@@ -6,37 +6,40 @@
 
 ## АЛХАМ 1: GitHub руу кодоо оруулах (Push to GitHub)
 
-1. [GitHub.com](https://github.com) дээр нэвтэрч ороод баруун дээд талын **"New repository"** товчийг дарж шинэ репозитор үүсгэнэ (Жишээ нэр: `dadlagiin-site`, Public эсвэл Private).
-2. Өөрийн компьютер дээрээ терминал (PowerShell) нээж төслийн хавтас дотроо дараах коммандуудыг дараалан ажиллуулна:
+> [!NOTE]
+> Бид таны компьютерийн энэ хавтсанд `git init`, `git add .`, `git commit` хийж бэлдсэн байгаа тул та зөвхөн GitHub дээрх хаягаа холбоод л push хийхэд хангалттай!
+
+1. [GitHub.com](https://github.com) руу ороод нэвтэрч, баруун дээд талын **"+" ➔ "New repository"** дарж шинэ репозитор үүсгэнэ (Жишээ нэр: `dadlaga-mn` эсвэл `dadlagiin-site`, Public эсвэл Private).
+2. Үүсгэсэн репозиторынхоо URL линкийг хуулж аваад (Жишээ нь: `https://github.com/таны-нэр/dadlaga-mn.git`), өөрийн энэ хавтас дээрээ терминал (PowerShell) нээж дараах 2 коммандыг ажиллуулна:
 
 ```bash
-git init
-git add .
-git commit -m "feat: complete full-stack internship platform with SQLite, ATS and Auth"
-git branch -M main
-git remote add origin https://github.com/таны-хэрэглэгчийн-нэр/dadlagiin-site.git
+git remote add origin https://github.com/таны-хэрэглэгчийн-нэр/dadlaga-mn.git
 git push -u origin main
 ```
 
+*(Хэрэв өмнө нь origin тохируулсан гэсэн алдаа гарвал `git remote set-url origin https://...` гэж бичээд `git push -u origin main` хийнэ).*
+
 ---
 
-## АЛХАМ 2: Render.com дээр 1 товшилтоор үнэгүй асаах (Deploy)
+## АЛХАМ 2: Render.com дээр 1 товшилтоор үнэгүй холбох (Deploy)
 
-1. [Render.com](https://render.com) сайт руу орж **GitHub эрхээрээ нэвтэрнэ** (Sign in with GitHub).
-2. Render Dashboard дээр **"New +"** товч дарж **"Web Service"** сонголтыг сонгоно.
-3. Сая үүсгэсэн **`dadlagiin-site`** репозитороо сонгоод **"Connect"** товчийг дарна.
-4. Тохиргооны хэсэгт дараах зүйлсийг шалгана:
-   * **Name:** `dadlagiin-site` (эсвэл хүссэн нэр)
-   * **Region:** `Singapore` (Монголоос хамгийн хурдан)
+1. [Render.com](https://render.com) сайт руу орж **"Sign in with GitHub"** товчоор нэвтэрнэ.
+2. Render Dashboard дээрх цэнхэр **"New +"** товч дарж **"Web Service"**-ийг сонгоно.
+3. Сая үүсгэсэн **`dadlaga-mn`** репозитороо хараад **"Connect"** дарна.
+4. Тохиргооны хэсэгт:
+   * **Name:** `dadlaga-mn` (Таны сайтын хаяг болно)
+   * **Region:** `Singapore` (Монголоос хамгийн хурдан уншина)
    * **Branch:** `main`
    * **Runtime:** `Node`
    * **Build Command:** `npm install`
    * **Start Command:** `node server.js`
-   * **Instance Type:** `Free` (0$/сар)
-5. Хуудасны доор байрлах **"Create Web Service"** товчийг дарна!
+   * **Instance Type:** `Free` (0$/сар үнэгүй)
+5. **Environment Variables** (Хүрээлэн буй орчны хувьсагч) хэсэгт нэмэх (заавал):
+   * `NODE_VERSION` = `22.12.0`
+6. Доод талын **"Deploy Web Service"** товчийг дарна!
 
 🎉 **1-2 минутын дараа таны веб сайт:**  
-`https://dadlagiin-site.onrender.com` гэсэн албан ёсны онлайн хаягтайгаар интернэтэд бүрэн ажиллаж эхэлнэ!
+`https://dadlaga-mn.onrender.com` гэсэн албан ёсны онлайн хаягтайгаар интернетэд дэлхий даяар ажиллаж эхэлнэ! Та энэ линкээ найзууддаа болон багшдаа шууд илгээх боломжтой болно.
 
 ---
 

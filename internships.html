@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="mn" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Дадлага хайх - Дадлага.mn</title>
+  <meta name="description" content="Монголын бүх салбарын 50+ нээлттэй дадлагын заруудыг чиглэл, цалин, байршил, ажлын хэлбэрээр шүүж харах">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Ambient Animated Background Layer -->
+  <div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon-wrapper">
+          <div class="logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+        </div>
+        <div>Дадлага<span>.mn</span></div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Нүүр</a>
+        <a href="internships.html" class="nav-link active">Дадлагууд</a>
+        <a href="companies.html" class="nav-link">Компаниуд</a>
+        <a href="dashboard.html" class="nav-link">Хяналтын самбар</a>
+        <a href="tips.html" class="nav-link">Зөвлөгөө & CV</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Dark / Light Mode Switcher -->
+        <button class="theme-toggle" aria-label="Горим солих">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+
+        <a href="post-internship.html" class="btn btn-outline btn-sm">Зар нийтлэх</a>
+      </div>
+
+      <button class="mobile-toggle" aria-label="Цэс нээх">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" x2="20" y1="12" y2="12"/>
+          <line x1="4" x2="20" y1="6" y2="6"/>
+          <line x1="4" x2="20" y1="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
+      <span style="font-weight: 700; color: var(--text-main);">Сэдэв</span>
+      <button class="theme-toggle" aria-label="Горим солих">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </div>
+    <a href="index.html" class="nav-link">Нүүр</a>
+    <a href="internships.html" class="nav-link active">Дадлагууд</a>
+    <a href="companies.html" class="nav-link">Компаниуд</a>
+    <a href="dashboard.html" class="nav-link">Хяналтын самбар</a>
+    <a href="tips.html" class="nav-link">Зөвлөгөө & CV</a>
+    <a href="post-internship.html" class="btn btn-primary btn-block">Зар нийтлэх</a>
+  </div>
+
+  <!-- Page Header -->
+  <section style="background: var(--bg-surface); border-bottom: 1px solid var(--border-light); padding: 42px 0;">
+    <div class="container">
+      <span class="section-tag">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Хайлт & Сонголт
+      </span>
+      <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--text-main); margin: 6px 0 8px 0; letter-spacing: -0.02em;">
+        Бүх салбарын дадлагын заруудыг хайх
+      </h1>
+      <p style="color: var(--text-muted); font-size: 1.05rem;">
+        Монголын 14 үндсэн мэргэжлийн чиглэлээр 50+ бодит дадлагын зарыг шүүж үзээрэй.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Search & Filter Layout -->
+  <section class="section" style="padding-top: 40px;">
+    <div class="container">
+      <div class="search-layout">
+        
+        <!-- Filter Sidebar with Scrollable 14 Categories -->
+        <aside class="filter-sidebar">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px;">
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main);">Шүүлтүүр</h3>
+            <button id="resetFiltersBtn" class="btn btn-outline btn-sm" style="font-size: 0.8rem; padding: 4px 10px;">Цэвэрлэх</button>
+          </div>
+
+          <!-- Keyword Search in Sidebar -->
+          <div class="filter-group">
+            <label class="filter-title" for="searchInput">Түлхүүр үг</label>
+            <input type="text" id="searchInput" class="form-control" placeholder="Мэргэжил, технологи, компани...">
+          </div>
+
+          <!-- All 14 Categories with Scroll Area -->
+          <div class="filter-group">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+              <h4 class="filter-title" style="margin-bottom: 0;">Мэргэжлийн чиглэл (14)</h4>
+            </div>
+            
+            <div style="max-height: 280px; overflow-y: auto; padding-right: 6px; display: flex; flex-direction: column; gap: 4px;" id="categoryFiltersList">
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="all" checked> 
+                <strong>Бүх салбар чиглэл</strong>
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="Мэдээллийн технологи & Программ"> 
+                Мэдээллийн технологи & IT
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="Санхүү, Банк & Нягтлан"> 
+                Санхүү, Банк & Нягтлан
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="Маркетинг, Борлуулалт & PR"> 
+                Маркетинг, Борлуулалт & PR
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="График дизайн, UI/UX & Мультимедиа"> 
+                Дизайн, UI/UX & Мультимедиа
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="Барилга, Архитектур & Интерьер"> 
+                Барилга, Архитектур & Интерьер
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="Уул уурхай, Геологи & Хүнд үйлдвэр"> 
+                Уул уурхай, Геологи & Хүнд үйлдвэр
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="Цахилгаан, Механик & Автоматжуулалт"> 
+                Цахилгаан, Механик & Робот
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="Эрүүл мэнд, Эм зүй & Биотехнологи"> 
+                Эрүүл мэнд, Эм зүй & Биотех
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="Хууль, Эрх зүй & Нийцэл"> 
+                Хууль, Эрх зүй & Нийцэл
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="Хүний нөөц, Захиргаа & Менежмент"> 
+                Хүний нөөц & Захиргаа
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="Аялал жуулчлал & Зочлох үйлчилгээ"> 
+                Аялал жуулчлал & Зочид буудал
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="Боловсрол, Багш & Сургалт"> 
+                Боловсрол, Багш & Сургалт
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="Байгаль орчин, ХАА & Экологи"> 
+                Байгаль орчин, ХАА & Экологи
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="categoryFilter" value="Логистик, Тээвэр & Нийлүүлэлт"> 
+                Логистик, Тээвэр & Гааль
+              </label>
+            </div>
+          </div>
+
+          <!-- Type Filter -->
+          <div class="filter-group">
+            <h4 class="filter-title">Цалин / Урамшуулал</h4>
+            <div>
+              <label class="filter-option">
+                <input type="radio" name="typeFilter" value="all" checked> Бүгд
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="typeFilter" value="Цалинтай"> Цалинтай дадлага
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="typeFilter" value="Урамшуулалтай"> Урамшуулалтай / Хоол, унаа
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="typeFilter" value="Цалингүй"> Сургуулийн дадлага
+              </label>
+            </div>
+          </div>
+
+          <!-- Work Mode Filter -->
+          <div class="filter-group">
+            <h4 class="filter-title">Ажлын хэлбэр</h4>
+            <div>
+              <label class="filter-option">
+                <input type="radio" name="modeFilter" value="all" checked> Бүгд
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="modeFilter" value="Оффис"> Оффис дээр
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="modeFilter" value="Зайнаас"> 100% Зайнаас (Remote)
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="modeFilter" value="Хосолсон"> Хосолсон (Hybrid)
+              </label>
+            </div>
+          </div>
+
+          <!-- Bookmarks Filter -->
+          <div class="filter-group">
+            <label class="filter-option" style="font-weight: 700; color: var(--primary);">
+              <input type="checkbox" id="savedOnlyFilter"> ⭐ Зөвхөн хадгалсан зарууд
+            </label>
+          </div>
+        </aside>
+
+        <!-- Search Results Grid Area -->
+        <main>
+          <!-- Top Bar with Counter and Sort -->
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 24px; background: var(--bg-surface); padding: 16px 20px; border-radius: var(--radius); border: 1px solid var(--border-light);">
+            <div id="resultCountText" style="font-weight: 800; color: var(--text-main); font-size: 1.1rem;">
+              Нийт дадлагууд
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 500;">Эрэмбэлэх:</span>
+              <select id="sortSelect" class="form-control" style="width: auto; padding: 6px 14px; font-size: 0.9rem;">
+                <option value="newest">Сүүлд нийтлэгдсэн</option>
+                <option value="stipend">Цалин өндөр нь</option>
+                <option value="name">Нэрээр (А-Я)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Active Filter Pills Bar -->
+          <div id="activePillsContainer" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;"></div>
+
+          <!-- Job Cards Grid -->
+          <div class="jobs-grid" id="internshipsGrid">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Empty State Container -->
+          <div id="noResultsState" class="empty-state" style="display: none; background: var(--bg-surface); border: 1px dashed var(--border-light); border-radius: var(--radius-lg); padding: 60px 20px; text-align: center;">
+            <div class="empty-icon" style="width: 64px; height: 64px; border-radius: 50%; background: var(--bg-subtle); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px auto; color: var(--text-subtle);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/>
+              </svg>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">Тохирох илэрц олдсонгүй</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 420px; margin: 0 auto 20px auto;">
+              Та хайлтын үгээ өөрчлөх эсвэл шүүлтүүрүүдээ цэвэрлээд дахин оролдоно уу.
+            </p>
+            <button class="btn btn-primary btn-sm" onclick="clearAllFilters()">Бүх шүүлтүүрийг цэвэрлэх</button>
+          </div>
+        </main>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Detail Modal (International Standard) -->
+  <div class="modal-backdrop" id="jobDetailModal">
+    <div class="modal-box" style="max-width: 680px;">
+      <div class="modal-header">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span class="match-score-badge" id="modalMatchScore">✨ 95% Тохирч байна</span>
+            <span class="badge" style="background:var(--primary-light); color:var(--primary); font-size:0.75rem;">Баталгаажсан зар</span>
+          </div>
+          <h3 class="modal-title" id="modalJobTitle">Дадлагын гарчиг</h3>
+        </div>
+        <button class="modal-close" onclick="closeModal('jobDetailModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Company Header Box with Share Actions -->
+        <div class="detail-company-box" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 18px; background: var(--bg-subtle); border-radius: var(--radius); margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div class="company-logo" id="modalCompanyLogo">CO</div>
+            <div>
+              <h4 id="modalCompanyName" style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 2px;">Компанийн нэр</h4>
+              <div style="font-size: 0.88rem; color: var(--text-muted);" id="modalJobLocation">Улаанбаатар хот</div>
+            </div>
+          </div>
+
+          <!-- Social Share Group -->
+          <div class="share-action-group">
+            <button type="button" class="share-btn-pill" onclick="copyJobLink(currentDetailJob ? currentDetailJob.id : '')" title="Холбоос хуулах">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              Хуулах
+            </button>
+            <button type="button" class="share-btn-pill" onclick="shareJob('facebook')" title="Facebook дээр хуваалцах">FB</button>
+            <button type="button" class="share-btn-pill" onclick="shareJob('linkedin')" title="LinkedIn дээр хуваалцах">in</button>
+            <button type="button" class="share-btn-pill" onclick="shareJob('telegram')" title="Telegram дээр хуваалцах">TG</button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 24px; background: var(--bg-subtle); padding: 16px; border-radius: var(--radius);">
+          <div>
+            <span style="font-size: 0.78rem; color: var(--text-muted); display: block; font-weight: 600;">ТӨРӨЛ:</span>
+            <strong id="modalJobType" style="font-size: 1rem; color: var(--text-main);">Цалинтай</strong>
+          </div>
+          <div>
+            <span style="font-size: 0.78rem; color: var(--text-muted); display: block; font-weight: 600;">ХЭЛБЭР:</span>
+            <strong id="modalJobMode" style="font-size: 1rem; color: var(--text-main);">Оффис</strong>
+          </div>
+          <div>
+            <span style="font-size: 0.78rem; color: var(--text-muted); display: block; font-weight: 600;">СТИПЕНД:</span>
+            <strong id="modalJobStipend" style="font-size: 1.05rem; color: var(--primary);">1,000,000₮</strong>
+          </div>
+          <div>
+            <span style="font-size: 0.78rem; color: var(--text-muted); display: block; font-weight: 600;">ХУГАЦАА:</span>
+            <strong id="modalJobDuration" style="font-size: 1rem; color: var(--text-main);">3 сар</strong>
+          </div>
+        </div>
+
+        <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Дадлагын товч танилцуулга</h4>
+        <p id="modalJobDesc" style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; margin-bottom: 20px;"></p>
+
+        <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Тавигдах шаардлага</h4>
+        <ul id="modalJobRequirements" style="list-style: disc; padding-left: 20px; color: var(--text-muted); line-height: 1.65; margin-bottom: 20px;"></ul>
+
+        <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Гүйцэтгэх үндсэн үүрэг</h4>
+        <ul id="modalJobResponsibilities" style="list-style: disc; padding-left: 20px; color: var(--text-muted); line-height: 1.65; margin-bottom: 20px;"></ul>
+
+        <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Олгох давуу тал, хангамж</h4>
+        <ul id="modalJobBenefits" style="list-style: disc; padding-left: 20px; color: var(--text-muted); line-height: 1.65;"></ul>
+
+        <!-- Similar Internships Container -->
+        <div id="modalSimilarInternships"></div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('jobDetailModal')">Хаах</button>
+        <button class="btn btn-primary" id="modalApplyBtn">Анкет илгээх &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Apply Modal with Drag & Drop CV Upload -->
+  <div class="modal-backdrop" id="applyModal">
+    <div class="modal-box" style="max-width: 580px;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Дадлагын анкет илгээх</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+            <span id="applyTargetJobTitle" style="font-weight: 700; color: var(--primary);"></span> - <span id="applyTargetCompany"></span>
+          </p>
+        </div>
+        <button class="modal-close" onclick="closeModal('applyModal')">&times;</button>
+      </div>
+      <form id="quickApplyForm">
+        <div class="modal-body">
+          <input type="hidden" id="applyJobId">
+
+          <!-- 1-Click Verified Student Banner -->
+          <div id="applyVerifiedUserBanner" style="display:none; background:var(--primary-light); border:1px solid var(--border-glow); padding:10px 14px; border-radius:var(--radius-sm); margin-bottom:18px; font-size:0.86rem; color:var(--text-main);"></div>
+
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="applicantName">Таны бүтэн нэр *</label>
+              <input type="text" id="applicantName" class="form-control" placeholder="Жишээ: Батбаяр Тэмүүлэн" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="applicantPhone">Утасны дугаар *</label>
+              <input type="tel" id="applicantPhone" class="form-control" placeholder="Жишээ: 99112233" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="applicantEmail">Имэйл хаяг *</label>
+            <input type="email" id="applicantEmail" class="form-control" placeholder="Жишээ: temulen@gmail.com" required>
+          </div>
+
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label class="form-label" for="applicantSchool">Их, дээд сургууль</label>
+              <input type="text" id="applicantSchool" class="form-control" placeholder="МУИС, ШУТИС, СЭЗИС г.м">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="applicantMajor">Мэргэжил</label>
+              <input type="text" id="applicantMajor" class="form-control" placeholder="Мэргэжлийн чиглэл">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="applicantYear">Курс</label>
+              <select id="applicantYear" class="form-control">
+                <option value="1-р курс">1-р курс</option>
+                <option value="2-р курс">2-р курс</option>
+                <option value="3-р курс" selected>3-р курс</option>
+                <option value="4-р курс">4-р курс</option>
+                <option value="Төгсөгч">Шинэ төгсөгч</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- CV Drag & Drop Upload Zone -->
+          <div class="form-group">
+            <label class="form-label">CV / Резюме хавсаргах (PDF, DOCX)</label>
+            <div class="cv-dropzone" onclick="document.getElementById('applicantCvFile').click()">
+              <div class="cv-dropzone-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <div style="font-weight:700; font-size:0.92rem; color:var(--text-main); margin-bottom:4px;">
+                CV файл сонгох эсвэл чирч оруулна уу
+              </div>
+              <div style="font-size:0.8rem; color:var(--text-muted);">
+                PDF, DOCX хэмжээ 10MB хүртэл
+              </div>
+              <input type="file" id="applicantCvFile" accept=".pdf,.doc,.docx" style="display:none;" onchange="handleCvFileSelect(event)">
+            </div>
+            <div id="uploadedCvPillContainer"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="applicantCvLink">Эсвэл онлайн холбоос (Google Drive / LinkedIn / GitHub)</label>
+            <input type="text" id="applicantCvLink" class="form-control" placeholder="https://drive.google.com/file/d/...">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="applicantNotes">Өөрийн тухай товч / Сонирхсон шалтгаан</label>
+            <textarea id="applicantNotes" class="form-control" rows="3" placeholder="Та яагаад энэ дадлагыг сонирхож байна вэ? Гол давуу тал тань юу вэ?"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('applyModal')">Болих</button>
+          <button type="submit" class="btn btn-primary">Өргөдөл илгээх 🚀</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding-top: 0;">
+        <div>&copy; 2026 Дадлага.mn. Бүх эрх хуулиар хамгаалагдсан.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="index.html">Нүүр хуудас</a>
+          <a href="companies.html">Компаниуд</a>
+          <a href="post-internship.html">Зар нийтлэх</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+    const sortSelect = document.getElementById('sortSelect');
+    const savedOnlyFilter = document.getElementById('savedOnlyFilter');
+    const resultCountText = document.getElementById('resultCountText');
+    const grid = document.getElementById('internshipsGrid');
+    const noResults = document.getElementById('noResultsState');
+
+    function initFromURLParams() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const keyword = params.get('keyword');
+        const category = params.get('category');
+        const type = params.get('type');
+        const workMode = params.get('workMode');
+
+        if (keyword && searchInput) searchInput.value = keyword;
+        if (category) {
+          const radios = document.querySelectorAll('input[name="categoryFilter"]');
+          radios.forEach(r => {
+            if (r.value.toLowerCase().includes(category.toLowerCase()) || category.toLowerCase().includes(r.value.toLowerCase())) {
+              r.checked = true;
+            }
+          });
+        }
+        if (type) {
+          const typeRadio = document.querySelector(`input[name="typeFilter"][value="${type}"]`);
+          if (typeRadio) typeRadio.checked = true;
+        }
+        if (workMode) {
+          const modeRadio = document.querySelector(`input[name="modeFilter"][value="${workMode}"]`);
+          if (modeRadio) modeRadio.checked = true;
+        }
+      } catch (e) {}
+    }
+
+    let serverJobs = null;
+    const API_BASE = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '3000'))
+      ? 'http://localhost:3000'
+      : '';
+
+    async function fetchServerJobs() {
+      try {
+        const res = await fetch(`${API_BASE}/api/internships`);
+        const data = await res.json();
+        if (data.internships && Array.isArray(data.internships) && data.internships.length > 0) {
+          serverJobs = data.internships;
+          window.serverJobs = serverJobs;
+          try {
+            localStorage.setItem(STORAGE_KEYS.INTERNSHIPS, JSON.stringify(serverJobs));
+          } catch (e) {}
+          renderFilteredJobs();
+        }
+      } catch (e) {}
+    }
+
+    function renderFilteredJobs() {
+      try {
+        let allJobs = serverJobs;
+        if (!allJobs || allJobs.length === 0) {
+          allJobs = getStoredInternships();
+        }
+        if (!allJobs || allJobs.length === 0) {
+          allJobs = (typeof INITIAL_INTERNSHIPS !== 'undefined') ? INITIAL_INTERNSHIPS : [];
+        }
+
+        const keyword = (searchInput ? searchInput.value : '').trim().toLowerCase();
+        const selectedCategory = document.querySelector('input[name="categoryFilter"]:checked')?.value || 'all';
+        const selectedType = document.querySelector('input[name="typeFilter"]:checked')?.value || 'all';
+        const selectedMode = document.querySelector('input[name="modeFilter"]:checked')?.value || 'all';
+        const onlySaved = savedOnlyFilter ? savedOnlyFilter.checked : false;
+        const savedIds = typeof getSavedJobIds === 'function' ? getSavedJobIds() : [];
+
+        let filtered = allJobs.filter(job => {
+          if (!job || !job.title) return false;
+          const title = (job.title || '').toLowerCase();
+          const company = (job.company || '').toLowerCase();
+          const desc = (job.description || '').toLowerCase();
+          const category = (job.category || '').toLowerCase();
+          const tags = Array.isArray(job.tags) ? job.tags : [];
+
+          if (keyword) {
+            const matchTitle = title.includes(keyword);
+            const matchCompany = company.includes(keyword);
+            const matchDesc = desc.includes(keyword);
+            const matchCategory = category.includes(keyword);
+            const matchTags = tags.some(t => (t || '').toLowerCase().includes(keyword));
+            if (!matchTitle && !matchCompany && !matchDesc && !matchTags && !matchCategory) return false;
+          }
+
+          if (selectedCategory !== 'all') {
+            const catB = selectedCategory.toLowerCase();
+            const words = catB.split(/[\s,&]+/).filter(w => w.length > 2);
+            const matches = category.includes(catB) || catB.includes(category) || words.some(w => category.includes(w));
+            if (!matches) return false;
+          }
+
+          if (selectedType !== 'all' && job.type !== selectedType) return false;
+          if (selectedMode !== 'all' && job.workMode !== selectedMode) return false;
+          if (onlySaved && !savedIds.includes(job.id)) return false;
+
+          return true;
+        });
+
+        const sortBy = sortSelect ? sortSelect.value : 'newest';
+        if (sortBy === 'stipend') {
+          filtered.sort((a, b) => {
+            const valA = parseInt((a.stipend || '0').replace(/[^0-9]/g, '')) || 0;
+            const valB = parseInt((b.stipend || '0').replace(/[^0-9]/g, '')) || 0;
+            return valB - valA;
+          });
+        } else if (sortBy === 'name') {
+          filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        }
+
+        if (resultCountText) {
+          resultCountText.textContent = `Нийт ${filtered.length} дадлагын зар олдлоо`;
+        }
+
+        const pillsContainer = document.getElementById('activePillsContainer');
+        if (pillsContainer) {
+          const pills = [];
+          if (keyword) {
+            pills.push(`<span class="quick-tag-pill" onclick="clearKeywordFilter()" style="cursor:pointer; background:var(--primary-light); color:var(--primary); font-size:0.82rem; border-color:var(--border-glow); display:inline-flex; align-items:center; gap:6px;">Хайлт: "${keyword}" <span style="font-weight:800;">✕</span></span>`);
+          }
+          if (selectedCategory !== 'all') {
+            pills.push(`<span class="quick-tag-pill" onclick="clearCategoryFilter()" style="cursor:pointer; background:var(--primary-light); color:var(--primary); font-size:0.82rem; border-color:var(--border-glow); display:inline-flex; align-items:center; gap:6px;">Салбар: ${selectedCategory} <span style="font-weight:800;">✕</span></span>`);
+          }
+          if (selectedType !== 'all') {
+            pills.push(`<span class="quick-tag-pill" onclick="clearTypeFilter()" style="cursor:pointer; background:var(--primary-light); color:var(--primary); font-size:0.82rem; border-color:var(--border-glow); display:inline-flex; align-items:center; gap:6px;">${selectedType} <span style="font-weight:800;">✕</span></span>`);
+          }
+          if (selectedMode !== 'all') {
+            pills.push(`<span class="quick-tag-pill" onclick="clearModeFilter()" style="cursor:pointer; background:var(--primary-light); color:var(--primary); font-size:0.82rem; border-color:var(--border-glow); display:inline-flex; align-items:center; gap:6px;">${selectedMode} <span style="font-weight:800;">✕</span></span>`);
+          }
+          if (onlySaved) {
+            pills.push(`<span class="quick-tag-pill" onclick="clearSavedFilter()" style="cursor:pointer; background:var(--primary-light); color:var(--primary); font-size:0.82rem; border-color:var(--border-glow); display:inline-flex; align-items:center; gap:6px;">Хадгалсан зарууд <span style="font-weight:800;">✕</span></span>`);
+          }
+          pillsContainer.innerHTML = pills.join('');
+        }
+
+        if (!grid) return;
+
+        if (filtered.length === 0) {
+          grid.innerHTML = '';
+          if (noResults) noResults.style.display = 'block';
+        } else {
+          if (noResults) noResults.style.display = 'none';
+          grid.innerHTML = filtered.map(j => createJobCardHTML(j)).join('');
+          if (typeof initCardTilt === 'function') initCardTilt();
+        }
+      } catch (err) {
+        console.error('Render error:', err);
+      }
+    }
+
+    function clearAllFilters() {
+      if (searchInput) searchInput.value = '';
+      const catAll = document.querySelector('input[name="categoryFilter"][value="all"]');
+      if (catAll) catAll.checked = true;
+      const typeAll = document.querySelector('input[name="typeFilter"][value="all"]');
+      if (typeAll) typeAll.checked = true;
+      const modeAll = document.querySelector('input[name="modeFilter"][value="all"]');
+      if (modeAll) modeAll.checked = true;
+      if (savedOnlyFilter) savedOnlyFilter.checked = false;
+      if (sortSelect) sortSelect.value = 'newest';
+      renderFilteredJobs();
+    }
+
+    function clearKeywordFilter() { if (searchInput) searchInput.value = ''; renderFilteredJobs(); }
+    function clearCategoryFilter() { const r = document.querySelector('input[name="categoryFilter"][value="all"]'); if (r) r.checked = true; renderFilteredJobs(); }
+    function clearTypeFilter() { const r = document.querySelector('input[name="typeFilter"][value="all"]'); if (r) r.checked = true; renderFilteredJobs(); }
+    function clearModeFilter() { const r = document.querySelector('input[name="modeFilter"][value="all"]'); if (r) r.checked = true; renderFilteredJobs(); }
+    function clearSavedFilter() { if (savedOnlyFilter) savedOnlyFilter.checked = false; renderFilteredJobs(); }
+
+    if (searchInput) searchInput.addEventListener('input', renderFilteredJobs);
+    document.querySelectorAll('input[name="categoryFilter"]').forEach(r => r.addEventListener('change', renderFilteredJobs));
+    document.querySelectorAll('input[name="typeFilter"]').forEach(r => r.addEventListener('change', renderFilteredJobs));
+    document.querySelectorAll('input[name="modeFilter"]').forEach(r => r.addEventListener('change', renderFilteredJobs));
+    if (savedOnlyFilter) savedOnlyFilter.addEventListener('change', renderFilteredJobs);
+    if (sortSelect) sortSelect.addEventListener('change', renderFilteredJobs);
+    if (resetFiltersBtn) resetFiltersBtn.addEventListener('click', clearAllFilters);
+
+    function startInternships() {
+      initFromURLParams();
+      renderFilteredJobs();
+      fetchServerJobs();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', startInternships);
+    } else {
+      startInternships();
+    }
+    // Also run immediately just in case
+    startInternships();
+  </script>
+</body>
+</html>

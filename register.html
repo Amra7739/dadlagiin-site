@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="mn" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Бүртгүүлэх - Дадлага.mn</title>
+  <meta name="description" content="Дадлага.mn платформд оюутан эсвэл ажил олгогчоор бүртгүүлж шилдэг боломжуудыг нээгээрэй">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Ambient Background -->
+  <div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon-wrapper">
+          <div class="logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+        </div>
+        <div>Дадлага<span>.mn</span></div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Нүүр</a>
+        <a href="internships.html" class="nav-link">Дадлагууд</a>
+        <a href="companies.html" class="nav-link">Компаниуд</a>
+        <a href="dashboard.html" class="nav-link">Хяналтын самбар</a>
+        <a href="tips.html" class="nav-link">Зөвлөгөө & CV</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" aria-label="Горим солих">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+
+        <a href="login.html" class="btn btn-outline btn-sm">Нэвтрэх</a>
+        <a href="post-internship.html" class="btn btn-primary btn-sm">Зар нийтлэх</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Register Main Section -->
+  <main class="auth-page-container">
+    <div class="auth-split-box" style="max-width: 1100px;">
+      
+      <!-- Left Hero Pane -->
+      <div class="auth-hero-pane">
+        <div>
+          <div class="badge badge-category" style="margin-bottom: 16px; font-weight:700;">
+            🎓 Оюутан ба Ажил олгогчийг холбох гүүр
+          </div>
+          <h2 style="font-size: 2.1rem; font-weight: 800; color: var(--text-main); line-height: 1.25; margin-bottom: 16px; letter-spacing: -0.02em;">
+            Таны дараагийн том боломж эндээс эхэлнэ.
+          </h2>
+          <p style="color: var(--text-muted); font-size: 0.98rem; line-height: 1.6; margin-bottom: 24px;">
+            Монголын тэргүүлэгч байгууллагуудад дадлага хийх, эсвэл шилдэг залуу авьяастнуудыг компанидаа урих бүрэн боломжтой.
+          </p>
+
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 18px; margin-bottom: 20px;">
+            <div style="font-weight: 800; color: var(--text-main); font-size: 0.95rem; margin-bottom: 8px;">
+              🎓 Оюутан танд:
+            </div>
+            <ul style="font-size: 0.86rem; color: var(--text-muted); padding-left: 18px; line-height: 1.6;">
+              <li>14 мэргэжлийн чиглэлээр бодит дадлагын зар хайх</li>
+              <li>1 товшилтоор анкет, CV-гээ илгээж хариугаа хянах</li>
+              <li>Цалинтай, уян хатан, онлайн дадлагуудыг шүүж үзэх</li>
+            </ul>
+          </div>
+
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 18px;">
+            <div style="font-weight: 800; color: var(--text-main); font-size: 0.95rem; margin-bottom: 8px;">
+              🏢 Ажил олгогч танд:
+            </div>
+            <ul style="font-size: 0.86rem; color: var(--text-muted); padding-left: 18px; line-height: 1.6;">
+              <li>Хязгааргүй дадлагын ажлын байр үнэгүй нийтлэх</li>
+              <li>Ирсэн анкетуудыг ATS хүснэгтээр шүүж ярилцлагад дуудах</li>
+              <li>МУИС, ШУТИС, СЭЗИС зэрэг шилдэг оюутнуудтай шууд холбогдох</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top: 30px; font-size: 0.85rem; color: var(--text-muted); text-align: center;">
+          🔒 Таны хувийн мэдээлэл өгөгдлийн санд найдвартай шифрлэгдэн хадгалагдана.
+        </div>
+      </div>
+
+      <!-- Right Form Pane -->
+      <div class="auth-card-pane">
+        
+        <!-- Header -->
+        <div style="margin-bottom: 20px;">
+          <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px; letter-spacing: -0.02em;">
+            Бүртгэл үүсгэх
+          </h1>
+          <p style="color: var(--text-muted); font-size: 0.92rem;">
+            Та өөрийн статуст тохирох төрлийг сонгон мэдээллээ оруулна уу.
+          </p>
+        </div>
+
+        <!-- Role Segmented Toggle -->
+        <div class="auth-segmented-control">
+          <button type="button" class="auth-segment-btn active" id="btnRoleStudent" onclick="switchRegistrationRole('student')">
+            🎓 Би Оюутан / Горилогч
+          </button>
+          <button type="button" class="auth-segment-btn" id="btnRoleCompany" onclick="switchRegistrationRole('company')">
+            🏢 Би Ажил олгогч / Компани
+          </button>
+        </div>
+
+        <!-- Dedicated Registration Form -->
+        <form id="dedicatedRegisterForm" onsubmit="handleRegistrationSubmit(event)">
+          <input type="hidden" id="selectedRole" name="role" value="student">
+
+          <!-- Full Name -->
+          <div class="form-group">
+            <label class="form-label" id="nameLabel">Бүтэн нэр (Овог, Нэр)</label>
+            <input type="text" id="regFullName" name="name" class="form-control" placeholder="Жишээ: Батболд Тэмүүлэн" required>
+          </div>
+
+          <!-- Company Exclusive Fields -->
+          <div id="companyExclusiveFields" style="display: none;">
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label class="form-label">Байгууллагын нэр</label>
+                <input type="text" id="regOrgName" name="organization" class="form-control" placeholder="Жишээ: Голомт Банк ХК">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Үйл ажиллагааны чиглэл</label>
+                <select id="regIndustry" class="form-control">
+                  <option value="Мэдээллийн технологи">Мэдээллийн технологи (IT)</option>
+                  <option value="Банк, Санхүү">Банк, Санхүү, Даатгал</option>
+                  <option value="Харилцаа холбоо">Харилцаа холбоо, Телеком</option>
+                  <option value="Уул уурхай, Геологи">Уул уурхай, Геологи</option>
+                  <option value="Барилга, Архитектур">Барилга, Архитектур</option>
+                  <option value="Маркетинг, Медиа">Маркетинг, Медиа, Зар сурталчилгаа</option>
+                  <option value="Эрүүл мэнд">Эрүүл мэнд, Эм зүй</option>
+                  <option value="Хууль эрх зүй">Хууль эрх зүй, Өмгөөлөл</option>
+                  <option value="Боловсрол">Боловсрол, Сургалт</option>
+                  <option value="Бусад салбар">Бусад салбар</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Байгууллагын вэбсайт (сонголтоор)</label>
+              <input type="url" id="regWebsite" name="website" class="form-control" placeholder="https://golomtbank.com">
+            </div>
+          </div>
+
+          <!-- Email & Phone -->
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" id="emailLabel">Имэйл хаяг</label>
+              <input type="email" id="regEmailInput" name="email" class="form-control" placeholder="name@domain.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Холбоо барих утас</label>
+              <input type="tel" id="regPhoneInput" name="phone" class="form-control" placeholder="99112233" required>
+            </div>
+          </div>
+
+          <!-- Student Exclusive Fields -->
+          <div id="studentExclusiveFields">
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label class="form-label">Их, дээд сургууль</label>
+                <select id="regSchoolSelect" class="form-control">
+                  <option value="МУИС">Монгол Улсын Их Сургууль (МУИС)</option>
+                  <option value="ШУТИС">Шинжлэх Ухаан Технологийн Их Сургууль (ШУТИС)</option>
+                  <option value="СЭЗИС">Санхүү Эдийн Засгийн Их Сургууль (СЭЗИС)</option>
+                  <option value="ХҮИС">Хүмүүнлэгийн Ухааны Их Сургууль (ХҮИС)</option>
+                  <option value="АШУҮИС">Анагаахын Шинжлэх Ухааны Үндэсний Их Сургууль (АШУҮИС)</option>
+                  <option value="МҮИС">Монголын Үндэсний Их Сургууль (МҮИС)</option>
+                  <option value="Отгонтэнгэр ИС">Отгонтэнгэр Их Сургууль</option>
+                  <option value="Мандах ИС">Мандах Их Сургууль</option>
+                  <option value="Их Засаг ОУИС">Их Засаг Олон Улсын Их Сургууль</option>
+                  <option value="Бусад сургууль">Бусад сургууль / Гадаадын их сургууль</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Мэргэжил</label>
+                <input type="text" id="regMajorInput" name="major" class="form-control" placeholder="Программ хангамж, Санхүү г.м">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Суралцаж буй түвшин / Курс</label>
+              <select id="regYearSelect" class="form-control">
+                <option value="1-р курс">1-р курс</option>
+                <option value="2-р курс">2-р курс</option>
+                <option value="3-р курс" selected>3-р курс</option>
+                <option value="4-р курс">4-р курс (Төгсөх анги)</option>
+                <option value="Магистрант">Магистрант / Докторант</option>
+                <option value="Шинэ төгсөгч">Шинэ төгсөгч</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Passwords -->
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Нууц үг</label>
+              <div class="password-input-group">
+                <input type="password" id="regPassInput" name="password" class="form-control" placeholder="Багадаа 6 тэмдэгт" minlength="6" required oninput="Auth.evaluatePasswordStrength(this.value, 'regStrengthFill', 'regStrengthText')">
+                <button type="button" class="password-toggle-btn" onclick="Auth.togglePasswordVisibility('regPassInput', this)" title="Нууц үг харах/нуух">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Нууц үг давтах</label>
+              <div class="password-input-group">
+                <input type="password" id="regPassConfirmInput" name="confirmPassword" class="form-control" placeholder="Дахин оруулна уу" minlength="6" required>
+                <button type="button" class="password-toggle-btn" onclick="Auth.togglePasswordVisibility('regPassConfirmInput', this)" title="Нууц үг харах/нуух">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Password Strength Bar -->
+          <div class="password-strength-wrapper" style="margin-bottom: 18px;">
+            <div class="password-strength-bar">
+              <div class="password-strength-fill" id="regStrengthFill"></div>
+            </div>
+            <div class="password-strength-text" id="regStrengthText">
+              <span>Нууц үгийн хүч:</span><span>-</span>
+            </div>
+          </div>
+
+          <!-- Terms Checkbox -->
+          <div style="margin-bottom: 22px;">
+            <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.86rem; color: var(--text-muted); cursor: pointer; line-height: 1.5;">
+              <input type="checkbox" id="termsCheck" required style="accent-color: var(--primary); width: 17px; height: 17px; margin-top: 2px;">
+              <span>Би Дадлага.mn үйлчилгээний нөхцөл болон хэрэглэгчийн нууцлалын бодлогыг хүлээн зөвшөөрч байна.</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="padding: 13px; font-size: 1rem; font-weight: 700;">
+            Бүртгэл үүсгэх
+          </button>
+
+          <div style="text-align: center; margin-top: 22px; font-size: 0.92rem; color: var(--text-muted);">
+            Аль хэдийн бүртгэлтэй юу? <a href="login.html" style="color: var(--primary); font-weight: 800; text-decoration: none;">Нэвтрэх &rarr;</a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" style="margin-top: 0;">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding-top: 0;">
+        <div>&copy; 2026 Дадлага.mn. Бүх эрх хуулиар хамгаалагдсан.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="index.html">Нүүр</a>
+          <a href="internships.html">Дадлагууд</a>
+          <a href="login.html">Нэвтрэх</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    function switchRegistrationRole(role) {
+      document.getElementById('selectedRole').value = role;
+      const btnStudent = document.getElementById('btnRoleStudent');
+      const btnCompany = document.getElementById('btnRoleCompany');
+      const studentFields = document.getElementById('studentExclusiveFields');
+      const companyFields = document.getElementById('companyExclusiveFields');
+      const nameLabel = document.getElementById('nameLabel');
+      const emailLabel = document.getElementById('emailLabel');
+
+      if (role === 'student') {
+        btnStudent.classList.add('active');
+        btnCompany.classList.remove('active');
+        studentFields.style.display = 'block';
+        companyFields.style.display = 'none';
+        nameLabel.textContent = 'Бүтэн нэр (Овог, Нэр)';
+        emailLabel.textContent = 'Имэйл хаяг';
+        document.getElementById('regFullName').placeholder = 'Жишээ: Батболд Тэмүүлэн';
+      } else {
+        btnCompany.classList.add('active');
+        btnStudent.classList.remove('active');
+        studentFields.style.display = 'none';
+        companyFields.style.display = 'block';
+        nameLabel.textContent = 'Хүний нөөц / Хариуцсан менежерийн нэр';
+        emailLabel.textContent = 'Ажлын имэйл хаяг';
+        document.getElementById('regFullName').placeholder = 'Жишээ: Батзориг Анударь';
+      }
+    }
+
+    async function handleRegistrationSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const role = document.getElementById('selectedRole').value;
+      const name = document.getElementById('regFullName').value.trim();
+      const email = document.getElementById('regEmailInput').value.trim();
+      const phone = document.getElementById('regPhoneInput').value.trim();
+      const password = document.getElementById('regPassInput').value;
+      const confirmPassword = document.getElementById('regPassConfirmInput').value;
+
+      if (!name || !email || !password) {
+        showToast('Бүх шаардлагатай талбаруудыг бөглөнө үү.', 'error');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showToast('Нууц үг хоорондоо таарахгүй байна.', 'error');
+        return;
+      }
+
+      const payload = {
+        name,
+        email,
+        phone,
+        password,
+        confirmPassword,
+        role,
+        organization: role === 'company' ? (document.getElementById('regOrgName').value.trim() || name) : '',
+        website: role === 'company' ? document.getElementById('regWebsite').value.trim() : '',
+        school: role === 'student' ? document.getElementById('regSchoolSelect').value : '',
+        major: role === 'student' ? document.getElementById('regMajorInput').value.trim() : '',
+        year: role === 'student' ? document.getElementById('regYearSelect').value : ''
+      };
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      await Auth.handleRegister(payload, 'dashboard.html', submitBtn);
+    }
+  </script>
+</body>
+</html>

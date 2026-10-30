@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="mn" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оюутны гарын авлага, CV Бүтээгч & Цалингийн судалгаа - Дадлага.mn</title>
+  <meta name="description" content="Дадлагад амжилттай тэнцэх CV бэлтгэх, шууд онлайн CV бүтээж A4 PDF татах, болон Монголын 2026 оны дадлагын цалингийн судалгаа">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .tips-tab-btn {
+      padding: 10px 22px;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: 1px solid var(--border-light);
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tips-tab-btn:hover {
+      color: var(--text-main);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .tips-tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Animated Background Layer -->
+  <div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon-wrapper">
+          <div class="logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+        </div>
+        <div>Дадлага<span>.mn</span></div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Нүүр</a>
+        <a href="internships.html" class="nav-link">Дадлагууд</a>
+        <a href="companies.html" class="nav-link">Компаниуд</a>
+        <a href="dashboard.html" class="nav-link">Хяналтын самбар</a>
+        <a href="tips.html" class="nav-link active">Зөвлөгөө & CV</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Dark / Light Mode Switcher -->
+        <button class="theme-toggle" aria-label="Горим солих">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+
+        <a href="internships.html" class="btn btn-primary btn-sm">Дадлага хайх</a>
+      </div>
+
+      <button class="mobile-toggle" aria-label="Цэс нээх">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" x2="20" y1="12" y2="12"/>
+          <line x1="4" x2="20" y1="6" y2="6"/>
+          <line x1="4" x2="20" y1="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
+      <span style="font-weight: 700; color: var(--text-main);">Сэдэв</span>
+      <button class="theme-toggle" aria-label="Горим солих">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </div>
+    <a href="index.html" class="nav-link">Нүүр</a>
+    <a href="internships.html" class="nav-link">Дадлагууд</a>
+    <a href="companies.html" class="nav-link">Компаниуд</a>
+    <a href="tips.html" class="nav-link active">Зөвлөгөө & CV</a>
+    <a href="internships.html" class="btn btn-primary btn-block">Дадлага хайх</a>
+  </div>
+
+  <!-- Page Header -->
+  <section style="background: var(--bg-surface); border-bottom: 1px solid var(--border-light); padding: 50px 0 35px 0;">
+    <div class="container">
+      <span class="section-tag">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+        Оюутны хөгжлийн төв & Карьер хөтөч
+      </span>
+      <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--text-main); margin: 6px 0 10px 0; letter-spacing: -0.02em;">
+        Дадлагын бэлтгэл, CV Бүтээгч & Цалингийн мэдээлэл
+      </h1>
+      <p style="color: var(--text-muted); font-size: 1.02rem; max-width: 780px;">
+        Мэргэжлийн стандартад нийцсэн CV үүсгэж PDF хэлбэрээр татах, ярилцлагад бэлдэх болон 2026 оны бодит цалингийн судалгаатай танилцаарай.
+      </p>
+
+      <!-- Sub Navigation Tabs -->
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px;">
+        <button class="tips-tab-btn active" id="tabBtnChecklist" onclick="switchTipsTab('checklist')">
+          📋 CV Бэлэн байдал & Зөвлөмж
+        </button>
+        <button class="tips-tab-btn" id="tabBtnBuilder" onclick="switchTipsTab('builder')">
+          🚀 Онлайн CV Бүтээгч & PDF
+        </button>
+        <button class="tips-tab-btn" id="tabBtnSalary" onclick="switchTipsTab('salary')">
+          💰 Дадлагын Цалингийн Судалгаа 2026
+        </button>
+        <a href="taylan_print.html" target="_blank" class="tips-tab-btn" style="text-decoration: none; border-color: var(--primary-light); color: var(--primary); font-weight: 800;">
+          📑 45 хоногийн Дадлагын тайлангийн бэлэн загвар (A4 Print) ↗
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       TAB 1: CHECKLIST & INTERVIEW GUIDES
+       ========================================================================= -->
+  <main class="section" id="tipsChecklistSection">
+    <div class="container" style="max-width: 880px;">
+
+      <!-- CV Checklist Interactive Tool with Animated Progress -->
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 36px; margin-bottom: 44px; box-shadow: var(--shadow-sm);">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 14px;">
+          <div>
+            <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">
+              ✓ Оюутны CV-ний бэлэн байдлын интерактив шалгагч
+            </h3>
+            <p style="font-size: 0.92rem; color: var(--text-muted);">
+              Таны CV шилдэг компаниудад өрсөлдөхөд хэр бэлэн байгааг шалгаарай:
+            </p>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 2rem; font-weight: 800; color: var(--primary); line-height: 1;" id="cvScoreText">0%</div>
+            <span id="cvFeedbackBadge" class="badge" style="background: var(--bg-subtle); color: var(--text-muted); margin-top: 6px;">Эхлээгүй</span>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div style="width: 100%; height: 10px; background: var(--bg-subtle); border-radius: var(--radius-full); overflow: hidden; margin-bottom: 24px;">
+          <div id="cvProgressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);"></div>
+        </div>
+
+        <div id="checklistItems" style="display: flex; flex-direction: column; gap: 14px;">
+          <label style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.94rem; color: var(--text-main); cursor: pointer; padding: 12px 14px; background: var(--bg-subtle); border-radius: var(--radius);">
+            <input type="checkbox" class="cv-check" onchange="updateCvScore()" style="margin-top: 3px; accent-color: var(--primary); width: 18px; height: 18px;">
+            <span><strong>Холбоо барих мэдээлэл:</strong> Албан ёсны имэйл хаяг (ner.ovog@gmail.com), утасны дугаар, LinkedIn эсвэл Github холбоос орсон.</span>
+          </label>
+
+          <label style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.94rem; color: var(--text-main); cursor: pointer; padding: 12px 14px; background: var(--bg-subtle); border-radius: var(--radius);">
+            <input type="checkbox" class="cv-check" onchange="updateCvScore()" style="margin-top: 3px; accent-color: var(--primary); width: 18px; height: 18px;">
+            <span><strong>Боловсрол:</strong> Сургууль, мэргэжил, курс, голч дүн (GPA 3.0-аас дээш бол заавал оруулах), төгсөх он.</span>
+          </label>
+
+          <label style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.94rem; color: var(--text-main); cursor: pointer; padding: 12px 14px; background: var(--bg-subtle); border-radius: var(--radius);">
+            <input type="checkbox" class="cv-check" onchange="updateCvScore()" style="margin-top: 3px; accent-color: var(--primary); width: 18px; height: 18px;">
+            <span><strong>Курсын болон бие даасан төслүүд:</strong> Хичээл дээр хийсэн лаборатори, төсөл эсвэл хакатон, тэмцээний бодит үр дүн.</span>
+          </label>
+
+          <label style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.94rem; color: var(--text-main); cursor: pointer; padding: 12px 14px; background: var(--bg-subtle); border-radius: var(--radius);">
+            <input type="checkbox" class="cv-check" onchange="updateCvScore()" style="margin-top: 3px; accent-color: var(--primary); width: 18px; height: 18px;">
+            <span><strong>Техникийн ур чадвар:</strong> Эзэмшсэн программ, технологи, хэл (Жишээ нь: Python, Figma, React, Excel, Англи хэл).</span>
+          </label>
+
+          <label style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.94rem; color: var(--text-main); cursor: pointer; padding: 12px 14px; background: var(--bg-subtle); border-radius: var(--radius);">
+            <input type="checkbox" class="cv-check" onchange="updateCvScore()" style="margin-top: 3px; accent-color: var(--primary); width: 18px; height: 18px;">
+            <span><strong>Сайн дурын ажил / Нийгмийн идэвх:</strong> Оюутны клуб, уралдаан тэмцээн, төслийн зохион байгуулалт.</span>
+          </label>
+
+          <label style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.94rem; color: var(--text-main); cursor: pointer; padding: 12px 14px; background: var(--bg-subtle); border-radius: var(--radius);">
+            <input type="checkbox" class="cv-check" onchange="updateCvScore()" style="margin-top: 3px; accent-color: var(--primary); width: 18px; height: 18px;">
+            <span><strong>Формат:</strong> Цэвэрхэн 1 хуудсанд багтсан, PDF форматаар экспортлосон (Word/DOCX биш).</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Articles / Guides -->
+      <article style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 36px; margin-bottom: 28px; box-shadow: var(--shadow-sm);">
+        <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 16px; letter-spacing: -0.01em;">
+          1. "Туршлагагүй" оюутан CV-гээ хэрхэн бичих вэ?
+        </h2>
+        <p style="color: var(--text-muted); line-height: 1.65; margin-bottom: 16px;">
+          Ихэнх компаниуд дадлагажигчаас олон жилийн туршлага шаарддаггүй. Тэдний хардаг гол зүйл нь: <strong>Суралцах чин хүсэл эрмэлзэл</strong>, <strong>Суурь онолын мэдлэг</strong> болон <strong>Хариуцлагатай хандлага</strong> юм.
+        </p>
+        <ul style="list-style: disc; padding-left: 20px; color: var(--text-muted); line-height: 1.7;">
+          <li style="margin-bottom: 10px;"><strong>Хичээлийн төслүүдээ бодит ажил мэт харуул:</strong> "Database Management Systems хичээл дээр 3 хүний бүрэлдэхүүнтэйгээр цахим номын сангийн өгөгдлийн бааз төлөвлөж хөгжүүлсэн" гэх мэтээр тодорхой бич.</li>
+          <li style="margin-bottom: 10px;"><strong>Тоон үзүүлэлт оруул:</strong> "Оюутны эрдэм шинжилгээний хуралд 45 багаас 2-р байр эзэлсэн", "IELTS 6.5 оноотой" гэх мэт тодорхой баримт дурд.</li>
+          <li><strong>Портфолио эсвэл Github холбоос:</strong> Хэрэв та IT, Дизайн чиглэл бол өөрийн бүтээлийн холбоосыг заавал оруул.</li>
+        </ul>
+      </article>
+
+      <article style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 36px; margin-bottom: 28px; box-shadow: var(--shadow-sm);">
+        <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 16px; letter-spacing: -0.01em;">
+          2. Дадлагын ярилцлагын топ 3 асуулт & Хэрхэн хариулах вэ?
+        </h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="background: var(--bg-subtle); padding: 20px; border-radius: var(--radius);">
+            <strong style="color: var(--primary); display: block; margin-bottom: 6px; font-size: 1.05rem;">Асуулт 1: "Өөрийгөө товч танилцуулна уу?"</strong>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              Хүүхэд наснаасаа биш, харин суралцаж буй мэргэжил, сонирхсон салбар болон яагаад энэ компанид дадлага хийхийг хүсэж байгаагаа 1.5 минутад багтаан яриарай.
+            </p>
+          </div>
+
+          <div style="background: var(--bg-subtle); padding: 20px; border-radius: var(--radius);">
+            <strong style="color: var(--primary); display: block; margin-bottom: 6px; font-size: 1.05rem;">Асуулт 2: "Сургууль дээр заагаагүй шинэ зүйлийг хийлгэвэл та яах вэ?"</strong>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              Энэ асуултаар таны бие даан суралцах чадвар, асуудал шийдвэрлэх арга барилыг шалгадаг. Баримт бичиг (Documentation) унших, ментороосоо зөв цагт оновчтой асуулт асуух чадвараа дурдаарай.
+            </p>
+          </div>
+
+          <div style="background: var(--bg-subtle); padding: 20px; border-radius: var(--radius);">
+            <strong style="color: var(--primary); display: block; margin-bottom: 6px; font-size: 1.05rem;">Асуулт 3: "Манай компанийн тухай та юу мэдэх вэ?"</strong>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              Ярилцлагад орохоос өмнө тухайн байгууллагын веб сайт, сүүлийн үеийн бүтээгдэхүүн, нийгмийн хариуцлагын ажлыг заавал уншиж судалсан байх хэрэгтэй.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 36px; box-shadow: var(--shadow-sm);">
+        <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 16px; letter-spacing: -0.01em;">
+          3. Дадлагын дараа үндсэн ажилтнаар үлдэх нууц
+        </h2>
+        <p style="color: var(--text-muted); line-height: 1.65; margin-bottom: 16px;">
+          Монголын тэргүүлэх компаниудын шинэ залуу ажилтнуудын 60 гаруй хувь нь өмнө нь тухайн газартаа дадлага хийж байсан оюутнууд байдаг.
+        </p>
+        <ul style="list-style: disc; padding-left: 20px; color: var(--text-muted); line-height: 1.7;">
+          <li style="margin-bottom: 8px;"><strong>Цаг баримтлах:</strong> Ажилдаа үргэлж 10 минутын өмнө ирж занших.</li>
+          <li style="margin-bottom: 8px;"><strong>Тэмдэглэл хөтлөх:</strong> Өгсөн үүрэг даалгавар, зөвлөгөөг дэвтэр дээрээ тэмдэглэж, нэг алдааг хоёр давтахгүй байх.</li>
+          <li><strong>Идэвх санаачилга:</strong> Өөрийн ажил дууссан бол багийн гишүүддээ "Би өөр юугаар туслах вэ?" гэж асуух.</li>
+        </ul>
+      </article>
+
+      <!-- 45 Days Internship Report Showcase Box -->
+      <article style="background: linear-gradient(135deg, rgba(37,99,235,0.06), rgba(6,182,212,0.06)); border: 1px solid var(--border-glow); border-radius: var(--radius-md); padding: 32px; box-shadow: var(--shadow-sm); margin-top: 36px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+          <div>
+            <span class="badge badge-paid" style="font-size:0.8rem; margin-bottom:8px;">🎓 Оюутны дадлагын стандарт тайлан</span>
+            <h3 style="font-size:1.35rem; font-weight:800; color:var(--text-main); margin-bottom:6px;">
+              Үйлдвэрлэлийн дадлагын 45 хоногийн бэлэн тайлан
+            </h3>
+            <p style="color:var(--text-muted); font-size:0.95rem; max-width:620px;">
+              Монголын их, дээд сургуулиудын (МУИС, ШУТИС, СЭЗИС г.м) стандартын дагуу 3см үдээсний зай, 12pt фонт, өдрийн тэмдэглэл бүхий A4 бэлэн тайлангийн загвар.
+            </p>
+          </div>
+          <a href="taylan_print.html" target="_blank" class="btn btn-primary" style="white-space:nowrap;">
+            📑 Тайлангийн загварыг үзэх & Хэвлэх ↗
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       TAB 2: INTERACTIVE LIVE CV BUILDER & A4 PDF EXPORT
+       ========================================================================= -->
+  <main class="section" id="tipsBuilderSection" style="display: none;">
+    <div class="container">
+      
+      <!-- Toolbar Banner -->
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 18px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px;">
+        <div>
+          <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 2px;">
+            📄 Олон улсын жишигт нийцсэн Оюутны CV Бүтээгч
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+            Зүүн талд мэдээллээ оруулснаар баруун талд шууд харагдана. Хэвлэх эсвэл PDF болгон хадгалах боломжтой.
+          </p>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <button type="button" class="btn btn-outline btn-sm" onclick="prefillCvFromProfile()">
+            🔄 Профайлаас бөглөх
+          </button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="loadSampleCvData()">
+            ✨ Жишээ мэдээлэл
+          </button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="exportCvPdf()" style="display: flex; align-items: center; gap: 6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            🖨️ PDF / Хэвлэх (A4)
+          </button>
+        </div>
+      </div>
+
+      <!-- CV Builder Layout (Form + Live Paper Preview) -->
+      <div class="cv-builder-layout">
+
+        <!-- Left Form Column -->
+        <div style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 28px;">
+          <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border-light);">
+            📝 CV Мэдээллээ оруулах
+          </h4>
+
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Бүтэн нэр</label>
+              <input type="text" id="cvInputName" class="form-control" value="Батболд Тэмүүлэн" oninput="renderLiveCv()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Мэргэжлийн цол / Чиглэл</label>
+              <input type="text" id="cvInputTitle" class="form-control" value="Программ хангамжийн дадлагажигч" oninput="renderLiveCv()">
+            </div>
+          </div>
+
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Имэйл хаяг</label>
+              <input type="email" id="cvInputEmail" class="form-control" value="temuulen@gmail.com" oninput="renderLiveCv()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Утасны дугаар</label>
+              <input type="text" id="cvInputPhone" class="form-control" value="+976 9911-2233" oninput="renderLiveCv()">
+            </div>
+          </div>
+
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Байршил (Хот, Дүүрэг)</label>
+              <input type="text" id="cvInputLocation" class="form-control" value="Улаанбаатар хот" oninput="renderLiveCv()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">LinkedIn / Портфолио линк</label>
+              <input type="text" id="cvInputLink" class="form-control" value="linkedin.com/in/temuulen" oninput="renderLiveCv()">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Мэргэжлийн зорилго / Товч танилцуулга</label>
+            <textarea id="cvInputSummary" class="form-control" rows="3" oninput="renderLiveCv()">МУИС-ийн Мэдээллийн Технологийн сургуулийн 3-р курсын оюутан. Веб технологи, Node.js, React чиглэлээр бие даан төслүүд хэрэгжүүлсэн. Багаар ажиллах чадвартай, шинийг хурдан суралцдаг, дадлагын хугацаанд бодит хувь нэмэр оруулах чин хүсэлтэй.</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Боловсрол</label>
+            <textarea id="cvInputEducation" class="form-control" rows="3" oninput="renderLiveCv()">Монгол Улсын Их Сургууль (МУИС) — Бакалавр, Программ хангамж (2023 - 2027)
+• Голч дүн: 3.65 / 4.0
+• Мэдээллийн сан, Өгөгдлийн бүтэц, Алгоритм хичээлүүдийг А үнэлгээтэй дүүргэсэн.</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Төсөл & Туршлага</label>
+            <textarea id="cvInputProjects" class="form-control" rows="5" oninput="renderLiveCv()">• Цахим дадлагын систем (Dadlaga.mn)
+Node.js болон SQLite өгөгдлийн сан ашиглан оюутнууд дадлага хайх, компаниуд анкет хянах ATS самбар хөгжүүлсэн. RESTful API болон аюулгүй нэвтрэлтийг амжилттай нэвтрүүлсэн.
+
+• Оюутны номын сангийн хайлтын веб апп
+React, Tailwind CSS ашиглан 5,000+ номын мэдээлэл шүүж хайх систем хөгжүүлсэн.</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Ур чадварууд (Таслалаар зааглана уу)</label>
+            <input type="text" id="cvInputSkills" class="form-control" value="JavaScript, Python, React.js, Node.js, SQLite, HTML5, CSS3, Git/GitHub, Figma, Англи хэл (B2)" oninput="renderLiveCv()">
+          </div>
+        </div>
+
+        <!-- Right Live A4 Preview Column -->
+        <div>
+          <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+            <span>📄 A4 Хэмжээтэй шууд урьдчилан харах</span>
+            <span style="font-weight:700; color:var(--success);">● Хэвлэхэд бэлэн</span>
+          </div>
+
+          <div class="cv-preview-paper" id="cvPreviewPaper">
+            <div class="cv-header-name" id="cvPreviewName">Батболд Тэмүүлэн</div>
+            <div class="cv-header-title" id="cvPreviewTitle">Программ хангамжийн дадлагажигч</div>
+            <div class="cv-contact-row" id="cvPreviewContact">
+              <span id="cvContactEmail">📧 temuulen@gmail.com</span>
+              <span id="cvContactPhone">📱 +976 9911-2233</span>
+              <span id="cvContactLoc">📍 Улаанбаатар хот</span>
+              <span id="cvContactLink">🔗 linkedin.com/in/temuulen</span>
+            </div>
+
+            <div class="cv-section-title">Мэргэжлийн зорилго & Хураангуй</div>
+            <div id="cvPreviewSummary" style="font-size: 0.9rem; color: #334155; line-height: 1.6; margin-bottom: 16px;"></div>
+
+            <div class="cv-section-title">Боловсрол</div>
+            <div id="cvPreviewEducation" style="font-size: 0.9rem; color: #334155; line-height: 1.6; margin-bottom: 16px; white-space: pre-line;"></div>
+
+            <div class="cv-section-title">Төсөл & Туршлага</div>
+            <div id="cvPreviewProjects" style="font-size: 0.9rem; color: #334155; line-height: 1.6; margin-bottom: 16px; white-space: pre-line;"></div>
+
+            <div class="cv-section-title">Ур чадварууд</div>
+            <div class="cv-skills-cloud" id="cvPreviewSkills"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       TAB 3: STIPEND & SALARY INSIGHTS 2026
+       ========================================================================= -->
+  <main class="section" id="tipsSalarySection" style="display: none;">
+    <div class="container">
+      
+      <!-- Market Overview Banner -->
+      <div style="background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(6,182,212,0.08)); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 30px; margin-bottom: 30px;">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;">
+          <div>
+            <div class="badge badge-paid" style="margin-bottom: 10px;">📊 Бодит судалгаа 2026</div>
+            <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">
+              Монгол Улсын Дадлагын Цалингийн Инсайт
+            </h2>
+            <p style="font-size: 0.95rem; color: var(--text-muted); max-width: 650px; line-height: 1.5;">
+              Хөдөлмөрийн зах зээл дээрх 14 чиглэлийн 500+ дадлагажигч оюутнуудын судалгаа болон компаниудын албан ёсны цалингийн статистик.
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 20px;">
+            <div style="background: var(--bg-surface); padding: 16px 20px; border-radius: var(--radius); border: 1px solid var(--border-light); text-align: center;">
+              <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">1,050,000₮</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">Дундаж тэтгэмж / сар</div>
+            </div>
+            <div style="background: var(--bg-surface); padding: 16px 20px; border-radius: var(--radius); border: 1px solid var(--border-light); text-align: center;">
+              <div style="font-size: 1.8rem; font-weight: 800; color: var(--success);">86%</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">Цалинтай дадлага</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Salary Cards Search & Filter -->
+      <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 24px; align-items: center; justify-content: space-between;">
+        <input type="text" id="salarySearchInput" class="form-control" placeholder="Чиглэл эсвэл ур чадвараар хайх..." style="max-width: 320px; padding: 9px 14px;" oninput="filterSalaryInsights()">
+        <div style="font-size: 0.88rem; color: var(--text-muted);" id="salaryCountText">Нийт 12 салбарын инсайт</div>
+      </div>
+
+      <!-- Salary Cards Grid -->
+      <div class="jobs-grid" id="salaryCardsGrid">
+        <!-- Dynamically populated from /api/stats/salary-insights -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding-top: 0;">
+        <div>&copy; 2026 Дадлага.mn. Бүх эрх хуулиар хамгаалагдсан.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="index.html">Нүүр хуудас</a>
+          <a href="internships.html">Дадлагууд</a>
+          <a href="post-internship.html">Зар нийтлэх</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    // Tab Switching Logic
+    function switchTipsTab(tabId) {
+      const tabs = ['checklist', 'builder', 'salary'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        const section = document.getElementById(`tips${t.charAt(0).toUpperCase() + t.slice(1)}Section`);
+        if (btn) btn.classList.remove('active');
+        if (section) section.style.display = 'none';
+      });
+
+      const activeBtn = document.getElementById(`tabBtn${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
+      const activeSection = document.getElementById(`tips${tabId.charAt(0).toUpperCase() + tabId.slice(1)}Section`);
+      if (activeBtn) activeBtn.classList.add('active');
+      if (activeSection) activeSection.style.display = 'block';
+
+      if (tabId === 'builder') {
+        renderLiveCv();
+      } else if (tabId === 'salary') {
+        loadSalaryInsights();
+      }
+    }
+
+    // Tab 1: Checklist Score Calculation
+    function updateCvScore() {
+      const checkboxes = document.querySelectorAll('.cv-check');
+      const checked = Array.from(checkboxes).filter(c => c.checked).length;
+      const total = checkboxes.length;
+      const percent = Math.round((checked / total) * 100);
+
+      const scoreEl = document.getElementById('cvScoreText');
+      const badgeEl = document.getElementById('cvFeedbackBadge');
+      const barEl = document.getElementById('cvProgressBar');
+
+      if (scoreEl) scoreEl.textContent = `${percent}%`;
+      if (barEl) barEl.style.width = `${percent}%`;
+
+      if (badgeEl) {
+        if (percent === 100) {
+          badgeEl.textContent = 'Маш сайн! Илгээхэд бэлэн 🚀';
+          badgeEl.style.background = 'var(--success-light)';
+          badgeEl.style.color = 'var(--success)';
+        } else if (percent >= 60) {
+          badgeEl.textContent = 'Дунд зэрэг (Сайжруулах зүйл бий)';
+          badgeEl.style.background = 'var(--warning-light)';
+          badgeEl.style.color = 'var(--warning)';
+        } else {
+          badgeEl.textContent = 'Хангалтгүй (Нэмж бөглөнө үү)';
+          badgeEl.style.background = 'var(--danger-light)';
+          badgeEl.style.color = 'var(--danger)';
+        }
+      }
+    }
+
+    // Tab 2: Live CV Builder Logic
+    function renderLiveCv() {
+      const name = document.getElementById('cvInputName')?.value || 'Батболд Тэмүүлэн';
+      const title = document.getElementById('cvInputTitle')?.value || 'Мэргэжил';
+      const email = document.getElementById('cvInputEmail')?.value || 'temuulen@gmail.com';
+      const phone = document.getElementById('cvInputPhone')?.value || '+976 9911-2233';
+      const loc = document.getElementById('cvInputLocation')?.value || 'Улаанбаатар хот';
+      const link = document.getElementById('cvInputLink')?.value || '';
+      const summary = document.getElementById('cvInputSummary')?.value || '';
+      const education = document.getElementById('cvInputEducation')?.value || '';
+      const projects = document.getElementById('cvInputProjects')?.value || '';
+      const skillsStr = document.getElementById('cvInputSkills')?.value || '';
+
+      const nameEl = document.getElementById('cvPreviewName');
+      const titleEl = document.getElementById('cvPreviewTitle');
+      const emailEl = document.getElementById('cvContactEmail');
+      const phoneEl = document.getElementById('cvContactPhone');
+      const locEl = document.getElementById('cvContactLoc');
+      const linkEl = document.getElementById('cvContactLink');
+      const summaryEl = document.getElementById('cvPreviewSummary');
+      const eduEl = document.getElementById('cvPreviewEducation');
+      const projEl = document.getElementById('cvPreviewProjects');
+      const skillsEl = document.getElementById('cvPreviewSkills');
+
+      if (nameEl) nameEl.textContent = name;
+      if (titleEl) titleEl.textContent = title;
+      if (emailEl) emailEl.textContent = `📧 ${email}`;
+      if (phoneEl) phoneEl.textContent = `📱 ${phone}`;
+      if (locEl) locEl.textContent = `📍 ${loc}`;
+      if (linkEl) {
+        linkEl.textContent = link ? `🔗 ${link}` : '';
+        linkEl.style.display = link ? 'inline' : 'none';
+      }
+      if (summaryEl) summaryEl.textContent = summary;
+      if (eduEl) eduEl.textContent = education;
+      if (projEl) projEl.textContent = projects;
+
+      if (skillsEl) {
+        const skills = skillsStr.split(',').map(s => s.trim()).filter(Boolean);
+        skillsEl.innerHTML = skills.map(s => `<span class="cv-skill-chip">${s}</span>`).join('');
+      }
+    }
+
+    function prefillCvFromProfile() {
+      const user = Auth.getUser();
+      if (!user) {
+        showToast('Нэвтэрсэн хэрэглэгч олдсонгүй. Жишээ мэдээлэл бөглөлөө.', 'info');
+        loadSampleCvData();
+        return;
+      }
+
+      if (user.name) document.getElementById('cvInputName').value = user.name;
+      if (user.major) document.getElementById('cvInputTitle').value = `${user.major} дадлагажигч`;
+      if (user.email) document.getElementById('cvInputEmail').value = user.email;
+      if (user.phone) document.getElementById('cvInputPhone').value = user.phone;
+      if (user.school || user.major) {
+        document.getElementById('cvInputEducation').value = `${user.school || 'Их Сургууль'} — ${user.major || 'Мэргэжил'} (${user.year || '3-р курс'})\n• Голч дүн: 3.5+ / 4.0`;
+      }
+      if (user.bio) {
+        document.getElementById('cvInputSummary').value = user.bio;
+      }
+      renderLiveCv();
+      showToast('Таны профайлаас мэдээллийг автоматаар бөглөлөө!');
+    }
+
+    function loadSampleCvData() {
+      document.getElementById('cvInputName').value = 'Батболд Тэмүүлэн';
+      document.getElementById('cvInputTitle').value = 'Программ хангамжийн дадлагажигч';
+      document.getElementById('cvInputEmail').value = 'temuulen.b@gmail.com';
+      document.getElementById('cvInputPhone').value = '+976 9911-2233';
+      document.getElementById('cvInputLocation').value = 'Улаанбаатар хот, СБД';
+      document.getElementById('cvInputLink').value = 'github.com/temuulen';
+      document.getElementById('cvInputSummary').value = 'МУИС-ийн Мэдээллийн Технологийн сургуулийн 3-р курсын оюутан. Веб технологи, Node.js, React чиглэлээр бие даан төслүүд хэрэгжүүлсэн. Багаар ажиллах чадвартай, шинийг хурдан суралцдаг, дадлагын хугацаанд бодит хувь нэмэр оруулах чин хүсэлтэй.';
+      document.getElementById('cvInputEducation').value = 'Монгол Улсын Их Сургууль (МУИС) — Бакалавр, Программ хангамж (2023 - 2027)\n• Голч дүн: 3.65 / 4.0\n• Мэдээллийн сан, Алгоритмын хичээлийг онц үнэлгээтэй дүүргэсэн.';
+      document.getElementById('cvInputProjects').value = '• Цахим дадлагын систем (Dadlaga.mn)\nNode.js болон SQLite өгөгдлийн сан ашиглан оюутнууд дадлага хайх, компаниуд анкет хянах ATS самбар хөгжүүлсэн. RESTful API болон аюулгүй нэвтрэлтийг амжилттай нэвтрүүлсэн.\n\n• Оюутны номын сангийн хайлтын веб апп\nReact, Tailwind CSS ашиглан 5,000+ номын мэдээлэл шүүж хайх систем хөгжүүлсэн.';
+      document.getElementById('cvInputSkills').value = 'JavaScript, Python, React.js, Node.js, SQLite, HTML5, CSS3, Git/GitHub, Figma, Англи хэл (B2)';
+      renderLiveCv();
+      showToast('Жишээ CV амжилттай ачаалагдлаа!');
+    }
+
+    function exportCvPdf() {
+      renderLiveCv();
+      window.print();
+    }
+
+    // Tab 3: Salary Insights Logic
+    let cachedSalaryData = [];
+
+    async function loadSalaryInsights() {
+      const container = document.getElementById('salaryCardsGrid');
+      if (!container) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/api/stats/salary-insights`);
+        const data = await res.json();
+        const list = data.salaryData || data.insights;
+        if (list && Array.isArray(list)) {
+          cachedSalaryData = list;
+          renderSalaryCards(cachedSalaryData);
+          return;
+        }
+      } catch (e) {}
+
+      // Reliable offline fallback
+      cachedSalaryData = [
+        { category: 'Мэдээллийн технологи & Программ', avgStipend: '1,200,000₮', min: '800,000₮', max: '2,500,000₮', paidPercent: 95, topSkills: ['JavaScript', 'Python', 'React', 'SQL'] },
+        { category: 'Уул уурхай, Геологи & Хүнд үйлдвэр', avgStipend: '1,450,000₮', min: '1,000,000₮', max: '2,800,000₮', paidPercent: 98, topSkills: ['AutoCAD', 'Vulcan', 'SCADA', 'HSE'] },
+        { category: 'Санхүү, Банк & Аудит', avgStipend: '950,000₮', min: '600,000₮', max: '1,500,000₮', paidPercent: 88, topSkills: ['Financial Modeling', 'Excel Advanced', 'IFRS', 'PowerBI'] },
+        { category: 'Маркетинг, Борлуулалт & PR', avgStipend: '850,000₮', min: '500,000₮', max: '1,400,000₮', paidPercent: 82, topSkills: ['Meta Ads', 'Copywriting', 'SEO', 'TikTok Content'] },
+        { category: 'График дизайн, UI/UX & Мультимедиа', avgStipend: '900,000₮', min: '600,000₮', max: '1,600,000₮', paidPercent: 85, topSkills: ['Figma', 'Photoshop', 'Illustrator', 'After Effects'] },
+        { category: 'Инженерчлэл, Механик & Цахилгаан', avgStipend: '1,100,000₮', min: '800,000₮', max: '1,800,000₮', paidPercent: 92, topSkills: ['PLC', 'SolidWorks', 'Matlab', 'Circuit Design'] },
+        { category: 'Барилга, Архитектур & Интерьер', avgStipend: '850,000₮', min: '500,000₮', max: '1,300,000₮', paidPercent: 80, topSkills: ['Revit', '3ds Max', 'BIM', 'AutoCAD'] },
+        { category: 'Эрүүл мэнд, Эм зүй & Биотехнологи', avgStipend: '750,000₮', min: '450,000₮', max: '1,200,000₮', paidPercent: 75, topSkills: ['Clinical Research', 'GMP', 'Laboratory Analysis'] },
+        { category: 'Хууль эрх зүй & Өмгөөлөл', avgStipend: '700,000₮', min: '400,000₮', max: '1,100,000₮', paidPercent: 70, topSkills: ['Contract Review', 'Legal Writing', 'Due Diligence'] },
+        { category: 'Логистик, Тээвэр & Хангамжийн хэлтэс', avgStipend: '900,000₮', min: '600,000₮', max: '1,400,000₮', paidPercent: 84, topSkills: ['Supply Chain', 'ERP', 'Warehouse Ops'] },
+        { category: 'Хүний нөөц, Олон нийтийн харилцаа', avgStipend: '750,000₮', min: '500,000₮', max: '1,200,000₮', paidPercent: 78, topSkills: ['Recruitment', 'Labor Law', 'Talent Acquisition'] },
+        { category: 'Байгаль орчин, ХАА & Ногоон хөгжил', avgStipend: '800,000₮', min: '500,000₮', max: '1,300,000₮', paidPercent: 80, topSkills: ['EIA', 'GIS', 'Sustainability', 'Soil Science'] }
+      ];
+      renderSalaryCards(cachedSalaryData);
+    }
+
+    function renderSalaryCards(data) {
+      const container = document.getElementById('salaryCardsGrid');
+      const countEl = document.getElementById('salaryCountText');
+      if (countEl) countEl.textContent = `Нийт ${data.length} салбарын инсайт`;
+
+      if (data.length === 0) {
+        container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">Илэрц олдсонгүй.</div>`;
+        return;
+      }
+
+      container.innerHTML = data.map(item => `
+        <div class="salary-card">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+              <span class="badge badge-paid" style="font-size:0.75rem;">${item.paidPercent}% цалинтай</span>
+              <span style="font-size:0.8rem; color:var(--text-muted);">2026 Инсайт</span>
+            </div>
+            <h3 style="font-size:1.15rem; font-weight:800; color:var(--text-main); margin-bottom:10px; line-height:1.35;">
+              ${item.category}
+            </h3>
+            <div style="margin-bottom:14px;">
+              <div style="font-size:0.82rem; color:var(--text-muted);">Сарын дундаж тэтгэмж:</div>
+              <div class="salary-amount-tag">${item.avgStipend}</div>
+              <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">Хүрээ: ${item.min} — ${item.max}</div>
+            </div>
+
+            <!-- Meter -->
+            <div style="margin-bottom:16px;">
+              <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--text-muted); margin-bottom:4px;">
+                <span>Цалинтай дадлагын эзлэх хувь</span>
+                <span style="font-weight:700; color:var(--text-main);">${item.paidPercent}%</span>
+              </div>
+              <div style="height:6px; background:var(--bg-subtle); border-radius:4px; overflow:hidden;">
+                <div style="width:${item.paidPercent}%; height:100%; background:linear-gradient(90deg, var(--primary), var(--secondary));"></div>
+              </div>
+            </div>
+
+            <!-- Top Skills -->
+            <div style="margin-bottom:20px;">
+              <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:6px;">Эрэлттэй ур чадварууд:</div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                ${(item.topSkills || []).map(sk => `<span class="badge" style="background:var(--bg-subtle); font-size:0.75rem; color:var(--text-main); font-weight:600;">${sk}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+
+          <a href="internships.html?category=${encodeURIComponent(item.category)}" class="btn btn-outline btn-block btn-sm" style="font-size:0.84rem;">
+            Энэ чиглэлийн дадлагууд харах &rarr;
+          </a>
+        </div>
+      `).join('');
+    }
+
+    function filterSalaryInsights() {
+      const q = (document.getElementById('salarySearchInput')?.value || '').toLowerCase().trim();
+      if (!q) {
+        renderSalaryCards(cachedSalaryData);
+        return;
+      }
+      const filtered = cachedSalaryData.filter(item => 
+        item.category.toLowerCase().includes(q) ||
+        (item.topSkills && item.topSkills.some(s => s.toLowerCase().includes(q)))
+      );
+      renderSalaryCards(filtered);
+    }
+
+    function initTipsPage() {
+      renderLiveCv();
+      loadSalaryInsights();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTipsPage);
+    } else {
+      initTipsPage();
+    }
+  </script>
+</body>
+</html>

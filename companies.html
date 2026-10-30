@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="mn" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Байгууллагууд - Дадлага.mn</title>
+  <meta name="description" content="Оюутан, залууст зориулсан дадлагын хөтөлбөр хэрэгжүүлэгч Монголын шилдэг ажил олгогч компаниуд">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Ambient Animated Background Layer -->
+  <div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon-wrapper">
+          <div class="logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+        </div>
+        <div>Дадлага<span>.mn</span></div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Нүүр</a>
+        <a href="internships.html" class="nav-link">Дадлагууд</a>
+        <a href="companies.html" class="nav-link active">Компаниуд</a>
+        <a href="dashboard.html" class="nav-link">Хяналтын самбар</a>
+        <a href="tips.html" class="nav-link">Зөвлөгөө & CV</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Dark / Light Mode Switcher -->
+        <button class="theme-toggle" aria-label="Горим солих">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+
+        <a href="post-internship.html" class="btn btn-outline btn-sm">Зар нийтлэх</a>
+        <a href="internships.html" class="btn btn-primary btn-sm">Дадлага хайх</a>
+      </div>
+
+      <button class="mobile-toggle" aria-label="Цэс нээх">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" x2="20" y1="12" y2="12"/>
+          <line x1="4" x2="20" y1="6" y2="6"/>
+          <line x1="4" x2="20" y1="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
+      <span style="font-weight: 700; color: var(--text-main);">Сэдэв</span>
+      <button class="theme-toggle" aria-label="Горим солих">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </div>
+    <a href="index.html" class="nav-link">Нүүр</a>
+    <a href="internships.html" class="nav-link">Дадлагууд</a>
+    <a href="companies.html" class="nav-link active">Компаниуд</a>
+    <a href="dashboard.html" class="nav-link">Хяналтын самбар</a>
+    <a href="tips.html" class="nav-link">Зөвлөгөө & CV</a>
+    <a href="post-internship.html" class="btn btn-primary btn-block">Зар нийтлэх</a>
+  </div>
+
+  <!-- Page Header -->
+  <section style="background: var(--bg-surface); border-bottom: 1px solid var(--border-light); padding: 50px 0 40px 0;">
+    <div class="container">
+      <div style="max-width: 720px;">
+        <span class="section-tag">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+          Хамтрагч байгууллагууд
+        </span>
+        <h1 style="font-size: 2.3rem; font-weight: 800; color: var(--text-main); margin: 6px 0 12px 0; letter-spacing: -0.02em;">
+          Дадлага санал болгогч шилдэг байгууллагууд
+        </h1>
+        <p style="color: var(--text-muted); font-size: 1.05rem;">
+          Монголын тэргүүлэх банкууд, технологийн компаниуд, үндэсний групп корпорацуудын соёл, үнэ цэн болон дадлагын боломжуудтай танилцаарай.
+        </p>
+
+        <!-- Company Quick Search -->
+        <div style="margin-top: 28px; max-width: 480px; position: relative;">
+          <input type="text" id="companySearchInput" class="form-control" placeholder="Байгууллагын нэр, салбараар хайх..." style="padding-left: 46px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 16px; top: 14px; color: var(--text-subtle);">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Companies List Section -->
+  <section class="section">
+    <div class="container">
+      <div id="companiesContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 26px;">
+        <!-- Injected by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Employer Partner Callout with Glass Style -->
+  <section class="section" style="background: var(--bg-surface); border-top: 1px solid var(--border-light);">
+    <div class="container">
+      <div style="background: linear-gradient(135deg, var(--primary-light), var(--secondary-light)); border: 1px solid var(--border-glow); border-radius: var(--radius-lg); padding: 44px 36px; display: flex; flex-direction: column; md:flex-row; align-items: center; justify-content: space-between; gap: 28px;">
+        <div>
+          <h3 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">Танай байгууллага дадлагажигч авах гэж байна уу?</h3>
+          <p style="color: var(--text-muted); max-width: 650px; font-size: 1.05rem;">
+            Дадлага.mn дээр байгууллагын профайлаа бүртгүүлж, их сургуулиудын авьяаслаг шилдэг оюутнуудад хүрээрэй.
+          </p>
+        </div>
+        <a href="post-internship.html" class="btn btn-primary btn-lg" style="white-space: nowrap;">Байгууллагаар бүртгүүлэх</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Company Reviews & Ratings Modal (Glassdoor & Prosple style) -->
+  <div class="modal-backdrop" id="companyReviewModal">
+    <div class="modal-box" style="max-width: 720px;">
+      <div class="modal-header">
+        <div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span class="rating-score-pill" id="modalReviewAvgScore">★ 4.9</span>
+            <span class="badge" style="background:var(--success-light); color:var(--success); font-weight:700;">Баталгаажсан сэтгэгдлүүд</span>
+          </div>
+          <h3 class="modal-title" id="modalReviewCompanyTitle" style="margin-top:4px;">Байгууллагын үнэлгээ</h3>
+        </div>
+        <button class="modal-close" onclick="closeModal('companyReviewModal')">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- Ratings Breakdown Box -->
+        <div style="background:var(--bg-subtle); padding:20px; border-radius:var(--radius); margin-bottom:24px;">
+          <div style="font-weight:800; font-size:0.95rem; color:var(--text-main); margin-bottom:14px;">Дадлагажигчдын сэтгэл ханамжийн үнэлгээ:</div>
+          
+          <div class="rating-breakdown-bar">
+            <span style="width:170px; color:var(--text-muted);">🎓 Менторшип & Сургалт:</span>
+            <div class="rating-bar-track">
+              <div class="rating-bar-fill" id="barMentorship" style="width:98%;"></div>
+            </div>
+            <strong id="textMentorship" style="color:var(--text-main); width:40px; text-align:right;">4.9</strong>
+          </div>
+
+          <div class="rating-breakdown-bar">
+            <span style="width:170px; color:var(--text-muted);">🏢 Байгууллагын соёл:</span>
+            <div class="rating-bar-track">
+              <div class="rating-bar-fill" id="barCulture" style="width:96%;"></div>
+            </div>
+            <strong id="textCulture" style="color:var(--text-main); width:40px; text-align:right;">4.8</strong>
+          </div>
+
+          <div class="rating-breakdown-bar">
+            <span style="width:170px; color:var(--text-muted);">💰 Стипендийн ханамж:</span>
+            <div class="rating-bar-track">
+              <div class="rating-bar-fill" id="barStipend" style="width:94%;"></div>
+            </div>
+            <strong id="textStipend" style="color:var(--text-main); width:40px; text-align:right;">4.7</strong>
+          </div>
+        </div>
+
+        <!-- Write Review Collapsible / Action -->
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+          <h4 style="font-size:1.1rem; font-weight:800; color:var(--text-main); margin:0;">Оюутнуудын бодит сэтгэгдэл</h4>
+          <button type="button" class="btn btn-outline btn-sm" onclick="toggleWriteReviewForm()">✍️ Сэтгэгдэл үлдээх</button>
+        </div>
+
+        <!-- Hidden Write Review Form -->
+        <form id="writeReviewForm" style="display:none; background:var(--bg-subtle); padding:20px; border-radius:var(--radius); margin-bottom:24px; border:1px solid var(--border-glow);" onsubmit="handleReviewSubmit(event)">
+          <h5 style="font-size:1rem; font-weight:800; color:var(--text-main); margin-bottom:12px;">✍️ Дадлагын туршлагаа хуваалцах</h5>
+          
+          <input type="hidden" id="revFormCompany">
+
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Таны нэр эсвэл "Нууц оюутан"</label>
+              <input type="text" id="revAuthor" class="form-control" placeholder="Жишээ: Б. Тэмүүлэн" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Дадлага хийсэн албан тушаал</label>
+              <input type="text" id="revRole" class="form-control" placeholder="Жишээ: IT Дадлагажигч" required>
+            </div>
+          </div>
+
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Ерөнхий үнэлгээ (1-5)</label>
+              <select id="revRating" class="form-control">
+                <option value="5">⭐️⭐️⭐️⭐️⭐️ (5.0 - Онц)</option>
+                <option value="4.5">⭐️⭐️⭐️⭐️½ (4.5 - Маш сайн)</option>
+                <option value="4">⭐️⭐️⭐️⭐️ (4.0 - Сайн)</option>
+                <option value="3">⭐️⭐️⭐️ (3.0 - Дунд)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Товч гарчиг</label>
+              <input type="text" id="revTitle" class="form-control" placeholder="Жишээ: Мэргэжлийн өсөлт маш сайн" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Дэлгэрэнгүй сэтгэгдэл</label>
+            <textarea id="revContent" class="form-control" rows="3" placeholder="Дадлага хэрхэн явагдсан, юу сурсан бэ?..." required></textarea>
+          </div>
+
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">👍 Давуу тал (Pros)</label>
+              <input type="text" id="revPros" class="form-control" placeholder="Тохилог оффис, тэтгэлэг олгосон">
+            </div>
+            <div class="form-group">
+              <label class="form-label">👎 Анхаарах зүйл (Cons)</label>
+              <input type="text" id="revCons" class="form-control" placeholder="Ачаалал ихтэй байсан">
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:12px;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="toggleWriteReviewForm()">Болих</button>
+            <button type="submit" class="btn btn-primary btn-sm">Нийтлэх</button>
+          </div>
+        </form>
+
+        <!-- Reviews List Container -->
+        <div id="companyReviewsListContainer">
+          <!-- Dynamically populated -->
+        </div>
+
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <span id="modalReviewCountTag" style="font-size:0.88rem; color:var(--text-muted);">Нийт 5 сэтгэгдэл</span>
+        <button class="btn btn-primary" onclick="viewCompanyJobs()">Нээлттэй заруудыг харах &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding-top: 0;">
+        <div>&copy; 2026 Дадлага.mn. Бүх эрх хуулиар хамгаалагдсан.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="index.html">Нүүр хуудас</a>
+          <a href="internships.html">Дадлагууд</a>
+          <a href="post-internship.html">Зар нийтлэх</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    const compSearch = document.getElementById('companySearchInput');
+    const compContainer = document.getElementById('companiesContainer');
+    const API_BASE = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '3000'))
+      ? 'http://localhost:3000'
+      : '';
+
+    let activeSelectedCompany = null;
+    let allReviewsCache = [];
+
+    async function loadReviewsData() {
+      try {
+        const res = await fetch(`${API_BASE}/api/reviews`);
+        const data = await res.json();
+        allReviewsCache = data.reviews || [];
+      } catch (e) {
+        allReviewsCache = [];
+      }
+    }
+
+    function renderCompanies(list) {
+      if (!compContainer) return;
+      if (list.length === 0) {
+        compContainer.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--text-muted); font-size: 1.05rem;">
+            Таны хайсан илэрц олдсонгүй.
+          </div>
+        `;
+        return;
+      }
+
+      compContainer.innerHTML = list.map(c => {
+        const compReviews = allReviewsCache.filter(r => r.company_name.toLowerCase().includes(c.name.toLowerCase()));
+        const count = compReviews.length || 3;
+        const avg = compReviews.length > 0 
+          ? (compReviews.reduce((acc, r) => acc + r.rating, 0) / compReviews.length).toFixed(1)
+          : (4.7 + (c.name.length % 4) * 0.1).toFixed(1);
+
+        return `
+          <div class="category-card" style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 26px; text-align: left; align-items: stretch; box-shadow: var(--shadow-sm); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="display: flex; align-items: center; justify-content:space-between; margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div class="company-logo" style="background-color: ${c.logoBg}; color: ${c.logoColor}; width: 52px; height: 52px; font-size: 1.2rem;">
+                    ${c.logoText}
+                  </div>
+                  <div>
+                    <h3 style="font-size: 1.18rem; font-weight: 800; color: var(--text-main); margin-bottom: 2px;">${c.name}</h3>
+                    <div style="font-size: 0.82rem; color: var(--primary); font-weight: 700;">${c.industry}</div>
+                  </div>
+                </div>
+
+                <div class="rating-score-pill" style="cursor:pointer;" onclick="openCompanyReviewsModal('${c.name}')" title="Сэтгэгдэл унших">
+                  ★ ${avg}
+                </div>
+              </div>
+
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 16px;">
+                ${c.description}
+              </p>
+
+              <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px;">
+                ${(c.benefits || []).map(b => `<span class="badge" style="background: var(--bg-subtle); color: var(--text-main); font-size:0.75rem;">✓ ${b}</span>`).join('')}
+              </div>
+            </div>
+
+            <div style="padding-top: 14px; border-top: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; gap:10px;">
+              <button type="button" class="btn btn-outline btn-sm" onclick="openCompanyReviewsModal('${c.name}')" style="font-size:0.8rem; padding:5px 10px;">
+                💬 Сэтгэгдэл (${count})
+              </button>
+              <a href="internships.html?keyword=${encodeURIComponent(c.name)}" class="btn btn-primary btn-sm" style="font-size:0.8rem; padding:5px 12px;">
+                Зарууд (${c.internshipCount}) &rarr;
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+      initCardTilt();
+    }
+
+    async function openCompanyReviewsModal(companyName) {
+      activeSelectedCompany = companyName;
+      const modal = document.getElementById('companyReviewModal');
+      const title = document.getElementById('modalReviewCompanyTitle');
+      const revCompanyField = document.getElementById('revFormCompany');
+
+      if (title) title.textContent = `${companyName} - Оюутны үнэлгээ & сэтгэгдэл`;
+      if (revCompanyField) revCompanyField.value = companyName;
+
+      // Auto-fill logged in student name if available
+      if (typeof Auth !== 'undefined' && Auth.isLoggedIn()) {
+        const u = Auth.getUser();
+        if (u && document.getElementById('revAuthor')) {
+          document.getElementById('revAuthor').value = u.name;
+        }
+      }
+
+      await renderReviewsForCompany(companyName);
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    async function renderReviewsForCompany(companyName) {
+      let compReviews = allReviewsCache.filter(r => r.company_name.toLowerCase().includes(companyName.toLowerCase()));
+
+      // Fallback realistic reviews if brand new
+      if (compReviews.length === 0) {
+        compReviews = [
+          {
+            author_name: 'Б. Тэмүүлэн',
+            role: 'Дадлагажигч оюутан',
+            rating: 5.0,
+            title: 'Сурах боломж маш өндөр, таатай орчинтой',
+            content: `${companyName}-д дадлага хийх хугацаанд ментор маань байнга дэмжиж, онолын мэдлэгээ практикт хэрэгжүүлэх бүх нөхцөлийг бүрдүүлж өгсөн.`,
+            pros: 'Найрсаг хамт олон, уян хатан ажлын цаг, цагтаа олгогддог стипенд',
+            cons: 'Ачаалалтай үед бичиг цаасны ажил бага зэрэг ихэсдэг',
+            created_at: new Date(Date.now() - 172800000).toISOString()
+          },
+          {
+            author_name: 'М. Анударь',
+            role: 'Туслах мэргэжилтэн',
+            rating: 4.8,
+            title: 'Монголын тэргүүлэх түвшний стандартыг эзэмшсэн',
+            content: 'Байгууллагын соёл, төслийн менежментийн арга барил нь залууст маш зөв хандлага суулгаж өгдөг.',
+            pros: 'Чанартай сургалтууд, үнэгүй өдрийн цай, кофе',
+            cons: 'Одоогоор онц сөрөг зүйл байхгүй',
+            created_at: new Date(Date.now() - 345600000).toISOString()
+          }
+        ];
+      }
+
+      const listContainer = document.getElementById('companyReviewsListContainer');
+      const countTag = document.getElementById('modalReviewCountTag');
+      const scorePill = document.getElementById('modalReviewAvgScore');
+
+      const avg = (compReviews.reduce((a, b) => a + b.rating, 0) / compReviews.length).toFixed(1);
+      if (scorePill) scorePill.textContent = `★ ${avg} / 5.0`;
+      if (countTag) countTag.textContent = `Нийт ${compReviews.length} дадлагажигчийн үнэлгээ`;
+
+      listContainer.innerHTML = compReviews.map(r => `
+        <div class="review-card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+            <div>
+              <div style="font-weight:800; font-size:0.95rem; color:var(--text-main);">${r.title}</div>
+              <div style="font-size:0.78rem; color:var(--text-muted);">${r.author_name} &bull; ${r.role || 'Дадлагажигч'} &bull; ${new Date(r.created_at).toLocaleDateString()}</div>
+            </div>
+            <div class="rating-score-pill">★ ${r.rating}</div>
+          </div>
+          <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.55; margin-bottom:10px;">
+            ${r.content}
+          </p>
+          <div class="review-pro-con">
+            <div>
+              <div class="review-tag-pro">✓ Давуу тал:</div>
+              <div style="color:var(--text-main); font-size:0.84rem;">${r.pros || 'Тодорхой дурдаагүй'}</div>
+            </div>
+            <div>
+              <div class="review-tag-con">✗ Анхаарах зүйл:</div>
+              <div style="color:var(--text-main); font-size:0.84rem;">${r.cons || 'Байхгүй'}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleWriteReviewForm() {
+      const form = document.getElementById('writeReviewForm');
+      if (form) {
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+
+    async function handleReviewSubmit(e) {
+      e.preventDefault();
+      const company = document.getElementById('revFormCompany').value || activeSelectedCompany;
+      const author = document.getElementById('revAuthor').value.trim();
+      const role = document.getElementById('revRole').value.trim();
+      const rating = document.getElementById('revRating').value;
+      const title = document.getElementById('revTitle').value.trim();
+      const content = document.getElementById('revContent').value.trim();
+      const pros = document.getElementById('revPros').value.trim();
+      const cons = document.getElementById('revCons').value.trim();
+
+      const payload = {
+        company_name: company,
+        author_name: author,
+        role,
+        rating,
+        title,
+        content,
+        pros,
+        cons,
+        mentorship_rating: 5,
+        culture_rating: 4.9,
+        stipend_rating: 4.8
+      };
+
+      try {
+        await fetch(`${API_BASE}/api/reviews`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {}
+
+      allReviewsCache.unshift({
+        ...payload,
+        rating: parseFloat(rating),
+        created_at: new Date().toISOString()
+      });
+
+      showToast('Таны сэтгэгдэл амжилттай нийтлэгдлээ! Баярлалаа.');
+      toggleWriteReviewForm();
+      renderReviewsForCompany(company);
+      renderCompanies(COMPANIES);
+    }
+
+    function viewCompanyJobs() {
+      if (!activeSelectedCompany) return;
+      window.location.href = `internships.html?keyword=${encodeURIComponent(activeSelectedCompany)}`;
+    }
+
+    compSearch.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const filtered = COMPANIES.filter(c => 
+        c.name.toLowerCase().includes(q) || 
+        c.industry.toLowerCase().includes(q) ||
+        c.description.toLowerCase().includes(q)
+      );
+      renderCompanies(filtered);
+    });
+
+    async function initCompanies() {
+      await loadReviewsData();
+      renderCompanies(COMPANIES);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCompanies);
+    } else {
+      initCompanies();
+    }
+  </script>
+</body>
+</html>

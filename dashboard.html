@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="mn" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Хяналтын нэгдсэн самбар (ATS & Portal) - Дадлага.mn</title>
+  <meta name="description" content="Компаниудад зориулсан дадлагын анкет удирдлагын ATS систем болон оюутны хувийн портал">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .dash-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+    }
+    .dash-table th, .dash-table td {
+      padding: 14px 18px;
+      text-align: left;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .dash-table th {
+      background: var(--bg-subtle);
+      font-weight: 800;
+      color: var(--text-main);
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+    }
+    .dash-table tr:last-child td {
+      border-bottom: none;
+    }
+    .dash-table tr:hover td {
+      background: rgba(59, 130, 246, 0.03);
+    }
+    .status-select {
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 700;
+      border: 1px solid var(--border-light);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      cursor: pointer;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Animated Background Layer -->
+  <div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon-wrapper">
+          <div class="logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+        </div>
+        <div>Дадлага<span>.mn</span></div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Нүүр</a>
+        <a href="internships.html" class="nav-link">Дадлагууд</a>
+        <a href="companies.html" class="nav-link">Компаниуд</a>
+        <a href="dashboard.html" class="nav-link active">Хяналтын самбар</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Theme Switcher -->
+        <button class="theme-toggle" aria-label="Горим солих">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+      </div>
+
+      <button class="mobile-toggle" aria-label="Цэс нээх">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" x2="20" y1="12" y2="12"/>
+          <line x1="4" x2="20" y1="6" y2="6"/>
+          <line x1="4" x2="20" y1="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav">
+    <a href="index.html" class="nav-link">Нүүр</a>
+    <a href="internships.html" class="nav-link">Дадлагууд</a>
+    <a href="dashboard.html" class="nav-link active">Хяналтын самбар</a>
+    <a href="post-internship.html" class="btn btn-primary btn-block">Зар нийтлэх</a>
+  </div>
+
+  <!-- Dashboard Top Bar with Role Switcher for seamless testing -->
+  <section style="background: var(--bg-surface); border-bottom: 1px solid var(--border-light); padding: 36px 0;">
+    <div class="container">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+            <span class="section-tag" id="dashRoleBadge" style="margin-bottom: 0;">Удирдлагын төв</span>
+            <button id="dashEditProfileBtn" class="btn btn-outline btn-sm" style="display:none; padding: 4px 10px; font-size: 0.8rem;" onclick="Auth.openProfileModal()">
+              ✏️ Профайл засах
+            </button>
+          </div>
+          <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--text-main); margin: 4px 0 8px 0; letter-spacing: -0.02em;" id="dashWelcomeTitle">
+            Тавтай морил
+          </h1>
+          <p style="color: var(--text-muted); font-size: 1rem;" id="dashWelcomeSubtitle">
+            Өргөдөл, дадлагын явц болон нэгдсэн хяналтын систем.
+          </p>
+        </div>
+
+        <!-- Mode Toggle for Easy Testing -->
+        <div style="background: var(--bg-subtle); padding: 6px; border-radius: var(--radius); border: 1px solid var(--border-light); display: flex; gap: 6px;">
+          <button id="btnViewCompany" class="btn btn-sm" onclick="switchDashboardView('company')" style="background:var(--bg-surface); color:var(--text-main); box-shadow:var(--shadow-sm);">
+            🏢 Компани (ATS Анкет шүүх)
+          </button>
+          <button id="btnViewStudent" class="btn btn-sm" onclick="switchDashboardView('student')" style="background:transparent; color:var(--text-muted);">
+            🎓 Оюутан (Миний анкетууд)
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard Body -->
+  <section class="section" style="padding-top: 36px;">
+    <div class="container">
+      
+      <!-- Metrics Bar (Company / Student) -->
+      <div class="stats-grid" style="margin-bottom: 36px;" id="dashMetricsContainer">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- ===================================================================
+           COMPANY ATS VIEW
+           =================================================================== -->
+      <div id="companyViewSection">
+
+        <!-- Company's Posted Internships Management -->
+        <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:24px; margin-bottom:32px; box-shadow:var(--shadow-sm);">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px; margin-bottom:18px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <h3 style="font-size:1.25rem; font-weight:800; color:var(--text-main); margin:0;">
+                📢 Нийтэлсэн дадлагын ажлын байрууд
+              </h3>
+              <span class="badge badge-category" id="companyJobsCountBadge">0 зар</span>
+            </div>
+            <a href="post-internship.html" class="btn btn-primary btn-sm" style="display:flex; align-items:center; gap:6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Шинэ зар нийтлэх
+            </a>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th>Дадлагын гарчиг</th>
+                  <th>Салбар чиглэл</th>
+                  <th>Хэлбэр & Байршил</th>
+                  <th>Стипенд / Цалин</th>
+                  <th>Ирсэн анкет</th>
+                  <th>Төлөв</th>
+                  <th>Үйлдэл</th>
+                </tr>
+              </thead>
+              <tbody id="companyJobsTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ATS Received Applications -->
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin:0;">
+              📥 Ирсэн өргөдлүүд (ATS Сонгон шалгаруулалт)
+            </h3>
+            <span class="badge badge-category" id="companyAppCountBadge">0 анкет</span>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+            <!-- ATS Search Input -->
+            <input type="text" id="atsSearchInput" class="form-control" placeholder="Нэр, сургууль, мэргэжлээр хайх..." style="width: auto; min-width: 200px; padding: 7px 12px; font-size: 0.88rem;" oninput="filterATSList()">
+
+            <select id="atsFilterStatus" class="form-control" style="width: auto; padding: 7px 14px; font-size: 0.88rem;" onchange="filterATSList()">
+              <option value="all">Бүх төлөв</option>
+              <option value="reviewing">🟡 Шалгаж буй (Reviewing)</option>
+              <option value="interview">🔵 Ярилцлагад дуудсан (Interview)</option>
+              <option value="accepted">🟢 Тэнцсэн (Accepted)</option>
+              <option value="rejected">🔴 Татгалзсан (Rejected)</option>
+            </select>
+
+            <!-- Export to CSV / Excel Button -->
+            <button type="button" class="btn btn-outline btn-sm" onclick="exportAtsCsv()" title="Анкетуудыг Excel файл болгон татах" style="display:flex; align-items:center; gap:6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Excel (CSV) татах
+            </button>
+          </div>
+        </div>
+
+        <!-- ATS Table Container -->
+        <div style="overflow-x: auto; box-shadow: var(--shadow-sm); border-radius: var(--radius-md);">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Овог Нэр</th>
+                <th>Дадлагын байр</th>
+                <th>Сургууль / Мэргэжил</th>
+                <th>Холбоо барих</th>
+                <th>CV / Файл</th>
+                <th>Ярилцлага / Тов</th>
+                <th>Төлөв (Статус)</th>
+                <th>Үйлдэл</th>
+              </tr>
+            </thead>
+            <tbody id="companyAtsTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           STUDENT VIEW
+           =================================================================== -->
+      <div id="studentViewSection" style="display: none;">
+        
+        <!-- Interview Invitation Alert Banner -->
+        <div id="studentInterviewAlert" style="display:none; background:linear-gradient(135deg, rgba(6,182,212,0.12), rgba(59,130,246,0.12)); border:1px solid var(--secondary); border-radius:var(--radius); padding:16px 20px; margin-bottom:24px; align-items:center; justify-content:space-between; gap:16px;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <span style="font-size:1.8rem;">🎉</span>
+            <div>
+              <div style="font-weight:800; font-size:0.98rem; color:var(--text-main);" id="studentInterviewTitle">Танд ярилцлагын урилга ирлээ!</div>
+              <div style="font-size:0.85rem; color:var(--text-muted);" id="studentInterviewMeta">Огноо & байршлын мэдээлэл</div>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="showToast('Ярилцлагын мэдээллийг хүлээн авлаа!')">Баталгаажуулах ✓</button>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+          <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main);">Миний илгээсэн өргөдлүүд</h3>
+          <a href="internships.html" class="btn btn-outline btn-sm">Дадлага хайх</a>
+        </div>
+
+        <div style="overflow-x: auto; box-shadow: var(--shadow-sm); border-radius: var(--radius-md); margin-bottom: 36px;">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Байгууллага</th>
+                <th>Дадлагын албан тушаал</th>
+                <th>Илгээсэн огноо</th>
+                <th>Ярилцлагын мэдээлэл</th>
+                <th>Хариу / Төлөв</th>
+              </tr>
+            </thead>
+            <tbody id="studentAppsTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Saved Internships Preview -->
+        <div style="margin-top: 36px;">
+          <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin-bottom: 16px;">
+            ⭐ Хадгалсан дадлагууд
+          </h3>
+          <div class="jobs-grid" id="studentSavedJobsGrid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Schedule Interview Modal -->
+  <div class="modal-backdrop" id="scheduleInterviewModal">
+    <div class="modal-box" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">📅 Ярилцлага товлох</h3>
+        <button class="modal-close" onclick="closeModal('scheduleInterviewModal')">&times;</button>
+      </div>
+      <form onsubmit="handleScheduleInterviewSubmit(event)">
+        <div class="modal-body" style="padding-top:14px;">
+          <input type="hidden" id="schedAppId">
+
+          <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:16px;">
+            Нэр дэвшигч: <strong id="schedApplicantName" style="color:var(--text-main);"></strong>
+          </p>
+
+          <div class="form-group">
+            <label class="form-label">Ярилцлагын огноо & цаг</label>
+            <input type="datetime-local" id="schedDatetime" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Уулзалтын хэлбэр / Байршил</label>
+            <input type="text" id="schedLocation" class="form-control" placeholder="Жишээ: Google Meet, Zoom эсвэл Төв байр 402 тоот" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Нэмэлт тайлбар (Нэр дэвшигчид харагдана)</label>
+            <textarea id="schedNotes" class="form-control" rows="2" placeholder="Жишээ: Иргэний үнэмлэхтэй ирэх, портфолио бэлтгэх..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('scheduleInterviewModal')">Болих</button>
+          <button type="submit" class="btn btn-primary">Ярилцлага товлох</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- HR Notes Modal -->
+  <div class="modal-backdrop" id="hrNotesModal">
+    <div class="modal-box" style="max-width: 460px;">
+      <div class="modal-header">
+        <h3 class="modal-title">📝 Хүний нөөцийн дотоод тэмдэглэл</h3>
+        <button class="modal-close" onclick="closeModal('hrNotesModal')">&times;</button>
+      </div>
+      <form onsubmit="handleHrNotesSubmit(event)">
+        <div class="modal-body" style="padding-top:14px;">
+          <input type="hidden" id="hrNotesAppId">
+          <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:14px;">
+            Нэр дэвшигч: <strong id="hrNotesApplicantName" style="color:var(--text-main);"></strong>
+          </p>
+          <div class="form-group">
+            <label class="form-label">Үнэлгээний тэмдэглэл (Зөвхөн HR баг харна)</label>
+            <textarea id="hrNotesContent" class="form-control" rows="4" placeholder="Жишээ: Англи хэл сайн, хандлага өндөр. 2-р шатанд удирдах ажилтантай уулзуулах..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('hrNotesModal')">Болих</button>
+          <button type="submit" class="btn btn-primary">Хадгалах</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding-top: 0;">
+        <div>&copy; 2026 Дадлага.mn. Бүх эрх хуулиар хамгаалагдсан.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="index.html">Нүүр хуудас</a>
+          <a href="internships.html">Дадлагууд</a>
+          <a href="companies.html">Компаниуд</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    const API_BASE = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '3000'))
+      ? 'http://localhost:3000'
+      : '';
+    let currentRole = 'company';
+    let cachedApplications = [];
+    let cachedCompanyJobs = [];
+
+    async function loadDashboardData() {
+      const user = Auth.getUser();
+      const editBtn = document.getElementById('dashEditProfileBtn');
+      if (user) {
+        currentRole = user.role === 'student' ? 'student' : 'company';
+        if (editBtn) editBtn.style.display = 'inline-flex';
+      } else {
+        if (editBtn) editBtn.style.display = 'none';
+      }
+
+      // Title
+      const titleEl = document.getElementById('dashWelcomeTitle');
+      const badgeEl = document.getElementById('dashRoleBadge');
+      const subTitleEl = document.getElementById('dashWelcomeSubtitle');
+      if (user) {
+        titleEl.textContent = `Тавтай морил, ${user.name}!`;
+        badgeEl.textContent = user.role === 'company' ? `🏢 ${user.organization || 'Байгууллагын ATS'}` : `🎓 Оюутны Профайл`;
+        subTitleEl.textContent = user.role === 'company' 
+          ? `${user.organization || 'Байгууллага'} - Ирсэн анкетуудыг шүүх, төлөв өөрчлөх болон шинэ зар нийтлэх төв.`
+          : `${user.school || 'Их сургууль'} &bull; ${user.major || 'Мэргэжил'} - Илгээсэн анкетуудынхаа хариу төлөвийг хянах хэсэг.`;
+      } else {
+        titleEl.textContent = `Хяналтын нэгдсэн самбар`;
+        subTitleEl.textContent = `Та одоогоор зочноор үзэж байна. Өөрийн анкет, заруудаа удирдахын тулд нэвтэрнэ үү.`;
+      }
+
+      // Sync Switcher buttons
+      switchDashboardView(currentRole);
+
+      // 1. Fetch Applications from Backend SQLite
+      try {
+        const res = await fetch(`${API_BASE}/api/applications`);
+        const data = await res.json();
+        cachedApplications = data.applications || [];
+      } catch (e) {
+        const local = localStorage.getItem(STORAGE_KEYS.APPLICATIONS);
+        cachedApplications = local ? JSON.parse(local).map((a, i) => ({
+          id: 'app-' + i,
+          applicant_name: a.name,
+          applicant_email: a.email,
+          applicant_phone: a.phone,
+          applicant_school: a.school,
+          applicant_major: a.major,
+          applicant_year: a.year,
+          cv_link: a.cvLink,
+          job_title: 'Дадлагажигч',
+          company_name: 'Голомт Банк',
+          status: 'reviewing',
+          created_at: a.submittedAt || new Date().toISOString()
+        })) : [];
+      }
+
+      // 2. Fetch Internships from Backend SQLite
+      try {
+        const res = await fetch(`${API_BASE}/api/internships`);
+        const data = await res.json();
+        const allJobs = (data.internships && data.internships.length > 0) ? data.internships : getStoredInternships();
+        window.allDashboardJobs = allJobs;
+        const u = user || ((typeof Auth !== 'undefined' && Auth.getUser) ? Auth.getUser() : null);
+        const userOrg = (u && (u.organization || u.name)) ? (u.organization || u.name).toLowerCase() : '';
+        const userId = u ? u.id : 'user-company-demo';
+        const matched = allJobs.filter(j => 
+          (j.user_id && (j.user_id === userId || j.user_id === 'user-company-demo')) ||
+          (userOrg && j.company && j.company.toLowerCase().includes(userOrg)) ||
+          (userOrg && j.company && userOrg.includes(j.company.toLowerCase())) ||
+          (j.company && j.company.includes('Голомт'))
+        );
+        cachedCompanyJobs = matched.length > 0 ? matched : allJobs.slice(0, 6);
+      } catch (e) {
+        cachedCompanyJobs = getStoredInternships().slice(0, 6);
+      }
+
+      renderCurrentView();
+    }
+
+    function switchDashboardView(role) {
+      currentRole = role;
+      const btnC = document.getElementById('btnViewCompany');
+      const btnS = document.getElementById('btnViewStudent');
+
+      if (role === 'company') {
+        btnC.style.background = 'var(--bg-surface)';
+        btnC.style.color = 'var(--text-main)';
+        btnC.style.boxShadow = 'var(--shadow-sm)';
+        btnS.style.background = 'transparent';
+        btnS.style.color = 'var(--text-muted)';
+        btnS.style.boxShadow = 'none';
+
+        if (window.allDashboardJobs) {
+          const u = (typeof Auth !== 'undefined' && Auth.getUser) ? Auth.getUser() : null;
+          const userOrg = (u && (u.organization || u.name)) ? (u.organization || u.name).toLowerCase() : '';
+          const userId = u ? u.id : 'user-company-demo';
+          const matched = window.allDashboardJobs.filter(j => 
+            (j.user_id && (j.user_id === userId || j.user_id === 'user-company-demo')) ||
+            (userOrg && j.company && j.company.toLowerCase().includes(userOrg)) ||
+            (userOrg && j.company && userOrg.includes(j.company.toLowerCase())) ||
+            (j.company && j.company.includes('Голомт'))
+          );
+          cachedCompanyJobs = matched.length > 0 ? matched : window.allDashboardJobs.slice(0, 6);
+        }
+      } else {
+        btnS.style.background = 'var(--bg-surface)';
+        btnS.style.color = 'var(--text-main)';
+        btnS.style.boxShadow = 'var(--shadow-sm)';
+        btnC.style.background = 'transparent';
+        btnC.style.color = 'var(--text-muted)';
+        btnC.style.boxShadow = 'none';
+      }
+
+      renderCurrentView();
+    }
+
+    function renderCurrentView() {
+      const companySec = document.getElementById('companyViewSection');
+      const studentSec = document.getElementById('studentViewSection');
+      const metricsContainer = document.getElementById('dashMetricsContainer');
+
+      if (currentRole === 'company') {
+        companySec.style.display = 'block';
+        studentSec.style.display = 'none';
+
+        const totalApps = cachedApplications.length;
+        const reviewingCount = cachedApplications.filter(a => a.status === 'reviewing').length;
+        const interviewCount = cachedApplications.filter(a => a.status === 'interview').length;
+        const acceptedCount = cachedApplications.filter(a => a.status === 'accepted').length;
+
+        metricsContainer.innerHTML = `
+          <div class="stat-item" style="background:var(--bg-surface); padding:20px; border-radius:var(--radius); border:1px solid var(--border-light);">
+            <div class="stat-number" style="font-size:2rem; color:var(--primary);">${cachedCompanyJobs.length}</div>
+            <div class="stat-label">Нийт нийтэлсэн зар</div>
+          </div>
+          <div class="stat-item" style="background:var(--bg-surface); padding:20px; border-radius:var(--radius); border:1px solid var(--border-light);">
+            <div class="stat-number" style="font-size:2rem; color:var(--warning);">${totalApps}</div>
+            <div class="stat-label">Ирсэн анкет</div>
+          </div>
+          <div class="stat-item" style="background:var(--bg-surface); padding:20px; border-radius:var(--radius); border:1px solid var(--border-light);">
+            <div class="stat-number" style="font-size:2rem; color:var(--secondary);">${interviewCount}</div>
+            <div class="stat-label">Ярилцлагад дуудсан</div>
+          </div>
+          <div class="stat-item" style="background:var(--bg-surface); padding:20px; border-radius:var(--radius); border:1px solid var(--border-light);">
+            <div class="stat-number" style="font-size:2rem; color:var(--success);">${acceptedCount}</div>
+            <div class="stat-label">Тэнцсэн (Hired)</div>
+          </div>
+        `;
+
+        renderCompanyJobsTable(cachedCompanyJobs);
+        renderAtsTable(cachedApplications);
+      } else {
+        companySec.style.display = 'none';
+        studentSec.style.display = 'block';
+
+        const savedIds = getSavedJobIds();
+        metricsContainer.innerHTML = `
+          <div class="stat-item" style="background:var(--bg-surface); padding:20px; border-radius:var(--radius); border:1px solid var(--border-light);">
+            <div class="stat-number" style="font-size:2rem; color:var(--primary);">${cachedApplications.length}</div>
+            <div class="stat-label">Миний илгээсэн өргөдөл</div>
+          </div>
+          <div class="stat-item" style="background:var(--bg-surface); padding:20px; border-radius:var(--radius); border:1px solid var(--border-light);">
+            <div class="stat-number" style="font-size:2rem; color:var(--secondary);">1</div>
+            <div class="stat-label">Ярилцлагын урилга</div>
+          </div>
+          <div class="stat-item" style="background:var(--bg-surface); padding:20px; border-radius:var(--radius); border:1px solid var(--border-light);">
+            <div class="stat-number" style="font-size:2rem; color:var(--warning);">${savedIds.length}</div>
+            <div class="stat-label">Хадгалсан зарууд</div>
+          </div>
+          <div class="stat-item" style="background:var(--bg-surface); padding:20px; border-radius:var(--radius); border:1px solid var(--border-light);">
+            <div class="stat-number" style="font-size:2rem; color:var(--success);">100%</div>
+            <div class="stat-label">CV бэлэн байдал</div>
+          </div>
+        `;
+
+        renderStudentTable();
+        renderSavedJobs();
+      }
+    }
+
+    function renderCompanyJobsTable(list) {
+      const tbody = document.getElementById('companyJobsTableBody');
+      const badge = document.getElementById('companyJobsCountBadge');
+      if (badge) badge.textContent = `${list.length} зар`;
+      if (!tbody) return;
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">Танай компани одоогоор зар нийтлээгүй байна. <a href="post-internship.html" style="color:var(--primary); font-weight:700;">Шинэ зар нийтлэх &rarr;</a></td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(job => {
+        const appCount = cachedApplications.filter(a => a.job_title && a.job_title.toLowerCase().includes(job.title.toLowerCase())).length;
+        return `
+          <tr>
+            <td>
+              <strong style="color:var(--text-main); font-size:0.95rem;">${job.title}</strong>
+              <div style="font-size:0.75rem; color:var(--text-muted);">${job.company} &bull; ${job.deadline ? `Хугацаа: ${job.deadline}` : ''}</div>
+            </td>
+            <td>
+              <span class="badge badge-category" style="font-size:0.75rem;">${job.category}</span>
+            </td>
+            <td>
+              <div>${job.workMode || 'Оффис'}</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">${job.location || 'Улаанбаатар'}</div>
+            </td>
+            <td>
+              <span style="font-weight:700; color:var(--primary); font-size:0.88rem;">${job.stipend || 'Тохиролцоно'}</span>
+            </td>
+            <td>
+              <span class="badge" style="background:var(--primary-light); color:var(--primary); font-weight:700;">
+                ${appCount} анкет
+              </span>
+            </td>
+            <td>
+              <span class="badge badge-paid" style="font-size:0.75rem;">🟢 Идэвхтэй</span>
+            </td>
+            <td>
+              <div style="display:flex; gap:6px;">
+                <a href="internships.html?keyword=${encodeURIComponent(job.title)}" class="btn btn-outline btn-sm" style="padding:4px 8px; font-size:0.8rem;" title="Сайт дээр харах">
+                  🔗 Үзэх
+                </a>
+                <button class="btn btn-outline btn-sm" onclick="deletePostedJob('${job.id}')" style="padding:4px 8px; font-size:0.8rem; color:var(--danger); border-color:var(--danger-light);" title="Зар устгах">
+                  🗑️
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function deletePostedJob(jobId) {
+      if (!confirm('Та энэ дадлагын зарыг устгахдаа итгэлтэй байна уу?')) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/internships/${jobId}`, {
+          method: 'DELETE'
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Дадлагын зар амжилттай устгагдлаа.');
+          cachedCompanyJobs = cachedCompanyJobs.filter(j => j.id !== jobId);
+          renderCompanyJobsTable(cachedCompanyJobs);
+          const local = getStoredInternships().filter(j => j.id !== jobId);
+          localStorage.setItem(STORAGE_KEYS.INTERNSHIPS, JSON.stringify(local));
+          return;
+        }
+      } catch (e) {}
+
+      cachedCompanyJobs = cachedCompanyJobs.filter(j => j.id !== jobId);
+      renderCompanyJobsTable(cachedCompanyJobs);
+      const local = getStoredInternships().filter(j => j.id !== jobId);
+      localStorage.setItem(STORAGE_KEYS.INTERNSHIPS, JSON.stringify(local));
+      showToast('Зар амжилттай устгагдлаа.');
+    }
+
+    function renderAtsTable(list) {
+      const tbody = document.getElementById('companyAtsTableBody');
+      const badge = document.getElementById('companyAppCountBadge');
+      if (badge) badge.textContent = `${list.length} анкет`;
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--text-muted);">Ирсэн анкет одоогоор байхгүй байна.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(a => `
+        <tr>
+          <td>
+            <strong>${a.applicant_name}</strong>
+            <div style="font-size:0.75rem; color:var(--text-muted);">${a.applicant_email}</div>
+          </td>
+          <td>
+            <span style="font-weight:600; color:var(--text-main);">${a.job_title}</span>
+            <div style="font-size:0.75rem; color:var(--text-muted);">${a.company_name}</div>
+          </td>
+          <td>
+            <div>${a.applicant_school || 'МУИС'}</div>
+            <div style="font-size:0.78rem; color:var(--text-muted);">${a.applicant_major || 'Мэргэжил'} (${a.applicant_year || '3-р курс'})</div>
+          </td>
+          <td>
+            <div>${a.applicant_phone || '-'}</div>
+          </td>
+          <td>
+            ${a.cv_file_name ? `<span class="cv-file-pill" style="font-size:0.78rem;">📄 ${a.cv_file_name}</span>` : 
+              (a.cv_link ? `<a href="${a.cv_link}" target="_blank" class="btn btn-outline btn-sm" style="font-size:0.78rem; padding:3px 8px;">🔗 CV Үзэх</a>` : 
+              '<span style="color:var(--text-muted); font-size:0.8rem;">Байхгүй</span>')}
+          </td>
+          <td>
+            ${a.interview_date ? `
+              <div style="font-size:0.82rem; font-weight:700; color:var(--secondary);">📅 ${new Date(a.interview_date).toLocaleDateString()} ${new Date(a.interview_date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">📍 ${a.interview_location || 'Google Meet'}</div>
+            ` : '<span style="color:var(--text-muted); font-size:0.8rem;">Товлоогүй</span>'}
+          </td>
+          <td>
+            <select class="status-select" onchange="updateApplicationStatus('${a.id}', this.value)" style="${getStatusStyle(a.status)}">
+              <option value="reviewing" ${a.status === 'reviewing' ? 'selected' : ''}>🟡 Шалгаж буй</option>
+              <option value="interview" ${a.status === 'interview' ? 'selected' : ''}>🔵 Ярилцлага</option>
+              <option value="accepted" ${a.status === 'accepted' ? 'selected' : ''}>🟢 Тэнцсэн</option>
+              <option value="rejected" ${a.status === 'rejected' ? 'selected' : ''}>🔴 Татгалзсан</option>
+            </select>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-outline btn-sm" onclick="openScheduleInterviewModal('${a.id}')" title="Ярилцлага товлох" style="padding:4px 8px; font-size:0.8rem;">
+                📅 Товлох
+              </button>
+              <button class="btn btn-outline btn-sm" onclick="openHrNotesModal('${a.id}')" title="HR тэмдэглэл" style="padding:4px 8px; font-size:0.8rem; position:relative;">
+                📝 ${a.hr_notes ? '<span style="color:var(--primary); font-weight:800;">●</span>' : ''}
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function getStatusStyle(status) {
+      if (status === 'accepted') return 'color:#15803d; border-color:#86efac; background:var(--success-light);';
+      if (status === 'interview') return 'color:#0284c7; border-color:#7dd3fc; background:var(--secondary-light);';
+      if (status === 'rejected') return 'color:#b91c1c; border-color:#fca5a5; background:var(--danger-light);';
+      return 'color:#b45309; border-color:#fde68a; background:var(--warning-light);';
+    }
+
+    async function updateApplicationStatus(id, newStatus) {
+      try {
+        const res = await fetch(`${API_BASE}/api/applications/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Анкетын статус амжилттай шинэчлэгдлээ!');
+          const item = cachedApplications.find(a => a.id === id);
+          if (item) item.status = newStatus;
+          renderCurrentView();
+          return;
+        }
+      } catch (e) {
+        // Offline update
+      }
+
+      const item = cachedApplications.find(a => a.id === id);
+      if (item) item.status = newStatus;
+      showToast('Статус шинэчлэгдлээ!');
+      renderCurrentView();
+    }
+
+    function filterATSList() {
+      const status = document.getElementById('atsFilterStatus').value;
+      const query = (document.getElementById('atsSearchInput')?.value || '').toLowerCase().trim();
+
+      let filtered = cachedApplications;
+      if (status !== 'all') {
+        filtered = filtered.filter(a => a.status === status);
+      }
+      if (query) {
+        filtered = filtered.filter(a => 
+          (a.applicant_name && a.applicant_name.toLowerCase().includes(query)) ||
+          (a.job_title && a.job_title.toLowerCase().includes(query)) ||
+          (a.applicant_school && a.applicant_school.toLowerCase().includes(query)) ||
+          (a.applicant_major && a.applicant_major.toLowerCase().includes(query)) ||
+          (a.applicant_email && a.applicant_email.toLowerCase().includes(query))
+        );
+      }
+      renderAtsTable(filtered);
+    }
+
+    async function exportAtsCsv() {
+      try {
+        const token = Auth.getToken();
+        const res = await fetch(`${API_BASE}/api/applications/export`, {
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        });
+        if (!res.ok) throw new Error('Экспорт хийхэд алдаа гарлаа');
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `dadlaga_anketuud_${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+        showToast('Excel (CSV) файл амжилттай татагдлаа!');
+      } catch (err) {
+        showToast('Татах боломжгүй байна: ' + err.message, 'error');
+      }
+    }
+
+    function openScheduleInterviewModal(appId) {
+      const app = cachedApplications.find(a => a.id === appId);
+      if (!app) return;
+      document.getElementById('schedAppId').value = appId;
+      document.getElementById('schedApplicantName').textContent = `${app.applicant_name} (${app.job_title})`;
+      if (app.interview_date) {
+        document.getElementById('schedDatetime').value = app.interview_date.slice(0, 16);
+      } else {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(10, 0, 0, 0);
+        document.getElementById('schedDatetime').value = tomorrow.toISOString().slice(0, 16);
+      }
+      document.getElementById('schedLocation').value = app.interview_location || 'Google Meet / Төв байр';
+      document.getElementById('schedNotes').value = '';
+      openModal('scheduleInterviewModal');
+    }
+
+    async function handleScheduleInterviewSubmit(e) {
+      e.preventDefault();
+      const appId = document.getElementById('schedAppId').value;
+      const interview_date = document.getElementById('schedDatetime').value;
+      const interview_location = document.getElementById('schedLocation').value.trim();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/applications/${appId}/interview`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ interview_date, interview_location })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Ярилцлага амжилттай товлогдлоо!');
+          const item = cachedApplications.find(a => a.id === appId);
+          if (item) {
+            item.status = 'interview';
+            item.interview_date = interview_date;
+            item.interview_location = interview_location;
+          }
+          closeModal('scheduleInterviewModal');
+          renderCurrentView();
+          return;
+        }
+      } catch (err) {}
+
+      const item = cachedApplications.find(a => a.id === appId);
+      if (item) {
+        item.status = 'interview';
+        item.interview_date = interview_date;
+        item.interview_location = interview_location;
+      }
+      closeModal('scheduleInterviewModal');
+      showToast('Ярилцлага амжилттай товлогдлоо!');
+      renderCurrentView();
+    }
+
+    function openHrNotesModal(appId) {
+      const app = cachedApplications.find(a => a.id === appId);
+      if (!app) return;
+      document.getElementById('hrNotesAppId').value = appId;
+      document.getElementById('hrNotesApplicantName').textContent = `${app.applicant_name} (${app.job_title})`;
+      document.getElementById('hrNotesContent').value = app.hr_notes || app.notes || '';
+      openModal('hrNotesModal');
+    }
+
+    async function handleHrNotesSubmit(e) {
+      e.preventDefault();
+      const appId = document.getElementById('hrNotesAppId').value;
+      const hr_notes = document.getElementById('hrNotesContent').value.trim();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/applications/${appId}/notes`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ hr_notes })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Тэмдэглэл хадгалагдлаа!');
+          const item = cachedApplications.find(a => a.id === appId);
+          if (item) item.hr_notes = hr_notes;
+          closeModal('hrNotesModal');
+          renderCurrentView();
+          return;
+        }
+      } catch (err) {}
+
+      const item = cachedApplications.find(a => a.id === appId);
+      if (item) item.hr_notes = hr_notes;
+      closeModal('hrNotesModal');
+      showToast('Тэмдэглэл хадгалагдлаа!');
+      renderCurrentView();
+    }
+
+    function renderStudentTable() {
+      const tbody = document.getElementById('studentAppsTableBody');
+      const interviewInvite = cachedApplications.find(a => a.status === 'interview' || a.interview_date);
+      const alertEl = document.getElementById('studentInterviewAlert');
+      if (interviewInvite && alertEl) {
+        alertEl.style.display = 'flex';
+        document.getElementById('studentInterviewTitle').textContent = `🎉 Танд ${interviewInvite.company_name}-аас ярилцлагын урилга ирлээ!`;
+        document.getElementById('studentInterviewMeta').textContent = `Албан тушаал: ${interviewInvite.job_title} | Огноо: ${interviewInvite.interview_date ? new Date(interviewInvite.interview_date).toLocaleString() : 'Товлохоор хүлээгдэж байна'} | Байршил/Хэлбэр: ${interviewInvite.interview_location || 'Google Meet'}`;
+      } else if (alertEl) {
+        alertEl.style.display = 'none';
+      }
+
+      if (cachedApplications.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px; color:var(--text-muted);">Та хараахан анкет илгээгээгүй байна.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = cachedApplications.map(a => `
+        <tr>
+          <td><strong>${a.company_name}</strong></td>
+          <td>${a.job_title}</td>
+          <td>${new Date(a.created_at).toLocaleDateString()}</td>
+          <td>
+            ${a.interview_date ? `
+              <div style="font-size:0.82rem; font-weight:700; color:var(--secondary);">📅 ${new Date(a.interview_date).toLocaleString()}</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">📍 ${a.interview_location || 'Google Meet'}</div>
+            ` : '<span style="color:var(--text-muted); font-size:0.8rem;">Товлоогүй</span>'}
+          </td>
+          <td>
+            <span class="badge" style="${getStatusStyle(a.status)}">
+              ${a.status === 'accepted' ? '🟢 Тэнцсэн (Баяр хүргэе!)' :
+                a.status === 'interview' ? '🔵 Ярилцлагад урьсан' :
+                a.status === 'rejected' ? '🔴 Татгалзсан' : '🟡 Шалгаж буй'}
+            </span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderSavedJobs() {
+      const savedContainer = document.getElementById('studentSavedJobsGrid');
+      const savedIds = getSavedJobIds();
+      const allJobs = getStoredInternships();
+      const savedJobs = allJobs.filter(j => savedIds.includes(j.id));
+
+      if (savedJobs.length === 0) {
+        savedContainer.innerHTML = `<p style="color:var(--text-muted);">Хадгалсан дадлагын зар байхгүй байна.</p>`;
+        return;
+      }
+
+      savedContainer.innerHTML = savedJobs.map(j => createJobCardHTML(j)).join('');
+      initCardTilt();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadDashboardData);
+    } else {
+      loadDashboardData();
+    }
+  </script>
+</body>
+</html>

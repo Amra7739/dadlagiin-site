@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="mn" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Дадлагын зар нийтлэх - Дадлага.mn</title>
+  <meta name="description" content="Ажил олгогчдод зориулсан оюутны дадлагын зар нийтлэх хялбар систем">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Ambient Animated Background Layer -->
+  <div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon-wrapper">
+          <div class="logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+        </div>
+        <div>Дадлага<span>.mn</span></div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Нүүр</a>
+        <a href="internships.html" class="nav-link">Дадлагууд</a>
+        <a href="companies.html" class="nav-link">Компаниуд</a>
+        <a href="dashboard.html" class="nav-link">Хяналтын самбар</a>
+        <a href="tips.html" class="nav-link">Зөвлөгөө & CV</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Dark / Light Mode Switcher -->
+        <button class="theme-toggle" aria-label="Горим солих">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+
+        <a href="internships.html" class="btn btn-outline btn-sm">Дадлага хайх</a>
+      </div>
+
+      <button class="mobile-toggle" aria-label="Цэс нээх">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" x2="20" y1="12" y2="12"/>
+          <line x1="4" x2="20" y1="6" y2="6"/>
+          <line x1="4" x2="20" y1="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
+      <span style="font-weight: 700; color: var(--text-main);">Сэдэв</span>
+      <button class="theme-toggle" aria-label="Горим солих">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </div>
+    <a href="index.html" class="nav-link">Нүүр</a>
+    <a href="internships.html" class="nav-link">Дадлагууд</a>
+    <a href="companies.html" class="nav-link">Компаниуд</a>
+    <a href="tips.html" class="nav-link">Зөвлөгөө & CV</a>
+    <a href="internships.html" class="btn btn-primary btn-block">Дадлага хайх</a>
+  </div>
+
+  <!-- Page Header -->
+  <section style="background: var(--bg-surface); border-bottom: 1px solid var(--border-light); padding: 48px 0 36px 0;">
+    <div class="container" style="max-width: 1100px;">
+      <span class="section-tag">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+        Ажил олгогчийн портал
+      </span>
+      <h1 style="font-size: 2.3rem; font-weight: 800; color: var(--text-main); margin: 6px 0 10px 0; letter-spacing: -0.02em;">
+        Дадлагын зар нийтлэх
+      </h1>
+      <p style="color: var(--text-muted); font-size: 1.05rem;">
+        Шинэ үеийн авьяаслаг оюутнуудыг багтаа урьж, дадлагажуулах зараа шууд нийтлээрэй.
+      </p>
+    </div>
+  </section>
+
+  <!-- Form + Live Preview Grid Layout -->
+  <section class="section">
+    <div class="container" style="max-width: 1100px;">
+      <div style="display: grid; grid-template-columns: 1fr; gap: 36px;" id="postLayoutGrid">
+        
+        <div style="display: grid; grid-template-columns: 1fr; gap: 32px;" class="split-post-container">
+          <!-- Form Left Column -->
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 36px; box-shadow: var(--shadow-sm);">
+            
+            <form id="postInternshipForm">
+              
+              <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 10px;">
+                1. Байгууллагын үндсэн мэдээлэл
+              </h3>
+
+              <div class="form-row form-row-2">
+                <div class="form-group">
+                  <label class="form-label" for="postCompany">Байгууллагын нэр *</label>
+                  <input type="text" id="postCompany" class="form-control" placeholder="Жишээ: Терасофт ХХК" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="postLocation">Байршил / Дүүрэг *</label>
+                  <input type="text" id="postLocation" class="form-control" placeholder="Жишээ: Улаанбаатар, Сүхбаатар" required>
+                </div>
+              </div>
+
+              <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin: 30px 0 20px 0; border-bottom: 1px solid var(--border-light); padding-bottom: 10px;">
+                2. Дадлагын зарын дэлгэрэнгүй
+              </h3>
+
+              <div class="form-group">
+                <label class="form-label" for="postTitle">Дадлагын албан тушаал / Гарчиг *</label>
+                <input type="text" id="postTitle" class="form-control" placeholder="Жишээ: Junior UI/UX Designer Дадлагажигч" required>
+              </div>
+
+              <div class="form-row form-row-3">
+                <div class="form-group">
+                  <label class="form-label" for="postCategory">Салбар чиглэл *</label>
+                  <select id="postCategory" class="form-control" required>
+                    <option value="Мэдээллийн технологи & Программ">Мэдээллийн технологи & IT</option>
+                    <option value="Санхүү, Банк & Нягтлан">Санхүү, Банк & Нягтлан</option>
+                    <option value="Маркетинг, Борлуулалт & PR">Маркетинг, Борлуулалт & PR</option>
+                    <option value="График дизайн, UI/UX & Мультимедиа">Дизайн, UI/UX & Мультимедиа</option>
+                    <option value="Барилга, Архитектур & Интерьер">Барилга, Архитектур & Интерьер</option>
+                    <option value="Уул уурхай, Геологи & Хүнд үйлдвэр">Уул уурхай, Геологи & Хүнд үйлдвэр</option>
+                    <option value="Цахилгаан, Механик & Автоматжуулалт">Цахилгаан, Механик & Робот</option>
+                    <option value="Эрүүл мэнд, Эм зүй & Биотехнологи">Эрүүл мэнд, Эм зүй & Биотех</option>
+                    <option value="Хууль, Эрх зүй & Нийцэл">Хууль, Эрх зүй & Нийцэл</option>
+                    <option value="Хүний нөөц, Захиргаа & Менежмент">Хүний нөөц & Захиргаа</option>
+                    <option value="Аялал жуулчлал & Зочлох үйлчилгээ">Аялал жуулчлал & Зочид буудал</option>
+                    <option value="Боловсрол, Багш & Сургалт">Боловсрол, Багш & Сургалт</option>
+                    <option value="Байгаль орчин, ХАА & Экологи">Байгаль орчин, ХАА & Экологи</option>
+                    <option value="Логистик, Тээвэр & Нийлүүлэлт">Логистик, Тээвэр & Гааль</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="postType">Цалин / Төрөл *</label>
+                  <select id="postType" class="form-control" required>
+                    <option value="Цалинтай">Цалинтай</option>
+                    <option value="Урамшуулалтай">Урамшуулалтай</option>
+                    <option value="Цалингүй">Сургуулийн дадлага</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="postMode">Ажлын хэлбэр *</label>
+                  <select id="postMode" class="form-control" required>
+                    <option value="Оффис">Оффис дээр</option>
+                    <option value="Зайнаас">100% Зайнаас (Remote)</option>
+                    <option value="Хосолсон">Хосолсон (Hybrid)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row form-row-3">
+                <div class="form-group">
+                  <label class="form-label" for="postStipend">Стипенд / Цалин</label>
+                  <input type="text" id="postStipend" class="form-control" placeholder="Жишээ: 1,000,000₮ / сар">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="postDuration">Хугацаа</label>
+                  <input type="text" id="postDuration" class="form-control" placeholder="Жишээ: 3 сар">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="postDeadline">Эцсийн хугацаа</label>
+                  <input type="date" id="postDeadline" class="form-control">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="postDesc">Дадлагын ерөнхий танилцуулга *</label>
+                <textarea id="postDesc" class="form-control" rows="4" placeholder="Дадлагажигч ямар төсөл дээр ажиллах, байгууллагын орчин соёлын талаар товч бичнэ үү..." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="postReqs">Тавигдах шаардлага (Мөр тус бүрт 1 шаардлага) *</label>
+                <textarea id="postReqs" class="form-control" rows="3" placeholder="Жишээ:&#10;Их дээд сургуулийн 3, 4-р курс&#10;Figma сайн эзэмшсэн&#10;Англи хэлний дунд түвшний мэдлэгтэй" required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="postBenefits">Олгох давуу тал, хангамж (Мөр тус бүрт 1)</label>
+                <textarea id="postBenefits" class="form-control" rows="3" placeholder="Жишээ:&#10;Үдийн халуун хоол, унаа&#10;Үндсэн ажилтнаар үлдэх боломж&#10;Туршлагатай менторын чиглүүлэг"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="postTags">Түлхүүр үгс / Шошго (Таслалаар тусгаарлана)</label>
+                <input type="text" id="postTags" class="form-control" placeholder="Жишээ: Figma, UI/UX, Prototype, Mobile">
+              </div>
+
+              <div style="margin-top: 32px; display: flex; gap: 14px; justify-content: flex-end;">
+                <a href="internships.html" class="btn btn-outline">Цуцлах</a>
+                <button type="submit" class="btn btn-primary btn-lg">Зарыг шууд нийтлэх</button>
+              </div>
+            </form>
+
+          </div>
+
+          <!-- Live Card Preview Right Column -->
+          <div>
+            <div style="position: sticky; top: 100px;">
+              <div style="font-size: 0.95rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
+                Зарын бодит харагдах байдал (Live Preview)
+              </div>
+
+              <div class="job-card featured-card" id="livePreviewCard" style="box-shadow: var(--shadow-hover);">
+                <div class="job-card-header">
+                  <div class="company-badge">
+                    <div class="company-logo" id="prevLogo" style="background-color: var(--primary); color: #ffffff;">
+                      CO
+                    </div>
+                    <div class="company-info">
+                      <h4 id="prevCompany">Танай компанийн нэр</h4>
+                      <span id="prevLocation">Улаанбаатар хот</span>
+                    </div>
+                  </div>
+                  <button class="bookmark-btn" onclick="event.stopPropagation();">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+                  </button>
+                </div>
+
+                <h3 class="job-title" id="prevTitle">Junior UI/UX Designer Дадлагажигч</h3>
+                <p class="job-description-short" id="prevDesc">Дадлагын товч танилцуулга энд бодитоор харагдана...</p>
+
+                <div class="job-tags" id="prevTags">
+                  <span class="badge badge-paid" id="prevType">Цалинтай</span>
+                  <span class="badge badge-remote" id="prevMode">Оффис</span>
+                  <span class="badge badge-category" id="prevCategory">Мэдээллийн технологи</span>
+                </div>
+
+                <div class="job-card-footer">
+                  <div class="job-stipend">
+                    <span>Стипенд / Цалин</span>
+                    <span id="prevStipend">1,000,000₮ / сар</span>
+                  </div>
+                  <div class="job-date" id="prevDuration">
+                    Хугацаа: 3 сар
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FAQ Section for Employers -->
+      <div id="faq" style="margin-top: 60px;">
+        <h3 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 22px;">
+          Ажил олгогчдод зориулсан түгээмэл асуултууд
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 22px;">
+            <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">
+              Зар байршуулахад үнэ төлбөртэй юу?
+            </h4>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              Одоогоор Дадлага.mn платформ дээр оюутны дадлагын зар нийтлэх нь бүх байгууллагуудад 100% үнэ төлбөргүй бөгөөд зар шууд нийтлэгдэнэ.
+            </p>
+          </div>
+
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 22px;">
+            <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">
+              Оюутнуудтай дадлагын 3 талт гэрээ хэрхэн байгуулах вэ?
+            </h4>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              Их дээд сургуулиудын стандарт "Оюутны үйлдвэрлэлийн дадлагын гэрээ"-г оюутан өөрөө сургуулиасаа авчирдаг бөгөөд байгууллага дадлага удирдагч томилон баталгаажуулж өгдөг.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding-top: 0;">
+        <div>&copy; 2026 Дадлага.mn. Бүх эрх хуулиар хамгаалагдсан.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="index.html">Нүүр хуудас</a>
+          <a href="internships.html">Дадлагууд</a>
+          <a href="companies.html">Компаниуд</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    // Live Card Preview Handler
+    const inputCompany = document.getElementById('postCompany');
+    const inputLocation = document.getElementById('postLocation');
+    const inputTitle = document.getElementById('postTitle');
+    const inputCategory = document.getElementById('postCategory');
+    const inputType = document.getElementById('postType');
+    const inputMode = document.getElementById('postMode');
+    const inputStipend = document.getElementById('postStipend');
+    const inputDuration = document.getElementById('postDuration');
+    const inputDesc = document.getElementById('postDesc');
+
+    function updateLivePreview() {
+      const comp = inputCompany.value.trim() || 'Танай компанийн нэр';
+      const loc = inputLocation.value.trim() || 'Улаанбаатар хот';
+      const tit = inputTitle.value.trim() || 'Дадлагын албан тушаал';
+      const cat = inputCategory.value;
+      const typ = inputType.value;
+      const mod = inputMode.value;
+      const stp = inputStipend.value.trim() || 'Тохиролцоно';
+      const dur = inputDuration.value.trim() || '3 сар';
+      const desc = inputDesc.value.trim() || 'Дадлагын товч танилцуулга энд бодитоор харагдана...';
+
+      document.getElementById('prevCompany').textContent = comp;
+      document.getElementById('prevLogo').textContent = comp.substring(0, 2).toUpperCase();
+      document.getElementById('prevLocation').textContent = loc;
+      document.getElementById('prevTitle').textContent = tit;
+      document.getElementById('prevDesc').textContent = desc;
+      document.getElementById('prevCategory').textContent = cat;
+      document.getElementById('prevType').textContent = typ;
+      document.getElementById('prevMode').textContent = mod;
+      document.getElementById('prevStipend').textContent = stp;
+      document.getElementById('prevDuration').textContent = 'Хугацаа: ' + dur;
+    }
+
+    [inputCompany, inputLocation, inputTitle, inputCategory, inputType, inputMode, inputStipend, inputDuration, inputDesc].forEach(el => {
+      el.addEventListener('input', updateLivePreview);
+      el.addEventListener('change', updateLivePreview);
+    });
+
+    // Auto-fill company information if logged in
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof Auth !== 'undefined' && Auth.isLoggedIn()) {
+        const user = Auth.getUser();
+        if (user && user.role === 'company') {
+          if (inputCompany && !inputCompany.value) {
+            inputCompany.value = user.organization || user.name;
+            updateLivePreview();
+          }
+        }
+      }
+    });
+
+    // Form Submission
+    const postForm = document.getElementById('postInternshipForm');
+    if (postForm) {
+      postForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = postForm.querySelector('button[type="submit"]');
+        const origBtnText = submitBtn ? submitBtn.innerHTML : '';
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '⏳ Өгөгдлийн санд нийтэлж байна...';
+        }
+
+        const company = inputCompany.value.trim();
+        const location = inputLocation.value.trim();
+        const title = inputTitle.value.trim();
+        const category = inputCategory.value;
+        const type = inputType.value;
+        const workMode = inputMode.value;
+        const stipend = inputStipend.value.trim() || 'Тохиролцоно';
+        const duration = inputDuration.value.trim() || '3 сар';
+        const deadline = document.getElementById('postDeadline').value || 'Нээлттэй';
+        const description = inputDesc.value.trim();
+        const reqsRaw = document.getElementById('postReqs').value.trim();
+        const benefitsRaw = document.getElementById('postBenefits').value.trim();
+        const tagsRaw = document.getElementById('postTags').value.trim();
+
+        const requirements = reqsRaw ? reqsRaw.split('\n').map(s => s.trim()).filter(Boolean) : [];
+        const benefits = benefitsRaw ? benefitsRaw.split('\n').map(s => s.trim()).filter(Boolean) : [];
+        const tags = tagsRaw ? tagsRaw.split(',').map(s => s.trim()).filter(Boolean) : [category];
+
+        const user = typeof Auth !== 'undefined' ? Auth.getUser() : null;
+        const userId = user ? user.id : 'user-company-demo';
+
+        const newJob = {
+          id: 'job-' + Date.now(),
+          title,
+          company,
+          logoText: company.length >= 2 ? company.substring(0, 2).toUpperCase() : 'CO',
+          logoBg: '#2563eb',
+          logoColor: '#ffffff',
+          category,
+          location,
+          workMode,
+          type,
+          stipend,
+          duration,
+          deadline,
+          postedDate: 'Дөнгөж сая',
+          featured: true,
+          description,
+          requirements,
+          responsibilities: [
+            'Төслийн өдөр тутмын үйл ажиллагаанд оролцох',
+            'Менторын өгсөн даалгаврыг чанартай биелүүлэх'
+          ],
+          benefits: benefits.length > 0 ? benefits : ['Туршлага хуримтлуулах', 'Тодорхойлолт гаргаж өгнө'],
+          tags,
+          user_id: userId
+        };
+
+        // Send to backend SQLite API
+        const API_BASE = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '3000'))
+          ? 'http://localhost:3000'
+          : '';
+
+        try {
+          const res = await fetch(`${API_BASE}/api/internships`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${Auth.getToken() || ''}`
+            },
+            body: JSON.stringify(newJob)
+          });
+          const data = await res.json();
+          if (data && data.internship) {
+            Object.assign(newJob, data.internship);
+          } else if (data && data.id) {
+            newJob.id = data.id;
+          }
+        } catch (err) {
+          console.warn('API sync warning:', err);
+        }
+
+        // Always save to localStorage immediately so both offline and online see it
+        saveNewInternship(newJob);
+
+        showToast('🎉 Таны зар өгөгдлийн санд амжилттай нийтлэгдлээ!');
+        
+        setTimeout(() => {
+          // If company is logged in, redirect to dashboard to see their new job; else to internships.html
+          if (user && user.role === 'company') {
+            window.location.href = 'dashboard.html';
+          } else {
+            window.location.href = 'internships.html';
+          }
+        }, 800);
+      });
+    }
+
+    // Responsive split layout on desktop
+    if (window.innerWidth >= 992) {
+      const split = document.querySelector('.split-post-container');
+      if (split) {
+        split.style.gridTemplateColumns = '1.3fr 0.7fr';
+      }
+    }
+  </script>
+</body>
+</html>

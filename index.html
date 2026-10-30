@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="mn" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Дадлага.mn - Монголын Оюутан Залуусын Дадлага Хайлтын Нэгдсэн Платформ</title>
+  <meta name="description" content="Монголын шилдэг компаниудын цалинтай, цалингүй дадлагын зар, хөтөлбөрүүд. Мэргэжлийн гараагаа итгэлтэй эхлүүл.">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Ambient Animated Background Layer -->
+  <div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon-wrapper">
+          <div class="logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+        </div>
+        <div>Дадлага<span>.mn</span><span class="sub-badge">Оюутанд зориулав</span></div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link active">Нүүр</a>
+        <a href="internships.html" class="nav-link">Дадлагууд</a>
+        <a href="companies.html" class="nav-link">Компаниуд</a>
+        <a href="dashboard.html" class="nav-link">Хяналтын самбар</a>
+        <a href="tips.html" class="nav-link">Зөвлөгөө & CV</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Dark / Light Mode Switcher -->
+        <button class="theme-toggle" aria-label="Горим солих">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+
+        <a href="post-internship.html" class="btn btn-outline btn-sm">Зар нийтлэх</a>
+        <a href="internships.html" class="btn btn-primary btn-sm">Дадлага хайх</a>
+      </div>
+
+      <button class="mobile-toggle" aria-label="Цэс нээх">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" x2="20" y1="12" y2="12"/>
+          <line x1="4" x2="20" y1="6" y2="6"/>
+          <line x1="4" x2="20" y1="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
+      <span style="font-weight: 700; color: var(--text-main);">Сэдэв</span>
+      <button class="theme-toggle" aria-label="Горим солих">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </div>
+    <a href="index.html" class="nav-link active">Нүүр</a>
+    <a href="internships.html" class="nav-link">Дадлагууд</a>
+    <a href="companies.html" class="nav-link">Компаниуд</a>
+    <a href="dashboard.html" class="nav-link">Хяналтын самбар</a>
+    <a href="tips.html" class="nav-link">Зөвлөгөө & CV</a>
+    <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 10px;">
+      <a href="post-internship.html" class="btn btn-outline btn-block">Ажил олгогч: Зар нийтлэх</a>
+      <a href="internships.html" class="btn btn-primary btn-block">Бүх дадлага харах</a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-pill">
+            <span class="pulse-dot"></span>
+            2026 оны шилдэг дадлагын бүртгэл эхэллээ
+          </div>
+          <h1 class="hero-title">
+            Мэргэжлийн гараагаа <br><span class="gradient-text">итгэлтэй эхлүүл</span>
+          </h1>
+          <p class="hero-desc">
+            Их, дээд сургуулийн оюутнуудад зориулсан Монголын тэргүүлэх компаниудын нээлттэй дадлагын хөтөлбөрүүд нэг дор. Танил талгүйгээр өөрийн чадвараараа сонгогдоорой.
+          </p>
+
+          <!-- Glassmorphic Search Box -->
+          <div class="search-box">
+            <form class="search-form" action="internships.html" method="GET">
+              <div class="search-input-group">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                </svg>
+                <input type="text" name="keyword" class="search-input" placeholder="Мэргэжил, албан тушаал, технологи...">
+              </div>
+
+              <div class="search-input-group">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+                </svg>
+                <select name="category" class="search-input">
+                  <option value="">Бүх 14 салбар чиглэл</option>
+                  <option value="Мэдээллийн технологи & Программ">Мэдээллийн технологи & IT</option>
+                  <option value="Санхүү, Банк & Нягтлан">Санхүү, Банк & Нягтлан</option>
+                  <option value="Маркетинг, Борлуулалт & PR">Маркетинг, Борлуулалт & PR</option>
+                  <option value="График дизайн, UI/UX & Мультимедиа">Дизайн, UI/UX & Мультимедиа</option>
+                  <option value="Барилга, Архитектур & Интерьер">Барилга, Архитектур & Интерьер</option>
+                  <option value="Уул уурхай, Геологи & Хүнд үйлдвэр">Уул уурхай, Геологи & Хүнд үйлдвэр</option>
+                  <option value="Цахилгаан, Механик & Автоматжуулалт">Цахилгаан, Механик & Робот</option>
+                  <option value="Эрүүл мэнд, Эм зүй & Биотехнологи">Эрүүл мэнд, Эм зүй & Биотех</option>
+                  <option value="Хууль, Эрх зүй & Нийцэл">Хууль, Эрх зүй & Нийцэл</option>
+                  <option value="Хүний нөөц, Захиргаа & Менежмент">Хүний нөөц & Захиргаа</option>
+                  <option value="Аялал жуулчлал & Зочлох үйлчилгээ">Аялал жуулчлал & Зочид буудал</option>
+                  <option value="Боловсрол, Багш & Сургалт">Боловсрол, Багш & Сургалт</option>
+                  <option value="Байгаль орчин, ХАА & Экологи">Байгаль орчин, ХАА & Экологи</option>
+                  <option value="Логистик, Тээвэр & Нийлүүлэлт">Логистик, Тээвэр & Гааль</option>
+                </select>
+              </div>
+
+              <div class="search-input-group">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+                <select name="type" class="search-input">
+                  <option value="">Бүх төрөл</option>
+                  <option value="Цалинтай">Цалинтай дадлага</option>
+                  <option value="Урамшуулалтай">Урамшуулалтай</option>
+                  <option value="Цалингүй">Сургуулийн дадлага</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                Хайх
+              </button>
+            </form>
+
+            <div class="quick-tags">
+              <span>Эрэлттэй хайлтууд:</span>
+              <a href="internships.html?keyword=React" class="quick-tag-pill">Frontend / React</a>
+              <a href="internships.html?keyword=Санхүү" class="quick-tag-pill">Дата Шинжээч</a>
+              <a href="internships.html?keyword=Figma" class="quick-tag-pill">UI/UX Дизайн</a>
+              <a href="internships.html?workMode=Зайнаас" class="quick-tag-pill">Зайнаас хийх</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero 3D Card Stack Showcase -->
+        <div class="hero-visual">
+          <div class="hero-card-stack">
+            <div class="hero-floating-card">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div style="width: 46px; height: 46px; border-radius: 12px; background: #1e3a8a; color: #fbbf24; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.15rem; box-shadow: 0 4px 10px rgba(30,58,138,0.3);">
+                    GB
+                  </div>
+                  <div>
+                    <h4 style="font-size: 1rem; font-weight: 700; color: var(--text-main);">Голомт Банк</h4>
+                    <span style="font-size: 0.82rem; color: var(--text-muted);">Сүхбаатар дүүрэг, УБ</span>
+                  </div>
+                </div>
+                <span class="badge badge-paid">1,000,000₮ / сар</span>
+              </div>
+
+              <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 10px; color: var(--text-main);">
+                Дата Шинжээч / Data Analyst Intern
+              </h3>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">
+                Банкны их өгөгдөл (Big Data) болон харилцагчийн зан төлөвийн шинжилгээний багт 3 сар ажиллах боломж...
+              </p>
+
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                <span class="badge" style="background:var(--primary-light); color:var(--primary);">SQL</span>
+                <span class="badge" style="background:var(--primary-light); color:var(--primary);">Python</span>
+                <span class="badge" style="background:var(--warning-light); color:var(--warning);">PowerBI</span>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted); border-top: 1px solid var(--border-light); padding-top: 14px;">
+                <span>⏱️ 2 өдрийн өмнө нэмэгдсэн</span>
+                <span style="color: var(--primary); font-weight: 700;">32 оюутан өргөдөл өгсөн</span>
+              </div>
+            </div>
+
+            <!-- Stats Float Pill -->
+            <div class="hero-stats-badge">
+              <div class="stats-badge-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div>
+                <div style="font-weight: 800; font-size: 1.2rem; color: var(--text-main); line-height: 1.1;">85% Амжилт</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Үндсэн ажилтнаар үлдсэн хувь</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Stats Counter -->
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">56<span>+</span></div>
+          <div class="stat-label">Идэвхтэй дадлагын зар</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">14<span>+</span></div>
+          <div class="stat-label">Мэргэжлийн чиглэлүүд</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">1,200<span>+</span></div>
+          <div class="stat-label">Холбогдсон оюутнууд</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">950<span>к₮</span></div>
+          <div class="stat-label">Дундаж сарын стипенд</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          Салбар чиглэлүүд
+        </span>
+        <h2 class="section-title">Өөрийн мэргэжлээр дадлагаа сонго</h2>
+        <p class="section-desc">Бүх чиглэлийн их, дээд сургуулийн оюутнуудад зориулсан төрөлжсөн ажлын байрууд</p>
+      </div>
+
+      <div class="category-grid" id="homeCategoriesGrid">
+        <!-- Rendered dynamically by JavaScript with all 14 categories -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Internships Section with Tab Filter -->
+  <section class="section" style="background: var(--bg-surface); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+    <div class="container">
+      <div class="section-header section-header-flex">
+        <div>
+          <span class="section-tag">Шилдэг боломжууд</span>
+          <h2 class="section-title">Онцлох дадлагын хөтөлбөрүүд</h2>
+          <p class="section-desc">Шалгарсан цалинтай болон карьер өсөх бодит боломжтой дадлагууд</p>
+        </div>
+
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="quick-tag-pill active" onclick="filterHomeFeatured('all', this)" style="background:var(--primary); color:#ffffff; border-color:var(--primary);">Бүгд</button>
+          <button class="quick-tag-pill" onclick="filterHomeFeatured('Цалинтай', this)">Цалинтай</button>
+          <button class="quick-tag-pill" onclick="filterHomeFeatured('IT', this)">IT / Tech</button>
+          <button class="quick-tag-pill" onclick="filterHomeFeatured('Хосолсон', this)">Хосолсон</button>
+        </div>
+      </div>
+
+      <div class="jobs-grid" id="featuredJobsGrid">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div style="margin-top: 40px; text-align: center;">
+        <a href="internships.html" class="btn btn-outline btn-lg">
+          Бүх 45+ дадлагыг үзэх
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Companies -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header section-header-flex">
+        <div>
+          <span class="section-tag">Тэргүүлэгч ажил олгогчид</span>
+          <h2 class="section-title">Оюутныг дэмжигч топ компаниуд</h2>
+          <p class="section-desc">Залуу авьяастнуудыг сургаж, чиглүүлж, ажлын байраар хангадаг үндэсний томоохон байгууллагууд</p>
+        </div>
+        <a href="companies.html" class="btn btn-outline">Бүх компаниуд</a>
+      </div>
+
+      <div class="companies-grid" id="featuredCompaniesGrid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- How it Works (Interactive Steps) -->
+  <section class="section how-it-works" style="background: var(--bg-surface); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+    <div class="container">
+      <div class="section-header" style="text-align: center; max-width: 650px; margin: 0 auto 50px auto;">
+        <span class="section-tag">Үйл явц</span>
+        <h2 class="section-title">Дадлагад хэрхэн орох вэ?</h2>
+        <p class="section-desc">Танил тал хайх шаардлагагүй, 3 хялбар алхмаар мөрөөдлийн дадлагаа олоорой</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card" style="background: var(--bg-surface); border: 1px solid var(--border-light);">
+          <div class="step-number">01</div>
+          <div class="step-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+          </div>
+          <h3 class="step-title" style="color:var(--text-main);">1. Өөрт тохирох дадлагаа хайх</h3>
+          <p class="step-desc">Мэргэжил, цалинтай эсэх, ажлын байршил, оффис эсвэл зайнаас ажиллах хэлбэрээрээ шүүж олоорой.</p>
+        </div>
+
+        <div class="step-card" style="background: var(--bg-surface); border: 1px solid var(--border-light);">
+          <div class="step-number">02</div>
+          <div class="step-icon" style="background: linear-gradient(135deg, var(--secondary), #0e7490);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+          <h3 class="step-title" style="color:var(--text-main);">2. Нэг товшилтоор анкет илгээх</h3>
+          <p class="step-desc">Урт маягт бөглөхгүйгээр сургууль, курс, холбоо барих мэдээлэл болон товч CV-гээ шууд илгээнэ.</p>
+        </div>
+
+        <div class="step-card" style="background: var(--bg-surface); border: 1px solid var(--border-light);">
+          <div class="step-number">03</div>
+          <div class="step-icon" style="background: linear-gradient(135deg, var(--accent), #6d28d9);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <h3 class="step-title" style="color:var(--text-main);">3. Ярилцлагад орж гараагаа эхлүүлэх</h3>
+          <p class="step-desc">Компанийн хүний нөөцийн баг тантай шууд холбогдож, дадлагын гэрээгээ байгуулан дадлагаа эхлүүлнэ.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner with Glowing Gradient -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-banner">
+        <h2 class="cta-title">Байгууллагадаа эрч хүчтэй дадлагажигч хайж байна уу?</h2>
+        <p class="cta-desc">
+          Монголын шилдэг их, дээд сургуулийн 10,000+ идэвхтэй оюутнуудад дадлагын зараа үнэгүй нийтэлж, ирээдүйн чадварлаг боловсон хүчнээ өнөөдөр бэлтгэж эхлээрэй.
+        </p>
+        <div class="cta-actions">
+          <a href="post-internship.html" class="btn btn-primary btn-lg">Үнэгүй зар нийтлэх</a>
+          <a href="companies.html" class="btn btn-outline btn-lg" style="color: #ffffff; border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.06);">Хамтран ажиллах тухай</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="logo">
+            <div class="logo-icon-wrapper">
+              <div class="logo-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                </svg>
+              </div>
+            </div>
+            <div>Дадлага<span>.mn</span></div>
+          </a>
+          <p class="footer-desc">
+            Монголын оюутан залуус, шинэ төгсөгчдийг шилдэг байгууллагуудын бодит ажлын байр, дадлагын боломжуудтай найдвартай холбох ухаалаг экосистем.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Оюутнуудад</h4>
+          <div class="footer-links">
+            <a href="internships.html">Бүх дадлагууд</a>
+            <a href="internships.html?type=Цалинтай">Цалинтай дадлага</a>
+            <a href="internships.html?workMode=Зайнаас">Зайнаас хийх дадлага</a>
+            <a href="tips.html">CV бэлтгэх зөвлөгөө</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Ажил олгогчдод</h4>
+          <div class="footer-links">
+            <a href="post-internship.html">Зар байршуулах</a>
+            <a href="companies.html">Байгууллагын сан</a>
+            <a href="post-internship.html#faq">Дадлагын үйл явц</a>
+            <a href="mailto:contact@dadlaga.mn">Хамтран ажиллах</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Холбоо барих</h4>
+          <div class="footer-links">
+            <span style="font-size:0.92rem; color:var(--text-muted);">📍 Улаанбаатар хот, Сүхбаатар дүүрэг</span>
+            <span style="font-size:0.92rem; color:var(--text-muted);">📞 +976 7700-1122</span>
+            <span style="font-size:0.92rem; color:var(--text-muted);">✉️ info@dadlaga.mn</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Дадлага.mn. Бүх эрх хуулиар хамгаалагдсан.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="#">Үйлчилгээний нөхцөл</a>
+          <a href="#">Нууцлалын бодлого</a>
+          <a href="#">Түгээмэл асуулт</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Detail Modal -->
+  <div class="modal-backdrop" id="jobDetailModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalJobTitle">Дадлагын гарчиг</h3>
+        <button class="modal-close" onclick="closeModal('jobDetailModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-company-box" style="display: flex; align-items: center; gap: 16px; padding: 18px; background: var(--bg-subtle); border-radius: var(--radius); margin-bottom: 24px;">
+          <div class="company-logo" id="modalCompanyLogo">CO</div>
+          <div>
+            <h4 id="modalCompanyName" style="font-size: 1.15rem; font-weight: 800; color: var(--text-main);">Компанийн нэр</h4>
+            <div style="font-size: 0.88rem; color: var(--text-muted);" id="modalJobLocation">Улаанбаатар хот</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 24px; background: var(--bg-subtle); padding: 16px; border-radius: var(--radius);">
+          <div>
+            <span style="font-size: 0.78rem; color: var(--text-muted); display: block; font-weight: 600;">ТӨРӨЛ:</span>
+            <strong id="modalJobType" style="font-size: 1rem; color: var(--text-main);">Цалинтай</strong>
+          </div>
+          <div>
+            <span style="font-size: 0.78rem; color: var(--text-muted); display: block; font-weight: 600;">ХЭЛБЭР:</span>
+            <strong id="modalJobMode" style="font-size: 1rem; color: var(--text-main);">Оффис</strong>
+          </div>
+          <div>
+            <span style="font-size: 0.78rem; color: var(--text-muted); display: block; font-weight: 600;">СТИПЕНД:</span>
+            <strong id="modalJobStipend" style="font-size: 1.05rem; color: var(--primary);">1,000,000₮</strong>
+          </div>
+          <div>
+            <span style="font-size: 0.78rem; color: var(--text-muted); display: block; font-weight: 600;">ХУГАЦАА:</span>
+            <strong id="modalJobDuration" style="font-size: 1rem; color: var(--text-main);">3 сар</strong>
+          </div>
+        </div>
+
+        <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Дадлагын товч танилцуулга</h4>
+        <p id="modalJobDesc" style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; margin-bottom: 20px;"></p>
+
+        <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Тавигдах шаардлага</h4>
+        <ul id="modalJobRequirements" style="list-style: disc; padding-left: 20px; color: var(--text-muted); line-height: 1.65; margin-bottom: 20px;"></ul>
+
+        <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Гүйцэтгэх үндсэн үүрэг</h4>
+        <ul id="modalJobResponsibilities" style="list-style: disc; padding-left: 20px; color: var(--text-muted); line-height: 1.65; margin-bottom: 20px;"></ul>
+
+        <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Олгох давуу тал, хангамж</h4>
+        <ul id="modalJobBenefits" style="list-style: disc; padding-left: 20px; color: var(--text-muted); line-height: 1.65;"></ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('jobDetailModal')">Хаах</button>
+        <button class="btn btn-primary" id="modalApplyBtn">Анкет илгээх</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Apply Modal -->
+  <div class="modal-backdrop" id="applyModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Дадлагын анкет илгээх</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+            <span id="applyTargetJobTitle" style="font-weight: 700; color: var(--primary);"></span> - <span id="applyTargetCompany"></span>
+          </p>
+        </div>
+        <button class="modal-close" onclick="closeModal('applyModal')">&times;</button>
+      </div>
+      <form id="quickApplyForm">
+        <div class="modal-body">
+          <input type="hidden" id="applyJobId">
+
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="applicantName">Таны бүтэн нэр *</label>
+              <input type="text" id="applicantName" class="form-control" placeholder="Жишээ: Батбаяр Тэмүүлэн" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="applicantPhone">Утасны дугаар *</label>
+              <input type="tel" id="applicantPhone" class="form-control" placeholder="Жишээ: 99112233" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="applicantEmail">Имэйл хаяг *</label>
+            <input type="email" id="applicantEmail" class="form-control" placeholder="Жишээ: temulen@gmail.com" required>
+          </div>
+
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label class="form-label" for="applicantSchool">Их, дээд сургууль</label>
+              <input type="text" id="applicantSchool" class="form-control" placeholder="МУИС, ШУТИС г.м">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="applicantMajor">Мэргэжил</label>
+              <input type="text" id="applicantMajor" class="form-control" placeholder="Программ хангамж г.м">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="applicantYear">Курс</label>
+              <select id="applicantYear" class="form-control">
+                <option value="2">2-р курс</option>
+                <option value="3" selected>3-р курс</option>
+                <option value="4">4-р курс</option>
+                <option value="Төгсөгч">Шинэ төгсөгч</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="applicantCvLink">CV / Резюме хавсаргах эсвэл холбоос</label>
+            <input type="text" id="applicantCvLink" class="form-control" placeholder="Google Drive, LinkedIn эсвэл GitHub холбоос">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="applicantNotes">Өөрийн тухай товч / Сонирхсон шалтгаан</label>
+            <textarea id="applicantNotes" class="form-control" placeholder="Та яагаад энэ дадлагыг сонирхож байна вэ? Гол давуу тал тань юу вэ?"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('applyModal')">Болих</button>
+          <button type="submit" class="btn btn-primary">Өргөдөл илгээх</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    const API_BASE = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '3000'))
+      ? 'http://localhost:3000'
+      : '';
+    let homeCachedJobs = [];
+
+    // Tab Filter Logic on Home Page
+    function filterHomeFeatured(filterType, btnEl) {
+      document.querySelectorAll('.section-header .quick-tag-pill').forEach(b => {
+        b.style.background = 'var(--bg-surface)';
+        b.style.color = 'var(--text-main)';
+        b.style.borderColor = 'var(--border-light)';
+      });
+      btnEl.style.background = 'var(--primary)';
+      btnEl.style.color = '#ffffff';
+      btnEl.style.borderColor = 'var(--primary)';
+
+      const allJobs = homeCachedJobs.length > 0 ? homeCachedJobs : getStoredInternships();
+      let filtered = allJobs;
+
+      if (filterType === 'Цалинтай') {
+        filtered = allJobs.filter(j => j.type === 'Цалинтай');
+      } else if (filterType === 'IT') {
+        filtered = allJobs.filter(j => (j.category || '').toLowerCase().includes('мэдээллийн') || (j.category || '').toLowerCase().includes('it'));
+      } else if (filterType === 'Хосолсон') {
+        filtered = allJobs.filter(j => j.workMode === 'Хосолсон' || j.workMode === 'Зайнаас');
+      }
+
+      const featuredContainer = document.getElementById('featuredJobsGrid');
+      if (featuredContainer) {
+        featuredContainer.innerHTML = filtered.slice(0, 6).map(j => createJobCardHTML(j)).join('');
+        initCardTilt();
+      }
+    }
+
+    async function loadHomeJobs() {
+      homeCachedJobs = getStoredInternships();
+      const featuredContainer = document.getElementById('featuredJobsGrid');
+      if (featuredContainer) {
+        featuredContainer.innerHTML = homeCachedJobs.slice(0, 6).map(j => createJobCardHTML(j)).join('');
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/internships`);
+        const data = await res.json();
+        if (data.internships && data.internships.length > 0) {
+          homeCachedJobs = data.internships;
+          try {
+            localStorage.setItem(STORAGE_KEYS.INTERNSHIPS, JSON.stringify(homeCachedJobs));
+          } catch (e) {}
+          if (featuredContainer) {
+            featuredContainer.innerHTML = homeCachedJobs.slice(0, 6).map(j => createJobCardHTML(j)).join('');
+            initCardTilt();
+          }
+        }
+      } catch (e) {}
+    }
+
+    function initHomePage() {
+      loadHomeJobs();
+
+      // Render All 14 Categories Dynamically
+      const catContainer = document.getElementById('homeCategoriesGrid');
+      if (catContainer && (!catContainer.children || catContainer.children.length === 0)) {
+        catContainer.innerHTML = CATEGORIES.map(c => `
+          <a href="internships.html?category=${encodeURIComponent(c.name)}" class="category-card">
+            <div class="category-icon ${c.class}">
+              ${ICONS[c.icon] || ICONS.briefcase}
+            </div>
+            <h3 class="category-title" style="font-size:0.95rem;">${c.name}</h3>
+            <span class="category-count">${c.count} нээлттэй зар</span>
+          </a>
+        `).join('');
+      }
+
+      const companiesContainer = document.getElementById('featuredCompaniesGrid');
+      if (companiesContainer && (!companiesContainer.children || companiesContainer.children.length === 0)) {
+        companiesContainer.innerHTML = COMPANIES.slice(0, 4).map(c => `
+          <div class="category-card" style="padding: 28px 20px; align-items: center;">
+            <div class="company-logo" style="background-color: ${c.logoBg}; color: ${c.logoColor}; width: 62px; height: 62px; font-size: 1.35rem; margin-bottom: 14px;">
+              ${c.logoText}
+            </div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">${c.name}</h3>
+            <p style="font-size: 0.85rem; color: var(--primary); font-weight: 600; margin-bottom: 14px;">${c.industry}</p>
+            <a href="internships.html?keyword=${encodeURIComponent(c.name)}" class="btn btn-outline btn-sm">
+              ${c.internshipCount} зар үзэх
+            </a>
+          </div>
+        `).join('');
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initHomePage);
+    } else {
+      initHomePage();
+    }
+  </script>
+</body>
+</html>

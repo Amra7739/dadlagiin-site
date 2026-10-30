@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<title>ҮЙЛДВЭРЛЭЛИЙН ДАДЛАГЫН ТАЙЛАН (45 ХОНОГ)</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 2.0cm 2.0cm 2.0cm 3.0cm; /* Mongolian standard left margin 3cm for binding */
+  }
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Times New Roman', 'Liberation Serif', serif;
+    font-size: 12pt;
+    line-height: 1.6;
+    color: #111827;
+    background: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Titles & Headings */
+  h1 {
+    font-size: 16pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 24pt;
+    margin-bottom: 12pt;
+    color: #0f172a;
+    page-break-after: avoid;
+  }
+  h2 {
+    font-size: 13.5pt;
+    font-weight: bold;
+    margin-top: 18pt;
+    margin-bottom: 8pt;
+    color: #1e3a8a;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 14pt;
+    margin-bottom: 6pt;
+    color: #1e293b;
+    page-break-after: avoid;
+  }
+  p {
+    margin-top: 0;
+    margin-bottom: 8pt;
+    text-align: justify;
+    text-indent: 1.25cm;
+  }
+  p.no-indent {
+    text-indent: 0;
+  }
+  .page-break {
+    page-break-before: always;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10pt 0 14pt 0;
+    font-size: 10.5pt;
+  }
+  th {
+    background-color: #f1f5f9;
+    border: 1pt solid #334155;
+    padding: 6pt 8pt;
+    text-align: center;
+    font-weight: bold;
+  }
+  td {
+    border: 1pt solid #334155;
+    padding: 6pt 8pt;
+    vertical-align: top;
+  }
+
+  /* Images */
+  .img-container {
+    text-align: center;
+    margin: 12pt 0 6pt 0;
+    page-break-inside: avoid;
+  }
+  .img-container img {
+    max-width: 90%;
+    max-height: 9.5cm;
+    height: auto;
+    border: 1pt solid #cbd5e1;
+    border-radius: 4pt;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+  }
+  .img-caption {
+    font-size: 9.5pt;
+    font-style: italic;
+    color: #475569;
+    text-align: center;
+    margin-top: 4pt;
+    margin-bottom: 12pt;
+    font-weight: 600;
+  }
+
+  /* Analysis box */
+  .analysis-box {
+    background-color: #f8fafc;
+    border-left: 3.5pt solid #2563eb;
+    padding: 8pt 12pt;
+    margin: 8pt 0 12pt 0;
+    font-size: 11pt;
+    line-height: 1.5;
+    page-break-inside: avoid;
+  }
+
+  .badge {
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 2pt 6pt;
+    font-weight: bold;
+    font-size: 9pt;
+    border-radius: 3pt;
+  }
+
+  /* Cover Page */
+  .cover-page {
+    height: 100%;
+    min-height: 24cm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    padding-top: 20pt;
+  }
+
+  /* Fixed Printable Toolbar */
+  .print-toolbar {
+    position: fixed;
+    top: 16px;
+    right: 24px;
+    display: flex;
+    gap: 12px;
+    z-index: 9999;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(10px);
+    padding: 10px 18px;
+    border-radius: 40px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .print-btn {
+    padding: 8px 18px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .back-btn {
+    padding: 8px 16px;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 30px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .back-btn:hover {
+    color: #ffffff;
+  }
+
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+    body {
+      padding: 0 !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Floating Print Control Bar (Hidden on actual print) -->
+  <div class="print-toolbar no-print">
+    <a href="tips.html" class="back-btn">← Дадлага.mn рүү буцах</a>
+    <button onclick="window.print()" class="print-btn">🖨️ A4 Хэвлэх / PDF татах</button>
+  </div>
+
+  <!-- ==================== НҮҮР ХУУДАС ==================== -->
+  <div class="cover-page">
+    <div>
+      <p class="no-indent" style="font-size: 12pt; font-weight: bold; margin-bottom: 4pt; text-align: center;">
+        БОЛОВСРОЛ, ШИНЖЛЭХ УХААНЫ ЯАМ
+      </p>
+      <p class="no-indent" style="font-size: 11.5pt; font-weight: bold; margin-bottom: 4pt; text-align: center;">
+        [ СУРГУУЛИЙН НЭР : ШУТИС / МУИС / ИХ ЗАСАГ / ИЗОУС ]
+      </p>
+      <p class="no-indent" style="font-size: 10.5pt; text-align: center; margin-bottom: 50pt;">
+        МЭДЭЭЛЭЛ ТЕХНОЛОГИЙН ТЭНХИМ / САЛБАР СУРГУУЛЬ
+      </p>
+
+      <h1 style="font-size: 19pt; line-height: 1.3; margin-bottom: 16pt; color: #0f172a;">
+        ҮЙЛДВЭРЛЭЛИЙН ДАДЛАГЫН ТАЙЛАН
+      </h1>
+      
+      <p class="no-indent" style="font-size: 12.5pt; font-weight: bold; line-height: 1.5; color: #1e3a8a; max-width: 90%; margin: 0 auto 60pt auto; text-align: center;">
+        Сэдэв: Цахим спортын платформын (BTT.mn) хэрэглэгчийн интерфэйс (UI/UX) аудит, 
+        өрсөлдөгчдийн харьцуулсан судалгаа (Xplay.gg, Leet.mn, Mirage.mn),
+        сургалтын систем (flask.lab) ба дадлагын нэгдсэн портал (Дадлага.mn) хөгжүүлэлт
+      </p>
+    </div>
+
+    <div>
+      <table style="width: 82%; margin: 0 auto 50pt auto; border: none; font-size: 11pt;">
+        <tr style="border: none;"><td style="border: none; width: 44%; text-align: left; padding: 4pt 0;"><strong>Гүйцэтгэсэн оюутан:</strong></td><td style="border: none; text-align: left; padding: 4pt 0;">............................................. / Нэр, Код /</td></tr>
+        <tr style="border: none;"><td style="border: none; text-align: left; padding: 4pt 0;"><strong>Мэргэжил:</strong></td><td style="border: none; text-align: left; padding: 4pt 0;">Программ хангамж / Мэдээллийн технологи</td></tr>
+        <tr style="border: none;"><td style="border: none; text-align: left; padding: 4pt 0;"><strong>Курс:</strong></td><td style="border: none; text-align: left; padding: 4pt 0;">3-р курс / 4-р курс</td></tr>
+        <tr style="border: none;"><td style="border: none; text-align: left; padding: 4pt 0;"><strong>Дадлага удирдсан багш:</strong></td><td style="border: none; text-align: left; padding: 4pt 0;">............................................. / Цол, Зэрэг, Нэр /</td></tr>
+        <tr style="border: none;"><td style="border: none; text-align: left; padding: 4pt 0;"><strong>Байгууллагын удирдагч:</strong></td><td style="border: none; text-align: left; padding: 4pt 0;">............................................. / Албан тушаал, Нэр /</td></tr>
+        <tr style="border: none;"><td style="border: none; text-align: left; padding: 4pt 0;"><strong>Дадлага хийсэн газар:</strong></td><td style="border: none; text-align: left; padding: 4pt 0;">............................................. / Компанийн нэр /</td></tr>
+        <tr style="border: none;"><td style="border: none; text-align: left; padding: 4pt 0;"><strong>Хугацаа:</strong></td><td style="border: none; text-align: left; padding: 4pt 0;">2026.09.15 – 2026.10.30 (45 хоног)</td></tr>
+      </table>
+
+      <p class="no-indent" style="font-size: 11pt; text-align: center;">
+        <strong>УЛААНБААТАР ХОТ - 2026 ОН</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== ОРШИЛ ==================== -->
+  <h1>ОРШИЛ</h1>
+  <p>
+    Орчин үеийн цахим спорт (Esports) болон коммьюнити платформууд нь сая сая тоглогчдыг өөртөө татахын тулд зөвхөн тоглоомын сервер ажиллуулаад зогсохгүй, хэрэглэгчийн туршлага (UX), хувийн тохиргоо (Customization), аналитик дата дүрслэл болон интерактив вэб интерфейсийн шийдлүүдийг цогцоор нь хөгжүүлж байна. Тоглогч вэб дээрээс дуртай зэвсгийн өнгө үзэмж (Skin)-ээ тохируулах, өөрийн чансаа (Elo), оноолтын статистикийг хянах, тусгай газрын зураг (Workshop maps)-т холбогдох үйлдлүүд нь маш хялбар, ойлгомжтой, саадгүй (Seamless) байх шаардлагатай.
+  </p>
+  <p>
+    Энэхүү 45 хоногийн үйлдвэрлэлийн дадлагын хүрээнд Монголын цахим спортын тэргүүлэгч платформуудын нэг болох <strong>BTT.mn</strong>-ийн хэрэглэгчийн интерфейс (UI) болон ажиллагаанд гүнзгийрүүлсэн аудит хийж, олон улсын жишиг <strong>Xplay.gg</strong>, дотоодын <strong>Leet.mn</strong> болон <strong>Mirage.mn</strong> системүүдтэй харьцуулсан бенчмарк (Benchmarking) судалгааг хийж гүйцэтгэлээ.
+  </p>
+  <p>
+    Мөн түүнчлэн сургалтын үйл ажиллагааг цахимжуулах <strong>flask.lab</strong> (Python Flask, Jinja2, SQLite/PostgreSQL) системийн элсэлт, админ удирдлагын хөгжүүлэлт болон их дээд сургуулийн оюутнуудад зориулсан <strong>Дадлага.mn</strong> (Node.js, Express, ATS Dashboard) нэгдсэн платформыг бие даан төлөвлөж, бүрэн кодчилон ашиглалтад оруулав.
+  </p>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== 1-Р БҮЛЭГ ==================== -->
+  <h1>НЭГДҮГЭЭР БҮЛЭГ: БАЙГУУЛЛАГЫН ТАНИЛЦУУЛГА БА ТЕХНОЛОГИЙН ОРЧИН</h1>
+  <p>
+    Дадлагыг программ хангамж, веб систем, өндөр ачаалалтай серверийн дэд бүтэц болон дижитал энтертайнмент чиглэлээр үйл ажиллагаа явуулдаг байгууллагын Системийн хөгжүүлэлтийн албанд 45 хоногийн турш гүйцэтгэв.
+  </p>
+  <p>
+    Төслүүдийг гүйцэтгэхдээ Python 3.10+, Flask microframework, SQLite, PostgreSQL (UnifiedCursor архитектур), Node.js, Express REST API, HTML5/CSS3 (CSS Variables, Glassmorphism), JavaScript ES6+ болон Figma орчныг ашигласан.
+  </p>
+
+  <!-- ==================== 2-Р БҮЛЭГ ==================== -->
+  <h1>ХОЁРДУГААР БҮЛЭГ: 45 ХОНОГИЙН ДАДЛАГЫН ТӨЛӨВЛӨГӨӨ БА ГҮЙЦЭТГЭЛ</h1>
+  <table>
+    <tr>
+      <th style="width: 15%;">Хугацаа</th>
+      <th style="width: 35%;">Төлөвлөсөн ажлууд</th>
+      <th style="width: 38%;">Гүйцэтгэлийн бодит үр дүн</th>
+      <th style="width: 12%;">Биелэлт</th>
+    </tr>
+    <tr>
+      <td><strong>1-р 7 хоног</strong></td>
+      <td>• BTT.mn платформын анхдагч аудит хийх</td>
+      <td>BTT.mn-ийн UI болон Skinchanger дутагдлыг илрүүлэв.</td>
+      <td style="text-align: center;"><span class="badge">100%</span></td>
+    </tr>
+    <tr>
+      <td><strong>2-р 7 хоног</strong></td>
+      <td>• Өрсөлдөгчдийн судалгаа (Xplay.gg, Leet.mn, Mirage.mn)</td>
+      <td>Skinchanger, Workshop холболт, статистикийг баримтжуулав.</td>
+      <td style="text-align: center;"><span class="badge">100%</span></td>
+    </tr>
+    <tr>
+      <td><strong>3-р 7 хоног</strong></td>
+      <td>• In-game Live Sync ба монетизацийн санал</td>
+      <td>15 бодит зургийн шинжилгээ, түрээсийн бизнес загвар гаргав.</td>
+      <td style="text-align: center;"><span class="badge">100%</span></td>
+    </tr>
+    <tr>
+      <td><strong>4-р 7 хоног</strong></td>
+      <td>• flask.lab боловсролын систем хөгжүүлэлт</td>
+      <td>Jinja2 темплэйт, файл ачаалалт, CSV тайлангийн экспорт ажиллав.</td>
+      <td style="text-align: center;"><span class="badge">100%</span></td>
+    </tr>
+    <tr>
+      <td><strong>5-р 7 хоног</strong></td>
+      <td>• "Дадлага.mn" платформын фронтенд кодчилол</td>
+      <td>Цэвэр CSS дизайн систем, шүүлтүүрийн системийг кодчилов.</td>
+      <td style="text-align: center;"><span class="badge">100%</span></td>
+    </tr>
+    <tr>
+      <td><strong>6-р 7 хоног</strong></td>
+      <td>• Зар нийтлэх Live Preview ба ATS самбар</td>
+      <td>Ажил олгогчийн хянах самбар, анкет илгээх логик бэлэн болов.</td>
+      <td style="text-align: center;"><span class="badge">100%</span></td>
+    </tr>
+    <tr>
+      <td><strong>7-р 7 хоног</strong></td>
+      <td>• Системийн тест, тайлан нэгтгэл</td>
+      <td>Тайланг эрдэм шинжилгээний найруулгаар нэгтгэж дуусгав.</td>
+      <td style="text-align: center;"><span class="badge">100%</span></td>
+    </tr>
+  </table>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== 3-Р БҮЛЭГ ==================== -->
+  <h1>ГУРАВДУГААР БҮЛЭГ: ЦАХИМ СПОРТЫН ПЛАТФОРМЫН (BTT.MN) UI/UX АУДИТ БА БЕНЧМАРК СУДАЛГАА</h1>
+
+  <h2>3.1 Skinchanger интерфейсийн бүтэц ба Хэрэглэгчийн ашиглах зам (User Flow)</h2>
+  <p>
+    Тоглогчдын платформыг сонгох хамгийн том сэдэл нь тоглоом доторх зэвсгийн өнгө үзэмжийг өөрийн хүссэнээр өөрчлөх "Skinchanger" модуль байдаг. BTT.mn-ийн одоогийн интерфейс нь бусад системүүдтэй харьцуулахад харагдах байдлын хувьд харьцангуй энгийн боловч хэрэглэгч хүссэн скинийхээ загвар, өнгө, чанарыг (Wear, Pattern, StatTrak) олоход алхмын тоо ихтэй, шүүлтүүр нь арай төвөгтэй санагдаж байна.
+  </p>
+
+  <div class="img-container">
+    <img src="assets/report_images/image1.png" alt="BTT.mn Screen 1">
+  </div>
+  <div class="img-caption">Зураг 3.1: BTT.mn платформын үндсэн интерфейс ба Skinchanger удирдлагын хэсэг</div>
+
+  <div class="img-container">
+    <img src="assets/report_images/image2.png" alt="BTT.mn Screen 2">
+  </div>
+  <div class="img-caption">Зураг 3.2: BTT.mn зайн хуваарилалт, зэвсгийн жагсаалт ба навигацийн бүтэц</div>
+
+  <h2>3.2 Өрсөлдөгчдийн шийдэл: Xplay.gg, Leet.mn ба Mirage.mn харьцуулалт</h2>
+  <p>
+    Олон улсын тэргүүлэгч <strong>Xplay.gg</strong> платформын хувьд Skinchanger хэсэг нь маш цэвэрхэн харааны шатлалтай (Visual Hierarchy). Хэрэглэгч нэг товшилтоор буу, хутга, бээлийний ангиллыг сонгож, шууд хайлт хийхэд хэдхэн миллисекундын дотор 3D загвартайгаа гарч ирдэг тул хүссэн скинээ олоход туйлын хялбар байна.
+  </p>
+
+  <div class="img-container">
+    <img src="assets/report_images/image3.png" alt="Xplay.gg Skinchanger">
+  </div>
+  <div class="img-caption">Зураг 3.3: Xplay.gg платформын хялбаршуулсан Skinchanger интерфейс ба шуурхай хайлт</div>
+
+  <p>
+    Дотоодын зах зээл дээрх <strong>Leet.mn</strong> платформын хувьд мөн адил тоглогч өөрийн хүссэн скинээ хайж олоход интерфейс нь маш ойлгомжтой, зэвсгийн дүрсүүд нь том, тодорхой хэмжээтэй хийгдсэн тул хэрэглэгчийн ашиглах хугацаа (Time-to-Task)-г мэдэгдэхүйц хэмнэдэг давуу талтай.
+  </p>
+
+  <div class="img-container">
+    <img src="assets/report_images/image4.png" alt="Leet.mn Screen 1">
+  </div>
+  <div class="img-caption">Зураг 3.4: Leet.mn платформын скин сонголтын каталог ба шүүлтүүрийн бүтэц</div>
+
+  <div class="img-container">
+    <img src="assets/report_images/image5.png" alt="Leet.mn Screen 2">
+  </div>
+  <div class="img-caption">Зураг 3.5: Leet.mn скин тохируулах дэлгэрэнгүй цонх ба төлөвийн мэдээлэл</div>
+
+  <h2>3.3 Тоглоомын горимууд ба Хэрэглэгчийн таталцал (Workshop Maps & Fun Modes)</h2>
+  <p>
+    Тоглогчид зөвхөн 5v5 Competitive тоглохоос гадна өдөр бүр ур чадвараа хөгжүүлэх (Aim training), буудлага болон хөдөлгөөний чадвар (Movement: KZ, Surf, Bunnyhop), 1v1 дуэлийн сорилтуудыг тогтмол эрэлхийлж байдаг. Steam Workshop-ийн шилдэг газрын зургуудтай шууд холбогдож, вэб дээрээс 1 товшилтоор серверт орох боломж олгох нь BTT.mn платформын тоглогчдыг өдөр бүр татах гол хүчин зүйл болно.
+  </p>
+
+  <h2>3.4 Серверийн бодит цагийн холболт ба Live Skin Synchronization шийдэл</h2>
+  <div class="analysis-box">
+    <strong>Асуудал ба Бодит шийдэл:</strong><br>
+    Аудитын явцад илэрсэн хамгийн том дутагдал бол: Тоглогч сервер дотор тоглож байх үедээ скинээ шууд сольж болохгүй байсан явдал юм. Үүнээс болж байнга скинээ сольж тоглоод сурчихсан тоглогчдод тоглоомоос гарч дахин холбогдох (Reconnect) төвөгтэй байдал үүсэж байна. Үүнийг шийдвэрлэхийн тулд Source Engine серверийн скин плагинтай <strong>WebSocket эсвэл RCON протоколоор</strong> бодит цагийн холболт үүсгэж, тоглоомын дундуур скинийг шууд солих (Live Hot-swap) архитектурыг нэвтрүүлэх нь нэн чухал байна.
+  </div>
+
+  <h2>3.5 Тоглогчийн дата аналитик ба дүрслэл (Player Statistics)</h2>
+  <p>
+    Бусад тэргүүлэгч платформууд тоглогчдын зөвхөн Чансаа (Elo)-г харуулаад зогсохгүй, туйлын нарийвчилсан статистик үзүүлэлтүүдийг график болон визуал картуудаар илэрхийлж байна: Winrate %, Headshot %, зэвсэг бүрийн задаргаа, тоглосон цагийн хуваарилалт.
+  </p>
+
+  <div class="img-container">
+    <img src="assets/report_images/image6.png" alt="Player Statistics">
+  </div>
+  <div class="img-caption">Зураг 3.6: Тоглогчийн дэвшилтэт статистикийн дэлгэц: Чансаа, Winrate, HS% ба зэвсгийн задаргаа</div>
+
+  <h2>3.6 Custom Agents, Визуал эффект ба Түрээсийн эдийн засгийн загварчлал</h2>
+  <p>
+    BTT.mn-ийг өрсөлдөгчдөөсөө эрс ялгарах, тоглогчдын сонирхлыг татах хамгийн том боломж бол <strong>Шинэлэг, онцгой дүрүүд (Custom Agents: Anime, Game characters)</strong> болон тоглоомын дуу, дүрсний визуал эффектүүдийг (Kill Effect, Hit Effect, Hit Sound, Bullet Tracer) нэвтрүүлэх явдал юм.
+  </p>
+
+  <div class="img-container"><img src="assets/report_images/image7.png" alt="Agent 1"></div>
+  <div class="img-caption">Зураг 3.7: Тусгай дүр / Агент загвар</div>
+
+  <div class="img-container"><img src="assets/report_images/image8.png" alt="Agent 2"></div>
+  <div class="img-caption">Зураг 3.8: Аниме болон тусгай баатрын дүр</div>
+
+  <div class="img-container"><img src="assets/report_images/image9.png" alt="Skin 1"></div>
+  <div class="img-caption">Зураг 3.9: Valorant/PUBG загварын зэвсгийн скин</div>
+
+  <div class="img-container"><img src="assets/report_images/image10.png" alt="Skin 2"></div>
+  <div class="img-caption">Зураг 3.10: Гэрэлтдэг визуал бүхий захиалгат скин</div>
+
+  <div class="img-container"><img src="assets/report_images/image11.png" alt="Agent 3"></div>
+  <div class="img-caption">Зураг 3.11: Custom 3D Агент модель</div>
+
+  <div class="img-container"><img src="assets/report_images/image12.png" alt="Agent 4"></div>
+  <div class="img-caption">Зураг 3.12: Эмэгтэй баатрын виртуал дүр</div>
+
+  <div class="img-container"><img src="assets/report_images/image13.png" alt="Tracer Effect"></div>
+  <div class="img-caption">Зураг 3.13: Сумны замнал (Bullet tracer) ба Hit Sound эффект</div>
+
+  <div class="img-container"><img src="assets/report_images/image14.png" alt="Kill Effect"></div>
+  <div class="img-caption">Зураг 3.14: Дайснаа устгах үеийн тусгай Kill Effect</div>
+
+  <div class="img-container"><img src="assets/report_images/image15.png" alt="Anime Agents"></div>
+  <div class="img-caption">Зураг 3.15: Anime, тоглоомын баатруудын нэгдсэн Агент сан</div>
+
+  <div class="analysis-box">
+    <strong>Монетизацийн шийдэл:</strong><br>
+    Эдгээр дүр, скинүүдийг платформ дээр үнэгүй тараах бус, <strong>Түрээсийн дэлгүүр (Rental Marketplace)</strong> загвараар 7 болон 30 хоногоор түрээслүүлдэг захиалгат загвар (Subscription) болон Battle Pass даалгаврын системээр олгох нь серверийн эдийн засгийн орлогыг тогтворжуулах шилдэг шийдэл болно.
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== 4 & 5-Р БҮЛЭГ ==================== -->
+  <h1>ДӨРӨВДҮГЭЭР БҮЛЭГ: PYTHON FLASK СУУРЬТАЙ БОЛОВСРОЛЫН СИСТЕМ (FLASK.LAB)</h1>
+  <p>
+    Дадлагын хүрээнд хэрэгжүүлсэн flask.lab төсөл нь сургуулийн элсэлт, удирдлага, багш нарын лавлах, оюутны бүртгэлийг цахимжуулсан 1,600 гаруй мөр Python эх код бүхий хүчирхэг систем юм. UnifiedCursor классыг хөгжүүлж, SQLite болон PostgreSQL хоёр өөр өгөгдлийн баазыг нэг кодоор удирдах архитектурыг амжилттай хэрэгжүүлэв.
+  </p>
+
+  <h1>ТАВДУГААР БҮЛЭГ: ОЮУТНЫ ДАДЛАГЫН НЭГДСЭН ПЛАТФОРМ (ДАДЛАГА.MN)</h1>
+  <p>
+    Оюутнуудыг ажлын байр, байгууллагын дадлагын хөтөлбөрүүдтэй холбох зорилгоор орчин үеийн Дадлага.mn платформыг бүтээв. Node.js + Express REST API сервер, Live Preview зарын маягт, шүүлтүүртэй зарын сан, компаниудад зориулсан ATS анкет шалгах самбарыг бүрэн хөгжүүлж дууслаа.
+  </p>
+
+  <h1>ДҮГНЭЛТ БА ЗӨВЛӨМЖ</h1>
+  <p>
+    45 хоногийн үйлдвэрлэлийн дадлагын үр дүнд BTT.mn платформын өрсөлдөх чадварыг дээшлүүлэх UI/UX болон функциональ цогц зөвлөмжүүд боловсруулагдсанаас гадна, боловсролын систем flask.lab болон оюутны ажлын байрны нэгдсэн систем Дадлага.mn платформууд бүрэн ажиллагаанд орж, их сургуулийн дээд шалгуурыг хангах дадлагын тайлан бэлэн боллоо.
+  </p>
+
+</body>
+</html>

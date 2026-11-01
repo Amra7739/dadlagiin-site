@@ -35,6 +35,13 @@ const Auth = {
   },
 
   logout() {
+    // Invalidate the server-side session too (fire and forget)
+    const token = this.getToken();
+    if (token) {
+      try {
+        fetch(`${API_BASE}/api/auth/logout`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` } }).catch(() => {});
+      } catch (e) {}
+    }
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
     if (typeof showToast === 'function') {
@@ -47,6 +54,21 @@ const Auth = {
         window.location.href = 'index.html';
       }, 500);
     }
+  },
+
+  // Requires a signed-in user (optionally of a given role). Opens the login dialog otherwise.
+  requireLogin(role, message) {
+    const user = this.getUser();
+    if (this.isLoggedIn() && (!role || user.role === role)) return true;
+    if (typeof showToast === 'function') {
+      if (this.isLoggedIn()) {
+        showToast(role === 'student' ? 'Анкет илгээхийн тулд оюутны эрхээр нэвтэрнэ үү.' : 'Энэ үйлдлийг зөвхөн ажил олгогчийн эрхээр хийнэ.', 'error');
+      } else {
+        showToast(message || 'Үргэлжлүүлэхийн тулд эхлээд нэвтэрнэ үү.', 'info');
+      }
+    }
+    if (!this.isLoggedIn()) this.openModal('login');
+    return false;
   },
 
   // 1-Click Fast Demo Login for instant testing
@@ -69,37 +91,12 @@ const Auth = {
         }, 400);
         return;
       }
+      if (typeof showToast === 'function') showToast(data.error || 'Демо хэрэглэгчээр нэвтэрч чадсангүй.', 'error');
     } catch (e) {
-      // Offline fallback
+      if (typeof showToast === 'function') {
+        showToast('Сервертэй холбогдож чадсангүй. Интернэт холболтоо шалгаад дахин оролдоно уу.', 'error');
+      }
     }
-
-    // Offline mock fallback if server is unreachable
-    const mockUser = role === 'company' ? {
-      id: 'user-company-demo',
-      email: 'hr@golomtbank.com',
-      name: 'Голомт Банк Хүний Нөөц',
-      role: 'company',
-      organization: 'Голомт Банк',
-      phone: '70111111'
-    } : {
-      id: 'user-student-demo',
-      email: 'student@dadlaga.mn',
-      name: 'Батболд Тэмүүлэн',
-      role: 'student',
-      school: 'МУИС',
-      major: 'Программ хангамж',
-      year: '3-р курс',
-      phone: '99112233'
-    };
-
-    this.setSession(`demo-token-${role}-${Date.now()}`, mockUser);
-    this.closeModal();
-    if (typeof showToast === 'function') {
-      showToast(`Демо горимоор нэвтэрлээ: ${mockUser.name}`);
-    }
-    setTimeout(() => {
-      window.location.href = redirectUrl || (window.location.pathname.includes('login.html') ? 'dashboard.html' : window.location.href);
-    }, 400);
   },
 
   // Real Email/Password Login
@@ -277,10 +274,10 @@ const Auth = {
     }
   },
 
-  // Forgot Password / Reset
-  async handleForgotPassword(email, submitBtn) {
-    if (!email) {
-      if (typeof showToast === 'function') showToast('Имэйл хаягаа оруулна уу.', 'error');
+  // Forgot Password / Reset (email + the phone number saved on the account)
+  async handleForgotPassword(email, phone, submitBtn) {
+    if (!email || !phone) {
+      if (typeof showToast === 'function') showToast('Имэйл болон бүртгэлтэй утасны дугаараа оруулна уу.', 'error');
       return;
     }
 
@@ -295,19 +292,18 @@ const Auth = {
       const res = await fetch(`${API_BASE}/api/auth/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim() })
+        body: JSON.stringify({ email: email.trim(), phone: phone.trim() })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Алдаа гарлаа.');
 
       alert(`✅ ${data.message}`);
       this.closeForgotPasswordModal();
-      this.openModal('login');
-      // Autofill email & temp password if modal exists
-      const emailInput = document.getElementById('loginEmail');
-      const passInput = document.getElementById('loginPassword');
+      const emailInput = document.getElementById('loginEmailInput') || document.getElementById('loginEmail');
+      const passInput = document.getElementById('loginPassInput') || document.getElementById('loginPassword');
       if (emailInput) emailInput.value = email;
       if (passInput) passInput.value = data.tempPassword || '';
+      if (!emailInput) this.openModal('login');
     } catch (err) {
       if (typeof showToast === 'function') {
         showToast(err.message, 'error');
@@ -405,13 +401,29 @@ const Auth = {
 
     if (user) {
       const isCompany = user.role === 'company';
-      const initial = (user.name || 'U').charAt(0).toUpperCase();
-      const roleText = isCompany ? (user.organization || 'Байгууллага') : 'Оюутан';
+      const initial = escapeHTML((user.name || 'U').charAt(0).toUpperCase());
+      const roleText = escapeHTML(isCompany ? (user.organization || 'Байгууллага') : 'Оюутан');
       const roleIcon = isCompany ? '🏢' : '🎓';
+      const firstName = escapeHTML((user.name || '').split(' ')[0]);
+      const fullName = escapeHTML(user.name);
+      const emailSafe = escapeHTML(user.email);
 
       headerActions.innerHTML = `
         ${themeBtn ? themeBtn.outerHTML : ''}
-        ${isCompany ? `<a href="post-internship.html" class="btn btn-outline btn-sm" style="display:none; @media(min-width:640px){display:inline-flex;}">+ Зар нийтлэх</a>` : ''}
+        ${isCompany ? `<a href="post-internship.html" class="btn btn-outline btn-sm header-post-btn">+ Зар нийтлэх</a>` : ''}
+
+        <!-- Notification Bell -->
+        <div class="notif-wrapper" id="notifWrapper">
+          <button type="button" class="notif-bell-btn" id="notifBellBtn" onclick="Auth.toggleNotifPanel(event)" aria-label="Мэдэгдлүүд">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
+          </button>
+          <div class="notif-panel" id="notifPanel">
+            <div class="notif-panel-header">Мэдэгдлүүд</div>
+            <div id="notifList"><div class="notif-empty">Ачаалж байна...</div></div>
+            <a href="dashboard.html" class="notif-panel-footer">Хяналтын самбар руу очих →</a>
+          </div>
+        </div>
         
         <!-- User Menu Pill & Dropdown -->
         <div class="user-menu-wrapper" id="userMenuWrapper">
@@ -420,7 +432,7 @@ const Auth = {
               ${initial}
             </div>
             <div class="user-pill-meta">
-              <span class="user-pill-name">${user.name.split(' ')[0]}</span>
+              <span class="user-pill-name">${firstName}</span>
               <span class="user-pill-role">${roleIcon} ${roleText}</span>
             </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
@@ -429,8 +441,8 @@ const Auth = {
           <!-- Dropdown Card -->
           <div class="user-dropdown-card" id="headerUserDropdown">
             <div class="user-dropdown-header">
-              <div class="user-dropdown-header-name">${user.name}</div>
-              <div class="user-dropdown-header-email">${user.email}</div>
+              <div class="user-dropdown-header-name">${fullName}</div>
+              <div class="user-dropdown-header-email">${emailSafe}</div>
               <div style="margin-top:6px;">
                 <span class="badge" style="background:var(--primary-light); color:var(--primary); font-size:0.75rem; padding:2px 8px;">
                   ${roleIcon} ${isCompany ? 'Ажил олгогч' : 'Оюутан / Горилогч'}
@@ -486,7 +498,7 @@ const Auth = {
         mobileNav.innerHTML = `
           <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
             <div style="font-weight: 700; color: var(--text-main);">
-              ${user.name.split(' ')[0]} (${user.role === 'company' ? '🏢 Компани' : '🎓 Оюутан'})
+              ${escapeHTML((user.name || '').split(' ')[0])} (${user.role === 'company' ? '🏢 Компани' : '🎓 Оюутан'})
             </div>
             ${mobileTheme ? mobileTheme.outerHTML : ''}
           </div>
@@ -522,6 +534,84 @@ const Auth = {
     if (typeof initTheme === 'function') {
       initTheme();
     }
+
+    if (user) this.loadNotifications();
+  },
+
+  // ----- Notifications (derived from the user's applications) -----
+  toggleNotifPanel(e) {
+    if (e) e.stopPropagation();
+    const panel = document.getElementById('notifPanel');
+    if (!panel) return;
+    const willShow = !panel.classList.contains('show');
+    panel.classList.toggle('show', willShow);
+    const dropdown = document.getElementById('headerUserDropdown');
+    if (dropdown) dropdown.classList.remove('show');
+    if (willShow) {
+      // Opening the panel marks everything as read
+      const user = this.getUser();
+      if (user && this._notifKeys) {
+        try { localStorage.setItem(`dadlaga_seen_notifs_${user.id}`, JSON.stringify(this._notifKeys)); } catch (err) {}
+      }
+      const badge = document.getElementById('notifBadge');
+      if (badge) badge.style.display = 'none';
+    }
+  },
+
+  async loadNotifications() {
+    const user = this.getUser();
+    const list = document.getElementById('notifList');
+    if (!user || !list || typeof authFetch !== 'function') return;
+
+    try {
+      const res = await authFetch(`${API_BASE}/api/applications`);
+      if (!res.ok) { list.innerHTML = '<div class="notif-empty">Мэдэгдэл байхгүй байна.</div>'; return; }
+      const data = await res.json();
+      const apps = data.applications || [];
+
+      let items;
+      if (user.role === 'company') {
+        items = apps.filter(a => a.status === 'reviewing').slice(0, 12).map(a => ({
+          key: `${a.id}:new`,
+          icon: '📥',
+          text: `<strong>${escapeHTML(a.applicant_name)}</strong> — ${escapeHTML(a.job_title)} дадлагад анкет илгээлээ`,
+          time: a.created_at
+        }));
+      } else {
+        const label = {
+          interview: (a) => `🔵 <strong>${escapeHTML(a.company_name)}</strong> таныг <em>${escapeHTML(a.job_title)}</em> дадлагын ярилцлагад урьлаа`,
+          accepted: (a) => `🎉 <strong>${escapeHTML(a.company_name)}</strong> таныг <em>${escapeHTML(a.job_title)}</em> дадлагад авлаа. Баяр хүргэе!`,
+          rejected: (a) => `<strong>${escapeHTML(a.company_name)}</strong> — ${escapeHTML(a.job_title)}: энэ удаа таны анкетыг сонгосонгүй`
+        };
+        items = apps.filter(a => label[a.status]).slice(0, 12).map(a => ({
+          key: `${a.id}:${a.status}`,
+          icon: a.status === 'accepted' ? '🎉' : (a.status === 'interview' ? '📅' : '✉️'),
+          text: label[a.status](a),
+          time: a.interview_date || a.created_at
+        }));
+      }
+
+      this._notifKeys = items.map(i => i.key);
+      let seen = [];
+      try { seen = JSON.parse(localStorage.getItem(`dadlaga_seen_notifs_${user.id}`) || '[]'); } catch (err) {}
+      const unread = items.filter(i => !seen.includes(i.key)).length;
+
+      list.innerHTML = items.length === 0
+        ? '<div class="notif-empty">Шинэ мэдэгдэл байхгүй байна.</div>'
+        : items.map(i => `
+            <a href="dashboard.html" class="notif-item ${seen.includes(i.key) ? '' : 'unread'}">
+              <span class="notif-item-icon">${i.icon}</span>
+              <span class="notif-item-text">${i.text}</span>
+            </a>`).join('');
+
+      const badge = document.getElementById('notifBadge');
+      if (badge) {
+        badge.textContent = unread > 9 ? '9+' : String(unread);
+        badge.style.display = unread > 0 ? 'flex' : 'none';
+      }
+    } catch (err) {
+      list.innerHTML = '<div class="notif-empty">Мэдэгдэл ачаалж чадсангүй.</div>';
+    }
   },
 
   // Close dropdown when clicking outside
@@ -532,6 +622,11 @@ const Auth = {
       if (dropdown && !dropdown.contains(e.target) && pillBtn && !pillBtn.contains(e.target)) {
         dropdown.classList.remove('show');
         pillBtn.classList.remove('active');
+      }
+      const notifPanel = document.getElementById('notifPanel');
+      const notifWrap = document.getElementById('notifWrapper');
+      if (notifPanel && notifWrap && !notifWrap.contains(e.target)) {
+        notifPanel.classList.remove('show');
       }
     });
   },
@@ -915,12 +1010,16 @@ const Auth = {
 
           <div class="modal-body" style="padding-top: 14px;">
             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
-              Бүртгэлтэй имэйл хаягаа оруулна уу. Бид таны аккаунтын нууц үгийг түр нууц үгээр шинэчилж өгнө.
+              Бүртгэлтэй имэйл хаяг болон бүртгүүлэхдээ оруулсан утасны дугаараа бичнэ үү. Хоёулаа таарвал танд түр нууц үг өгнө.
             </p>
-            <form onsubmit="event.preventDefault(); Auth.handleForgotPassword(document.getElementById('forgotEmailInput').value, this.querySelector('button[type=submit]'));">
+            <form onsubmit="event.preventDefault(); Auth.handleForgotPassword(document.getElementById('forgotEmailInput').value, document.getElementById('forgotPhoneInput').value, this.querySelector('button[type=submit]'));">
               <div class="form-group">
                 <label class="form-label">Имэйл хаяг</label>
                 <input type="email" id="forgotEmailInput" class="form-control" placeholder="name@domain.com" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Бүртгэлтэй утасны дугаар</label>
+                <input type="tel" id="forgotPhoneInput" class="form-control" placeholder="99112233" required>
               </div>
 
               <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px;">

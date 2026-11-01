@@ -265,9 +265,7 @@
   <script>
     const compSearch = document.getElementById('companySearchInput');
     const compContainer = document.getElementById('companiesContainer');
-    const API_BASE = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '3000'))
-      ? 'http://localhost:3000'
-      : '';
+    // API_BASE is provided globally by assets/js/auth.js
 
     let activeSelectedCompany = null;
     let allReviewsCache = [];

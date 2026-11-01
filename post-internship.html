@@ -418,11 +418,7 @@
           user_id: userId
         };
 
-        // Send to backend SQLite API
-        const API_BASE = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '3000'))
-          ? 'http://localhost:3000'
-          : '';
-
+        // Send to backend SQLite API (API_BASE provided globally by assets/js/auth.js)
         try {
           const res = await fetch(`${API_BASE}/api/internships`, {
             method: 'POST',

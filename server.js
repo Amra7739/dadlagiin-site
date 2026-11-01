@@ -8,11 +8,16 @@ const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const zlib = require('node:zlib');
 const { DatabaseSync } = require('node:sqlite');
 
 const PORT = process.env.PORT || 3000;
-// Connect directly to dadlaga.db in root folder
-const DB_PATH = path.join(__dirname, 'dadlaga.db');
+// Database location. Set DB_PATH (e.g. /var/data/dadlaga.db) to keep data on a persistent disk.
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'dadlaga.db');
+// Uploaded CV files live next to the database so they share the same persistent disk.
+const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(path.dirname(DB_PATH), 'uploads');
+try { fs.mkdirSync(path.dirname(DB_PATH), { recursive: true }); } catch (e) {}
+try { fs.mkdirSync(UPLOAD_DIR, { recursive: true }); } catch (e) {}
 
 // Initialize Native SQLite Database
 const db = new DatabaseSync(DB_PATH);
@@ -97,9 +102,17 @@ db.exec(`
     stipend_rating REAL DEFAULT 4,
     created_at TEXT NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS sessions (
+    token_hash TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    expires_at INTEGER NOT NULL,
+    created_at TEXT NOT NULL
+  );
 `);
 
 // Safe migrations for additional profile and application fields
+try { db.exec(`ALTER TABLE applications ADD COLUMN cv_stored TEXT`); } catch (e) {}
 try { db.exec(`ALTER TABLE users ADD COLUMN bio TEXT`); } catch (e) {}
 try { db.exec(`ALTER TABLE users ADD COLUMN website TEXT`); } catch (e) {}
 try { db.exec(`ALTER TABLE applications ADD COLUMN cv_file_name TEXT`); } catch (e) {}
@@ -107,54 +120,110 @@ try { db.exec(`ALTER TABLE applications ADD COLUMN interview_date TEXT`); } catc
 try { db.exec(`ALTER TABLE applications ADD COLUMN interview_location TEXT`); } catch (e) {}
 try { db.exec(`ALTER TABLE applications ADD COLUMN hr_notes TEXT`); } catch (e) {}
 
-// Simple crypto hash helper
-function hashPassword(password) {
+// ---------------------------------------------------------------------------
+// Password hashing: scrypt with a unique random salt per user.
+// Legacy SHA-256 hashes (from older versions) are still accepted and are
+// transparently upgraded to scrypt the next time the user logs in.
+// ---------------------------------------------------------------------------
+function legacyHash(password) {
   return crypto.createHash('sha256').update(password + '_dadlaga_salt').digest('hex');
 }
 
-// In-Memory Token Session Store
-const sessions = new Map();
+function hashPassword(password) {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.scryptSync(String(password), salt, 64).toString('hex');
+  return `scrypt$${salt}$${hash}`;
+}
+
+function verifyPassword(password, stored) {
+  if (!stored || typeof password !== 'string') return false;
+  if (stored.startsWith('scrypt$')) {
+    const [, salt, hash] = stored.split('$');
+    const expected = Buffer.from(hash, 'hex');
+    const actual = crypto.scryptSync(password, salt, expected.length);
+    return crypto.timingSafeEqual(expected, actual);
+  }
+  return stored === legacyHash(password);
+}
+
+// ---------------------------------------------------------------------------
+// Persistent sessions (stored in SQLite so users stay logged in after restarts)
+// ---------------------------------------------------------------------------
+const SESSION_TTL_MS = 14 * 24 * 60 * 60 * 1000; // 14 days
+
+function tokenHash(token) {
+  return crypto.createHash('sha256').update(token).digest('hex');
+}
 
 function createSession(user) {
   const token = crypto.randomBytes(32).toString('hex');
-  sessions.set(token, {
-    userId: user.id,
-    email: user.email,
-    name: user.name,
-    role: user.role,
-    organization: user.organization || ''
-  });
+  db.prepare('INSERT INTO sessions (token_hash, user_id, expires_at, created_at) VALUES (?, ?, ?, ?)')
+    .run(tokenHash(token), user.id, Date.now() + SESSION_TTL_MS, new Date().toISOString());
   return token;
 }
 
-function getUserFromReq(req) {
+function getBearerToken(req) {
   const authHeader = req.headers['authorization'];
-  if (!authHeader) return null;
-  const token = authHeader.replace('Bearer ', '').trim();
-  if (!token) return null;
-  if (sessions.has(token)) return sessions.get(token);
-
-  // Fallback for demo tokens so demo company and student are always recognized
-  if (token.startsWith('demo-token-company') || token.includes('company')) {
-    return {
-      userId: 'user-company-demo',
-      email: 'hr@golomtbank.com',
-      name: 'Голомт Банк Хүний Нөөц',
-      role: 'company',
-      organization: 'Голомт Банк'
-    };
-  }
-  if (token.startsWith('demo-token-') || token.includes('student')) {
-    return {
-      userId: 'user-student-demo',
-      email: 'student@dadlaga.mn',
-      name: 'Батболд Тэмүүлэн',
-      role: 'student',
-      organization: 'МУИС'
-    };
-  }
-  return null;
+  if (!authHeader) return '';
+  return authHeader.replace(/^Bearer\s+/i, '').trim();
 }
+
+function getUserFromReq(req) {
+  const token = getBearerToken(req);
+  if (!token) return null;
+  const row = db.prepare(`
+    SELECT u.id, u.email, u.name, u.role, u.organization, s.expires_at
+    FROM sessions s JOIN users u ON u.id = s.user_id
+    WHERE s.token_hash = ?
+  `).get(tokenHash(token));
+  if (!row) return null;
+  if (row.expires_at < Date.now()) {
+    db.prepare('DELETE FROM sessions WHERE token_hash = ?').run(tokenHash(token));
+    return null;
+  }
+  return {
+    userId: row.id,
+    email: row.email,
+    name: row.name,
+    role: row.role,
+    organization: row.organization || ''
+  };
+}
+
+try { db.prepare('DELETE FROM sessions WHERE expires_at < ?').run(Date.now()); } catch (e) {}
+
+// ---------------------------------------------------------------------------
+// Tiny in-memory rate limiter (per IP + bucket) to slow down brute force
+// ---------------------------------------------------------------------------
+const rateBuckets = new Map();
+
+function clientIp(req) {
+  const fwd = req.headers['x-forwarded-for'];
+  if (fwd) return String(fwd).split(',')[0].trim();
+  return req.socket.remoteAddress || 'unknown';
+}
+
+function isRateLimited(req, bucket, max, windowMs) {
+  const key = `${bucket}:${clientIp(req)}`;
+  const now = Date.now();
+  const entry = rateBuckets.get(key);
+  if (!entry || entry.reset < now) {
+    rateBuckets.set(key, { count: 1, reset: now + windowMs });
+    return false;
+  }
+  entry.count += 1;
+  return entry.count > max;
+}
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [k, v] of rateBuckets) if (v.reset < now) rateBuckets.delete(k);
+}, 60 * 1000).unref();
+
+// Small helpers
+const clip = (value, max) => String(value == null ? '' : value).trim().slice(0, max);
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 
 // Seed Initial Data if Database is Fresh
 function seedDatabase() {
@@ -408,42 +477,90 @@ const MIME_TYPES = {
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
-  '.ico': 'image/x-icon'
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.gif': 'image/gif',
+  '.ico': 'image/x-icon',
+  '.txt': 'text/plain; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8',
+  '.woff2': 'font/woff2'
 };
+
+const COMPRESSIBLE = new Set(['.html', '.css', '.js', '.json', '.svg', '.txt', '.xml']);
 
 // Helper to send JSON responses
 function sendJSON(res, statusCode, data) {
   res.writeHead(statusCode, {
     'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'no-store',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization'
   });
   res.end(JSON.stringify(data));
 }
 
-// Request Body Parser
-function parseBody(req) {
+// Request Body Parser (size-limited; returns { __tooLarge: true } when exceeded)
+function parseBody(req, limit = 1024 * 1024) {
   return new Promise((resolve) => {
-    let body = '';
-    req.on('data', chunk => body += chunk);
+    const chunks = [];
+    let size = 0;
+    let tooLarge = false;
+    req.on('data', chunk => {
+      size += chunk.length;
+      if (size > limit) { tooLarge = true; return; }
+      chunks.push(chunk);
+    });
     req.on('end', () => {
+      if (tooLarge) return resolve({ __tooLarge: true });
       try {
-        resolve(body ? JSON.parse(body) : {});
+        const text = Buffer.concat(chunks).toString('utf8');
+        resolve(text ? JSON.parse(text) : {});
       } catch (e) {
         resolve({});
       }
     });
+    req.on('error', () => resolve({}));
   });
+}
+
+// Auth guards (send the error response and return null when access is denied)
+function requireSession(req, res, role) {
+  const session = getUserFromReq(req);
+  if (!session) {
+    sendJSON(res, 401, { error: 'Энэ үйлдлийг хийхийн тулд нэвтэрнэ үү.' });
+    return null;
+  }
+  if (role && session.role !== role) {
+    sendJSON(res, 403, { error: role === 'company' ? 'Энэ үйлдлийг зөвхөн ажил олгогч (байгууллагын) эрхээр хийнэ.' : 'Энэ үйлдлийг зөвхөн оюутны эрхээр хийнэ.' });
+    return null;
+  }
+  return session;
+}
+
+// Can this company session manage this application? (owner of the job, or same organization)
+function companyOwnsApplication(session, app) {
+  if (!session || session.role !== 'company' || !app) return false;
+  const job = db.prepare('SELECT user_id, company FROM internships WHERE id = ?').get(app.job_id);
+  if (job && job.user_id && job.user_id === session.userId) return true;
+  const org = (session.organization || '').toLowerCase();
+  const target = ((job && job.company) || app.company_name || '').toLowerCase();
+  return Boolean(org && target && (target.includes(org) || org.includes(target)));
 }
 
 // Main HTTP Server
 const server = http.createServer(async (req, res) => {
+  // Baseline security headers for every response
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+
   // CORS Preflight
   if (req.method === 'OPTIONS') {
     res.writeHead(204, {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization'
     });
     return res.end();
@@ -456,35 +573,44 @@ const server = http.createServer(async (req, res) => {
   // REST API ROUTES (/api/*)
   // =========================================================================
 
+  // 0. Health check (used by Render / uptime monitors)
+  if (pathname === '/api/health' && req.method === 'GET') {
+    return sendJSON(res, 200, { ok: true, uptime: Math.round(process.uptime()) });
+  }
+
   // 1. Auth: Register
   if (pathname === '/api/auth/register' && req.method === 'POST') {
+    if (isRateLimited(req, 'register', 10, 10 * 60 * 1000)) {
+      return sendJSON(res, 429, { error: 'Хэт олон оролдлого хийлээ. Түр хүлээгээд дахин оролдоно уу.' });
+    }
     const body = await parseBody(req);
-    const { 
-      email, 
-      password, 
-      name, 
-      role = 'student', 
-      organization = '', 
-      phone = '', 
-      school = '', 
-      major = '', 
-      year = '',
-      bio = '',
-      website = ''
-    } = body;
+    const email = clip(body.email, 160);
+    const password = typeof body.password === 'string' ? body.password : '';
+    const name = clip(body.name, 120);
+    const role = body.role === 'company' ? 'company' : 'student';
+    const organization = clip(body.organization, 160);
+    const phone = clip(body.phone, 30);
+    const school = clip(body.school, 160);
+    const major = clip(body.major, 160);
+    const year = clip(body.year, 40);
+    const bio = clip(body.bio, 1000);
+    const website = clip(body.website, 200);
 
     if (!email || !password || !name) {
       return sendJSON(res, 400, { error: 'Имэйл, нууц үг, нэр заавал шаардлагатай.' });
     }
 
-    const cleanEmail = email.trim().toLowerCase();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(cleanEmail)) {
+    const cleanEmail = email.toLowerCase();
+    if (!EMAIL_RE.test(cleanEmail)) {
       return sendJSON(res, 400, { error: 'Имэйл хаягийн бүтэц буруу байна.' });
     }
 
-    if (password.length < 6) {
+    if (password.length < 6 || password.length > 128) {
       return sendJSON(res, 400, { error: 'Нууц үг хамгийн багадаа 6 тэмдэгттэй байх ёстой.' });
+    }
+
+    if (role === 'company' && !organization) {
+      return sendJSON(res, 400, { error: 'Байгууллагын нэрийг заавал оруулна уу.' });
     }
 
     try {
@@ -493,44 +619,60 @@ const server = http.createServer(async (req, res) => {
         return sendJSON(res, 400, { error: 'Энэ имэйл хаягаар бүртгэл үүссэн байна. Нэвтрэх хэсгээр орно уу.' });
       }
 
-      const id = 'user-' + Date.now();
+      const id = 'user-' + crypto.randomUUID();
       const password_hash = hashPassword(password);
       const createdAt = new Date().toISOString();
 
       db.prepare(`
         INSERT INTO users (id, email, password_hash, name, role, organization, phone, school, major, year, bio, website, created_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `).run(id, cleanEmail, password_hash, name.trim(), role, organization.trim(), phone.trim(), school.trim(), major.trim(), year.trim(), bio.trim(), website.trim(), createdAt);
+      `).run(id, cleanEmail, password_hash, name, role, organization, phone, school, major, year, bio, website, createdAt);
 
-      const user = { id, email: cleanEmail, name: name.trim(), role, organization: organization.trim(), phone: phone.trim(), school: school.trim(), major: major.trim(), year: year.trim(), bio: bio.trim(), website: website.trim() };
+      const user = { id, email: cleanEmail, name, role, organization, phone, school, major, year, bio, website };
       const token = createSession(user);
 
       return sendJSON(res, 201, { success: true, token, user });
     } catch (err) {
-      return sendJSON(res, 500, { error: err.message });
+      console.error('Register error:', err);
+      return sendJSON(res, 500, { error: 'Бүртгэл үүсгэхэд алдаа гарлаа. Дахин оролдоно уу.' });
     }
   }
 
   // 2. Auth: Login
   if (pathname === '/api/auth/login' && req.method === 'POST') {
+    if (isRateLimited(req, 'login', 12, 60 * 1000)) {
+      return sendJSON(res, 429, { error: 'Хэт олон удаа оролдлоо. 1 минут хүлээгээд дахин оролдоно уу.' });
+    }
     const body = await parseBody(req);
-    const { email, password } = body;
+    const email = clip(body.email, 160);
+    const password = typeof body.password === 'string' ? body.password : '';
 
     if (!email || !password) {
       return sendJSON(res, 400, { error: 'Имэйл болон нууц үгээ оруулна уу.' });
     }
 
-    const cleanEmail = email.trim().toLowerCase();
-    const password_hash = hashPassword(password);
-    const user = db.prepare('SELECT * FROM users WHERE lower(email) = ? AND password_hash = ?').get(cleanEmail, password_hash);
+    const cleanEmail = email.toLowerCase();
+    const user = db.prepare('SELECT * FROM users WHERE lower(email) = ?').get(cleanEmail);
 
-    if (!user) {
+    if (!user || !verifyPassword(password, user.password_hash)) {
       return sendJSON(res, 401, { error: 'Имэйл хаяг эсвэл нууц үг буруу байна. Шалгаад дахин оролдоно уу.' });
+    }
+
+    // Upgrade legacy SHA-256 hashes to scrypt on successful login
+    if (!user.password_hash.startsWith('scrypt$')) {
+      db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hashPassword(password), user.id);
     }
 
     const token = createSession(user);
     delete user.password_hash;
     return sendJSON(res, 200, { success: true, token, user });
+  }
+
+  // 2.1. Auth: Logout (invalidate the server-side session)
+  if (pathname === '/api/auth/logout' && req.method === 'POST') {
+    const token = getBearerToken(req);
+    if (token) db.prepare('DELETE FROM sessions WHERE token_hash = ?').run(tokenHash(token));
+    return sendJSON(res, 200, { success: true });
   }
 
   // 3. Auth: 1-Click Demo Login
@@ -567,7 +709,15 @@ const server = http.createServer(async (req, res) => {
       return sendJSON(res, 401, { error: 'Нэвтрээгүй байна.' });
     }
     const body = await parseBody(req);
-    const { name, phone, school, major, year, organization, bio, website } = body;
+    const pick = (v, max) => (typeof v === 'string' ? clip(v, max) : null);
+    const name = pick(body.name, 120);
+    const phone = pick(body.phone, 30);
+    const school = pick(body.school, 160);
+    const major = pick(body.major, 160);
+    const year = pick(body.year, 40);
+    const organization = pick(body.organization, 160);
+    const bio = pick(body.bio, 1000);
+    const website = pick(body.website, 200);
 
     try {
       db.prepare(`
@@ -582,14 +732,7 @@ const server = http.createServer(async (req, res) => {
           website = COALESCE(?, website)
         WHERE id = ?
       `).run(
-        name !== undefined ? name : null,
-        phone !== undefined ? phone : null,
-        school !== undefined ? school : null,
-        major !== undefined ? major : null,
-        year !== undefined ? year : null,
-        organization !== undefined ? organization : null,
-        bio !== undefined ? bio : null,
-        website !== undefined ? website : null,
+        name || null, phone, school, major, year, organization, bio, website,
         session.userId
       );
 
@@ -616,39 +759,46 @@ const server = http.createServer(async (req, res) => {
       return sendJSON(res, 400, { error: 'Шинэ нууц үг хамгийн багадаа 6 тэмдэгттэй байх ёстой.' });
     }
 
-    const currentHash = hashPassword(currentPassword);
-    const user = db.prepare('SELECT id FROM users WHERE id = ? AND password_hash = ?').get(session.userId, currentHash);
-    if (!user) {
+    const currentUser = db.prepare('SELECT id, password_hash FROM users WHERE id = ?').get(session.userId);
+    if (!currentUser || !verifyPassword(String(currentPassword), currentUser.password_hash)) {
       return sendJSON(res, 400, { error: 'Одоогийн нууц үг буруу байна.' });
     }
+    if (String(newPassword).length > 128) {
+      return sendJSON(res, 400, { error: 'Шинэ нууц үг хэт урт байна.' });
+    }
 
-    const newHash = hashPassword(newPassword);
+    const newHash = hashPassword(String(newPassword));
     db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(newHash, session.userId);
     return sendJSON(res, 200, { success: true, message: 'Нууц үг амжилттай солигдлоо.' });
   }
 
   // 4.3. Auth: Forgot Password / Password Reset (/api/auth/forgot-password)
+  // Ownership check: the email AND the phone number saved on the account must both match.
+  // (A real email/SMS one-time link needs an SMTP/SMS provider - see DEPLOY.md.)
   if (pathname === '/api/auth/forgot-password' && req.method === 'POST') {
+    if (isRateLimited(req, 'forgot', 5, 10 * 60 * 1000)) {
+      return sendJSON(res, 429, { error: 'Хэт олон оролдлого хийлээ. 10 минутын дараа дахин оролдоно уу.' });
+    }
     const body = await parseBody(req);
-    const { email } = body;
-    if (!email) {
-      return sendJSON(res, 400, { error: 'Имэйл хаягаа оруулна уу.' });
+    const email = clip(body.email, 160).toLowerCase();
+    const phone = clip(body.phone, 30).replace(/\D/g, '');
+    if (!email || !phone) {
+      return sendJSON(res, 400, { error: 'Имэйл болон бүртгэлтэй утасны дугаараа оруулна уу.' });
     }
 
-    const cleanEmail = email.trim().toLowerCase();
-    const user = db.prepare('SELECT id, email, name FROM users WHERE lower(email) = ?').get(cleanEmail);
-    if (!user) {
-      return sendJSON(res, 404, { error: 'Энэ имэйл хаягаар бүртгэлтэй хэрэглэгч олдсонгүй.' });
+    const user = db.prepare('SELECT id, phone FROM users WHERE lower(email) = ?').get(email);
+    const storedPhone = user ? String(user.phone || '').replace(/\D/g, '') : '';
+    if (!user || !storedPhone || storedPhone !== phone) {
+      return sendJSON(res, 400, { error: 'Имэйл эсвэл утасны дугаар бүртгэлтэй мэдээлэлтэй таарахгүй байна.' });
     }
 
-    // Set temporary password for smooth recovery: "dadlaga2026"
-    const tempPass = 'dadlaga2026';
-    const tempHash = hashPassword(tempPass);
-    db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(tempHash, user.id);
+    const tempPass = crypto.randomBytes(6).toString('base64url');
+    db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hashPassword(tempPass), user.id);
+    db.prepare('DELETE FROM sessions WHERE user_id = ?').run(user.id);
 
-    return sendJSON(res, 200, { 
-      success: true, 
-      message: `Таны түр нууц үгийг "${tempPass}" болгон шинэчиллээ. Та энэ нууц үгээр шууд нэвтэрч ороод солих боломжтой.`,
+    return sendJSON(res, 200, {
+      success: true,
+      message: `Таны түр нууц үг: ${tempPass}. Нэвтэрсний дараа профайлаасаа заавал солиорой.`,
       tempPassword: tempPass
     });
   }
@@ -702,38 +852,43 @@ const server = http.createServer(async (req, res) => {
     return sendJSON(res, 200, { count: rows.length, internships: rows });
   }
 
-  // 6. Internships: Create New
+  // 6. Internships: Create New (company accounts only)
   if (pathname === '/api/internships' && req.method === 'POST') {
+    const session = requireSession(req, res, 'company');
+    if (!session) return;
     try {
-      const session = getUserFromReq(req);
       const body = await parseBody(req);
+      const list = (v, fallback) => {
+        const arr = Array.isArray(v) ? v.map(x => clip(x, 300)).filter(Boolean).slice(0, 20) : [];
+        return arr.length ? arr : fallback;
+      };
 
-      const title = (body.title || '').trim();
-      const company = (body.company || '').trim();
-      const category = (body.category || 'Мэдээллийн технологи & Программ').trim();
-      const location = (body.location || 'Улаанбаатар').trim();
-      const workMode = (body.workMode || 'Оффис').trim();
-      const type = (body.type || 'Цалинтай').trim();
-      const stipend = (body.stipend || 'Тохиролцоно').trim();
-      const duration = (body.duration || '3 сар').trim();
-      const deadline = (body.deadline || '2026-12-01').trim();
-      const description = (body.description || '').trim();
-      const requirements = Array.isArray(body.requirements) ? body.requirements : [];
-      const responsibilities = Array.isArray(body.responsibilities) ? body.responsibilities : [
-        'Төслийн өдөр тутмын үйл ажиллагаанд оролцох',
-        'Менторын өгсөн даалгаврыг чанартай биелүүлэх'
-      ];
-      const benefits = Array.isArray(body.benefits) ? body.benefits : ['Туршлага хуримтлуулах', 'Тодорхойлолт олгоно'];
-      const tags = Array.isArray(body.tags) ? body.tags : [category];
+      const title = clip(body.title, 160);
+      const company = clip(body.company || session.organization || session.name, 160);
+      const category = clip(body.category || 'Мэдээллийн технологи & Программ', 120);
+      const location = clip(body.location || 'Улаанбаатар', 160);
+      const workMode = ['Оффис', 'Зайнаас', 'Хосолсон'].includes(body.workMode) ? body.workMode : 'Оффис';
+      const type = ['Цалинтай', 'Урамшуулалтай', 'Цалингүй'].includes(body.type) ? body.type : 'Цалинтай';
+      const stipend = clip(body.stipend || 'Тохиролцоно', 80);
+      const duration = clip(body.duration || '3 сар', 60);
+      const deadline = clip(body.deadline || 'Нээлттэй', 40);
+      const description = clip(body.description, 3000);
 
-      if (!title || !company) {
-        return sendJSON(res, 400, { error: 'Гарчиг болон компанийн нэрийг заавал бөглөнө үү.' });
+      if (title.length < 3 || !company) {
+        return sendJSON(res, 400, { error: 'Дадлагын гарчиг болон байгууллагын нэрийг заавал бөглөнө үү.' });
       }
 
-      const id = 'job-' + Date.now();
+      const requirements = list(body.requirements, []);
+      const responsibilities = list(body.responsibilities, [
+        'Төслийн өдөр тутмын үйл ажиллагаанд оролцох',
+        'Менторын өгсөн даалгаврыг чанартай биелүүлэх'
+      ]);
+      const benefits = list(body.benefits, ['Туршлага хуримтлуулах', 'Тодорхойлолт олгоно']);
+      const tags = list(body.tags, [category]).slice(0, 8);
+
+      const id = 'job-' + crypto.randomUUID();
       const createdAt = new Date().toISOString();
-      const logoText = (company.length >= 2) ? company.substring(0, 2).toUpperCase() : (company || 'CO').toUpperCase();
-      const userId = session ? session.userId : (body.user_id || 'user-company-demo');
+      const logoText = company.length >= 2 ? company.substring(0, 2).toUpperCase() : company.toUpperCase();
 
       db.prepare(`
         INSERT INTO internships (
@@ -743,28 +898,12 @@ const server = http.createServer(async (req, res) => {
           benefits, tags, user_id, created_at
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `).run(
-        id,
-        title,
-        company,
-        logoText,
-        '#2563eb',
-        '#ffffff',
-        category,
-        location,
-        workMode,
-        type,
-        stipend,
-        duration,
-        deadline,
-        'Дөнгөж сая',
-        1,
-        description,
-        JSON.stringify(requirements),
-        JSON.stringify(responsibilities),
-        JSON.stringify(benefits),
-        JSON.stringify(tags),
-        userId,
-        createdAt
+        id, title, company, logoText, '#2563eb', '#ffffff', category,
+        location, workMode, type, stipend, duration, deadline,
+        'Дөнгөж сая', 1, description,
+        JSON.stringify(requirements), JSON.stringify(responsibilities),
+        JSON.stringify(benefits), JSON.stringify(tags),
+        session.userId, createdAt
       );
 
       return sendJSON(res, 201, {
@@ -774,101 +913,157 @@ const server = http.createServer(async (req, res) => {
           id, title, company, logoText, logoBg: '#2563eb', logoColor: '#ffffff',
           category, location, workMode, type, stipend, duration, deadline,
           postedDate: 'Дөнгөж сая', featured: true, description,
-          requirements, responsibilities, benefits, tags, user_id: userId, created_at: createdAt
+          requirements, responsibilities, benefits, tags, user_id: session.userId, created_at: createdAt
         },
         message: 'Дадлагын зар амжилттай нийтлэгдлээ!'
       });
     } catch (err) {
       console.error('Error creating internship:', err);
-      return sendJSON(res, 500, { error: err.message });
+      return sendJSON(res, 500, { error: 'Зар нийтлэхэд алдаа гарлаа. Дахин оролдоно уу.' });
     }
   }
 
-  // 6.1. Internships: Delete
+  // 6.1. Internships: Delete (only the owner company)
   if (pathname.startsWith('/api/internships/') && req.method === 'DELETE') {
-    const parts = pathname.split('/');
-    const jobId = parts[3];
+    const session = requireSession(req, res, 'company');
+    if (!session) return;
+    let jobId = '';
+    try { jobId = decodeURIComponent(pathname.split('/')[3] || ''); } catch (e) {}
 
     try {
+      const job = db.prepare('SELECT id, user_id, company FROM internships WHERE id = ?').get(jobId);
+      if (!job) return sendJSON(res, 404, { error: 'Дадлагын зар олдсонгүй.' });
+
+      const org = (session.organization || '').toLowerCase();
+      const orgMatch = org && (job.company || '').toLowerCase().includes(org);
+      const owns = job.user_id === session.userId || ((!job.user_id || job.user_id === 'system') && orgMatch);
+      if (!owns) return sendJSON(res, 403, { error: 'Та зөвхөн өөрийн байгууллагын зарыг устгах эрхтэй.' });
+
       db.prepare('DELETE FROM internships WHERE id = ?').run(jobId);
       return sendJSON(res, 200, { success: true, message: 'Дадлагын зар амжилттай устгагдлаа.' });
     } catch (err) {
-      return sendJSON(res, 500, { error: err.message });
+      console.error('Error deleting internship:', err);
+      return sendJSON(res, 500, { error: 'Зар устгахад алдаа гарлаа.' });
     }
   }
 
-  // 7. Applications: List (ATS view for company / My applications for student)
+  // 7. Applications: List (company -> its own applicants, student -> own applications)
   if (pathname === '/api/applications' && req.method === 'GET') {
-    const session = getUserFromReq(req);
-    const userRole = session ? session.role : null;
-    const companyFilter = parsedUrl.searchParams.get('company');
+    const session = requireSession(req, res);
+    if (!session) return;
 
-    let query = 'SELECT * FROM applications ORDER BY created_at DESC';
-    let rows = db.prepare(query).all();
-
-    if (userRole === 'company' && session.organization) {
-      rows = rows.filter(r => r.company_name.toLowerCase().includes(session.organization.toLowerCase()));
-    } else if (companyFilter) {
-      rows = rows.filter(r => r.company_name.toLowerCase().includes(companyFilter.toLowerCase()));
+    let rows = db.prepare('SELECT * FROM applications ORDER BY created_at DESC').all();
+    if (session.role === 'company') {
+      rows = rows.filter(r => companyOwnsApplication(session, r));
+    } else {
+      const myEmail = (session.email || '').toLowerCase();
+      rows = rows
+        .filter(r => r.user_id === session.userId || (r.applicant_email || '').toLowerCase() === myEmail)
+        .map(r => ({ ...r, hr_notes: null })); // internal HR notes are never shown to applicants
     }
+    rows = rows.map(r => {
+      const { cv_stored, ...rest } = r;
+      return { ...rest, has_cv_file: Boolean(cv_stored) };
+    });
 
     return sendJSON(res, 200, { count: rows.length, applications: rows });
   }
 
-  // 8. Applications: Submit New Application
+  // 8. Applications: Submit New Application (student accounts only)
   if (pathname === '/api/applications' && req.method === 'POST') {
+    const session = requireSession(req, res, 'student');
+    if (!session) return;
     try {
-      const session = getUserFromReq(req);
-      const body = await parseBody(req);
-      const {
-        job_id, job_title, company_name, applicant_name, applicant_email,
-        applicant_phone, applicant_school, applicant_major, applicant_year,
-        cv_link, cv_file_name, notes
-      } = body;
-
-      if (!job_id || !applicant_name || !applicant_email || !applicant_phone) {
-        return sendJSON(res, 400, { error: 'Анкетын үндсэн мэдээллийг бүрэн бөглөнө үү.' });
+      const body = await parseBody(req, 8 * 1024 * 1024);
+      if (body.__tooLarge) {
+        return sendJSON(res, 413, { error: 'Илгээсэн файл хэт том байна (5MB-аас бага байх ёстой).' });
       }
 
-      const id = 'app-' + Date.now();
+      const jobId = clip(body.job_id, 80);
+      const job = db.prepare('SELECT id, title, company FROM internships WHERE id = ?').get(jobId);
+      if (!job) {
+        return sendJSON(res, 404, { error: 'Энэ дадлагын зар олдсонгүй эсвэл хаагдсан байна.' });
+      }
+
+      const duplicate = db.prepare('SELECT id FROM applications WHERE job_id = ? AND user_id = ?').get(job.id, session.userId);
+      if (duplicate) {
+        return sendJSON(res, 409, { error: 'Та энэ дадлагад аль хэдийн анкет илгээсэн байна. Төлөвийг хяналтын самбараас харна уу.' });
+      }
+
+      const applicantName = clip(body.applicant_name, 120);
+      const applicantEmail = clip(body.applicant_email, 160);
+      const applicantPhone = clip(body.applicant_phone, 30);
+      if (!applicantName || !applicantPhone || !EMAIL_RE.test(applicantEmail)) {
+        return sendJSON(res, 400, { error: 'Нэр, зөв имэйл хаяг болон утасны дугаараа бүрэн бөглөнө үү.' });
+      }
+
+      let cvLink = clip(body.cv_link, 300);
+      if (cvLink && !/^https?:\/\//i.test(cvLink)) cvLink = 'https://' + cvLink;
+
+      const id = 'app-' + crypto.randomUUID();
       const createdAt = new Date().toISOString();
+
+      // Optional CV file upload (PDF / DOC / DOCX, max 5MB)
+      let cvFileName = '';
+      let cvStored = '';
+      if (body.cv_file_data) {
+        const originalName = clip(body.cv_file_name, 120).replace(/[^\w.\-() \u0400-\u04FF]/g, '_') || 'cv';
+        const ext = path.extname(originalName).toLowerCase();
+        if (!['.pdf', '.doc', '.docx'].includes(ext)) {
+          return sendJSON(res, 400, { error: 'CV файл нь зөвхөн PDF, DOC, DOCX форматтай байх ёстой.' });
+        }
+        const base64 = String(body.cv_file_data).replace(/^data:[^;]*;base64,/, '');
+        const buf = Buffer.from(base64, 'base64');
+        const looksValid =
+          (ext === '.pdf' && buf.slice(0, 4).toString('latin1') === '%PDF') ||
+          (ext === '.docx' && buf[0] === 0x50 && buf[1] === 0x4B) ||
+          (ext === '.doc' && buf[0] === 0xD0 && buf[1] === 0xCF);
+        if (buf.length === 0 || buf.length > 5 * 1024 * 1024 || !looksValid) {
+          return sendJSON(res, 400, { error: 'CV файл буруу эсвэл 5MB-аас том байна.' });
+        }
+        cvStored = id + ext;
+        fs.writeFileSync(path.join(UPLOAD_DIR, cvStored), buf);
+        cvFileName = originalName;
+      }
 
       db.prepare(`
         INSERT INTO applications (
           id, job_id, job_title, company_name, user_id, applicant_name,
           applicant_email, applicant_phone, applicant_school, applicant_major,
-          applicant_year, cv_link, cv_file_name, notes, status, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          applicant_year, cv_link, cv_file_name, cv_stored, notes, status, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `).run(
-        id, job_id, job_title || 'Дадлага', company_name || 'Байгууллага',
-        session ? session.userId : 'guest',
-        applicant_name, applicant_email, applicant_phone,
-        applicant_school || '', applicant_major || '', applicant_year || '',
-        cv_link || '', cv_file_name || '', notes || '', 'reviewing', createdAt
+        id, job.id, job.title, job.company, session.userId,
+        applicantName, applicantEmail.toLowerCase(), applicantPhone,
+        clip(body.applicant_school, 160), clip(body.applicant_major, 160), clip(body.applicant_year, 40),
+        cvLink, cvFileName, cvStored, clip(body.notes, 2000), 'reviewing', createdAt
       );
 
       return sendJSON(res, 201, { success: true, id, message: 'Таны анкет амжилттай бүртгэгдлээ!' });
     } catch (err) {
       console.error('Error creating application:', err);
-      return sendJSON(res, 500, { error: err.message });
+      return sendJSON(res, 500, { error: 'Анкет илгээхэд алдаа гарлаа. Дахин оролдоно уу.' });
     }
   }
 
-  // 8.1. Applications: Export to CSV (Excel Compatible with UTF-8 BOM)
+  // 8.1. Applications: Export to CSV (company accounts only, Excel compatible UTF-8 BOM)
   if (pathname === '/api/applications/export' && req.method === 'GET') {
-    const session = getUserFromReq(req);
-    const userRole = session ? session.role : null;
-    let rows = db.prepare('SELECT * FROM applications ORDER BY created_at DESC').all();
-
-    if (userRole === 'company' && session.organization) {
-      rows = rows.filter(r => r.company_name.toLowerCase().includes(session.organization.toLowerCase()));
-    }
+    const session = requireSession(req, res, 'company');
+    if (!session) return;
+    const rows = db.prepare('SELECT * FROM applications ORDER BY created_at DESC').all()
+      .filter(r => companyOwnsApplication(session, r));
 
     const headers = ['Нэр', 'Имэйл', 'Утас', 'Сургууль', 'Мэргэжил', 'Курс', 'Дадлагын_нэр', 'Компани', 'Статус', 'Ярилцлагын_огноо', 'Ярилцлагын_байршил', 'CV_линк', 'Тэмдэглэл', 'Огноо'];
     const csvRows = [headers.join(',')];
 
+    // Escape quotes and neutralise spreadsheet formula injection (= + - @)
+    const escape = (val) => {
+      let s = (val || '').toString();
+      if (/^[=+\-@]/.test(s)) s = "'" + s;
+      return `"${s.replace(/"/g, '""')}"`;
+    };
+
     for (const r of rows) {
-      const escape = (val) => `"${(val || '').toString().replace(/"/g, '""')}"`;
       csvRows.push([
         escape(r.applicant_name),
         escape(r.applicant_email),
@@ -887,7 +1082,7 @@ const server = http.createServer(async (req, res) => {
       ].join(','));
     }
 
-    // Add UTF-8 Byte Order Mark (BOM) so Microsoft Excel opens Mongolian Cyrillic with zero encoding errors
+    // UTF-8 BOM so Microsoft Excel opens Mongolian Cyrillic correctly
     const csvContent = '\uFEFF' + csvRows.join('\r\n');
     res.writeHead(200, {
       'Content-Type': 'text/csv; charset=utf-8',
@@ -897,10 +1092,49 @@ const server = http.createServer(async (req, res) => {
     return res.end(csvContent);
   }
 
+  // 8.2. Applications: Download the uploaded CV file (owning company or the applicant)
+  if (/^\/api\/applications\/[^/]+\/cv$/.test(pathname) && req.method === 'GET') {
+    const session = requireSession(req, res);
+    if (!session) return;
+    const appRow = db.prepare('SELECT * FROM applications WHERE id = ?').get(pathname.split('/')[3]);
+    if (!appRow || !appRow.cv_stored) return sendJSON(res, 404, { error: 'CV файл олдсонгүй.' });
+
+    const isOwnerStudent = appRow.user_id === session.userId;
+    if (!isOwnerStudent && !companyOwnsApplication(session, appRow)) {
+      return sendJSON(res, 403, { error: 'Энэ файлыг үзэх эрхгүй байна.' });
+    }
+
+    const filePath = path.join(UPLOAD_DIR, path.basename(appRow.cv_stored));
+    if (!fs.existsSync(filePath)) return sendJSON(res, 404, { error: 'CV файл серверээс олдсонгүй.' });
+
+    const ext = path.extname(filePath).toLowerCase();
+    const types = { '.pdf': 'application/pdf', '.doc': 'application/msword', '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' };
+    res.writeHead(200, {
+      'Content-Type': types[ext] || 'application/octet-stream',
+      'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(appRow.cv_file_name || ('cv' + ext))}`,
+      'Cache-Control': 'private, no-store',
+      'Access-Control-Allow-Origin': '*'
+    });
+    return fs.createReadStream(filePath).pipe(res);
+  }
+
+  // Helper: load an application the signed-in company is allowed to manage
+  const loadManagedApplication = (appId) => {
+    const session = requireSession(req, res, 'company');
+    if (!session) return null;
+    const appRow = db.prepare('SELECT * FROM applications WHERE id = ?').get(appId);
+    if (!appRow) { sendJSON(res, 404, { error: 'Анкет олдсонгүй.' }); return null; }
+    if (!companyOwnsApplication(session, appRow)) {
+      sendJSON(res, 403, { error: 'Энэ анкетыг удирдах эрх танд байхгүй байна.' });
+      return null;
+    }
+    return appRow;
+  };
+
   // 9. Applications: Update Status (Reviewing, Interview, Accepted, Rejected)
   if (pathname.startsWith('/api/applications/') && pathname.endsWith('/status') && req.method === 'PATCH') {
-    const parts = pathname.split('/');
-    const appId = parts[3];
+    const appRow = loadManagedApplication(pathname.split('/')[3]);
+    if (!appRow) return;
     const body = await parseBody(req);
     const { status } = body;
 
@@ -908,40 +1142,40 @@ const server = http.createServer(async (req, res) => {
       return sendJSON(res, 400, { error: 'Буруу статус утга.' });
     }
 
-    db.prepare('UPDATE applications SET status = ? WHERE id = ?').run(status, appId);
+    db.prepare('UPDATE applications SET status = ? WHERE id = ?').run(status, appRow.id);
     return sendJSON(res, 200, { success: true, message: 'Анкетын статус амжилттай шинэчлэгдлээ!' });
   }
 
   // 9.1. Applications: Schedule Interview
   if (pathname.startsWith('/api/applications/') && pathname.endsWith('/interview') && req.method === 'PATCH') {
-    const parts = pathname.split('/');
-    const appId = parts[3];
+    const appRow = loadManagedApplication(pathname.split('/')[3]);
+    if (!appRow) return;
     const body = await parseBody(req);
-    const { interview_date, interview_location } = body;
+    const interviewDate = clip(body.interview_date, 40);
 
-    if (!interview_date) {
-      return sendJSON(res, 400, { error: 'Ярилцлагын огноо оруулна уу.' });
+    if (!interviewDate || Number.isNaN(Date.parse(interviewDate))) {
+      return sendJSON(res, 400, { error: 'Ярилцлагын огноо, цагийг зөв оруулна уу.' });
     }
 
     db.prepare(`
       UPDATE applications 
       SET status = 'interview', interview_date = ?, interview_location = ?
       WHERE id = ?
-    `).run(interview_date, interview_location || 'Google Meet', appId);
+    `).run(interviewDate, clip(body.interview_location, 200) || 'Google Meet', appRow.id);
 
     return sendJSON(res, 200, { success: true, message: 'Ярилцлага амжилттай товлогдлоо!' });
   }
 
   // 9.2. Applications: Update HR Internal Notes
   if (pathname.startsWith('/api/applications/') && pathname.endsWith('/notes') && req.method === 'PATCH') {
-    const parts = pathname.split('/');
-    const appId = parts[3];
+    const appRow = loadManagedApplication(pathname.split('/')[3]);
+    if (!appRow) return;
     const body = await parseBody(req);
-    const { hr_notes } = body;
 
-    db.prepare('UPDATE applications SET hr_notes = ? WHERE id = ?').run(hr_notes || '', appId);
+    db.prepare('UPDATE applications SET hr_notes = ? WHERE id = ?').run(clip(body.hr_notes, 2000), appRow.id);
     return sendJSON(res, 200, { success: true, message: 'Тэмдэглэл хадгалагдлаа.' });
   }
+
 
   // 9.3. Reviews: List & Add (Company Reviews & Ratings - Glassdoor & Prosple style)
   if (pathname === '/api/reviews' && req.method === 'GET') {
@@ -974,17 +1208,22 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (pathname === '/api/reviews' && req.method === 'POST') {
+    const session = requireSession(req, res, 'student');
+    if (!session) return;
     const body = await parseBody(req);
-    const {
-      company_name, author_name, role, rating, title, content,
-      pros = '', cons = '', mentorship_rating = 5, culture_rating = 5, stipend_rating = 5
-    } = body;
+    const company_name = clip(body.company_name, 160);
+    const title = clip(body.title, 160);
+    const content = clip(body.content, 3000);
+    const rating = Math.min(5, Math.max(1, parseFloat(body.rating) || 0));
+    const pros = clip(body.pros, 500);
+    const cons = clip(body.cons, 500);
+    const score = (v) => Math.min(5, Math.max(1, parseFloat(v) || 5));
 
-    if (!company_name || !title || !content || !rating) {
+    if (!company_name || !title || !content || !body.rating) {
       return sendJSON(res, 400, { error: 'Компани, гарчиг, сэтгэгдэл, үнэлгээ заавал шаардлагатай.' });
     }
 
-    const id = 'rev-' + Date.now();
+    const id = 'rev-' + crypto.randomUUID();
     const createdAt = new Date().toISOString();
 
     db.prepare(`
@@ -993,9 +1232,9 @@ const server = http.createServer(async (req, res) => {
         content, pros, cons, mentorship_rating, culture_rating, stipend_rating, created_at
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
-      id, company_name, author_name || 'Оюутан', role || 'Дадлагажигч',
-      parseFloat(rating), title, content, pros, cons,
-      parseFloat(mentorship_rating), parseFloat(culture_rating), parseFloat(stipend_rating), createdAt
+      id, company_name, clip(body.author_name, 80) || session.name, clip(body.role, 120) || 'Дадлагажигч',
+      rating, title, content, pros, cons,
+      score(body.mentorship_rating), score(body.culture_rating), score(body.stipend_rating), createdAt
     );
 
     return sendJSON(res, 201, { success: true, id, message: 'Таны сэтгэгдэл, үнэлгээ амжилттай нийтлэгдлээ!' });
@@ -1046,41 +1285,75 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
-  // =========================================================================
-  // STATIC FILE SERVER
-  // =========================================================================
-  let safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '');
-  if (safePath === '/' || safePath === '\\') {
-    safePath = '/index.html';
+  // Unknown API routes return JSON, not an HTML page
+  if (pathname.startsWith('/api/')) {
+    return sendJSON(res, 404, { error: 'API хаяг олдсонгүй.' });
   }
 
-  const filePath = path.join(__dirname, safePath);
+  // =========================================================================
+  // STATIC FILE SERVER (whitelist only: HTML pages in the root + /assets/*)
+  // The database, server code, uploads and dotfiles are never served.
+  // =========================================================================
+  const sendNotFound = () => {
+    res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+    res.end(`<!DOCTYPE html>
+<html lang="mn">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>404 - Хуудас олдсонгүй | Дадлага.mn</title><link rel="stylesheet" href="/assets/css/style.css"></head>
+<body style="display:flex; align-items:center; justify-content:center; min-height:100vh; text-align:center; padding:24px;">
+  <div>
+    <div style="font-size:4.5rem; font-weight:800; color:var(--primary); line-height:1;">404</div>
+    <p style="font-size:1.2rem; margin:14px 0 8px 0; font-weight:700;">Уучлаарай, хайсан хуудас олдсонгүй.</p>
+    <p style="color:var(--text-muted); margin-bottom:24px;">Хаяг буруу эсвэл хуудас устгагдсан байж магадгүй.</p>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <a href="/" class="btn btn-primary">Нүүр хуудас</a>
+      <a href="/internships.html" class="btn btn-outline">Дадлага хайх</a>
+    </div>
+  </div>
+</body>
+</html>`);
+  };
+
+  let decodedPath;
+  try { decodedPath = decodeURIComponent(pathname); } catch (e) { return sendNotFound(); }
+  if (decodedPath.includes('\0') || decodedPath.includes('..') || decodedPath.includes('\\')) return sendNotFound();
+  if (decodedPath === '/') decodedPath = '/index.html';
+
+  const segments = decodedPath.split('/').filter(Boolean);
+  const ext = path.extname(decodedPath).toLowerCase();
+  const isAsset = segments[0] === 'assets' && segments.length >= 2;
+  const isRootPage = segments.length === 1 && ['.html', '.txt', '.xml', '.ico', '.png', '.svg', '.webp'].includes(ext);
+  const hasDotSegment = segments.some(seg => seg.startsWith('.'));
+  if (!MIME_TYPES[ext] || hasDotSegment || !(isAsset || isRootPage)) return sendNotFound();
+
+  const filePath = path.join(__dirname, decodedPath);
+  if (!filePath.startsWith(__dirname + path.sep)) return sendNotFound();
 
   fs.stat(filePath, (err, stats) => {
-    if (err || !stats.isFile()) {
-      // 404 - Not Found
-      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
-      return res.end(`
-        <!DOCTYPE html>
-        <html lang="mn">
-        <head><meta charset="UTF-8"><title>404 Хуудас олдсонгүй</title><link rel="stylesheet" href="/assets/css/style.css"></head>
-        <body style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center;">
-          <div>
-            <h1 style="font-size:3rem; font-weight:800; color:var(--primary);">404</h1>
-            <p style="font-size:1.2rem; margin:14px 0 24px 0;">Уучлаарай, хайсан хуудас олдсонгүй.</p>
-            <a href="/" class="btn btn-primary">Нүүр хуудас руу буцах</a>
-          </div>
-        </body>
-        </html>
-      `);
+    if (err || !stats.isFile()) return sendNotFound();
+
+    const etag = '"' + stats.size.toString(16) + '-' + Math.floor(stats.mtimeMs).toString(16) + '"';
+    if (req.headers['if-none-match'] === etag) {
+      res.writeHead(304, { ETag: etag });
+      return res.end();
     }
 
-    const ext = path.extname(filePath).toLowerCase();
-    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+    const headers = {
+      'Content-Type': MIME_TYPES[ext] || 'application/octet-stream',
+      'Cache-Control': 'no-cache',
+      'ETag': etag
+    };
 
-    res.writeHead(200, { 'Content-Type': contentType });
     const stream = fs.createReadStream(filePath);
-    stream.pipe(res);
+    if (COMPRESSIBLE.has(ext) && /\bgzip\b/.test(req.headers['accept-encoding'] || '')) {
+      headers['Content-Encoding'] = 'gzip';
+      headers['Vary'] = 'Accept-Encoding';
+      res.writeHead(200, headers);
+      stream.pipe(zlib.createGzip()).pipe(res);
+    } else {
+      headers['Content-Length'] = stats.size;
+      res.writeHead(200, headers);
+      stream.pipe(res);
+    }
   });
 });
 
